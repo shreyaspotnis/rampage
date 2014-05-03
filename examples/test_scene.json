@@ -1,0 +1,29 @@
+{
+    "keyframes" :
+    {
+        "start" :
+        {
+            "time" : 0.0,
+            "parent" : null,
+            "comment" : "start the ramp"
+        },
+        "molasses" :
+        {
+            "time" : 10.0,
+            "parent" : "start",
+            "comment" : "begin molasses"
+        },
+        "image" :
+        {
+            "time" : 30.0,
+            "parent" : "image",
+            "comment" : "take an image"
+        },
+        "open shutter" :
+        {
+            "time" : -3.0,
+            "parent" : "image",
+            "comment" : "open camera shutter"
+        }
+    }
+}

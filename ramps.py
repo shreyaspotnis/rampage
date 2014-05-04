@@ -104,7 +104,7 @@ class KeyFrameList(object):
         """Returns list of keys sorted according to their absolute time."""
         if not self.is_baked:
             self.bake()
-        key_value_tuple = sorted(kfl.dct.items(),
+        key_value_tuple = sorted(self.dct.items(),
                                  key=lambda x: x[1]['__abs_time__'])
         skl = [k[0] for k in key_value_tuple]
         return skl

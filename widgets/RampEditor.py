@@ -1,4 +1,6 @@
 from PyQt4 import QtGui
+from ramps import KeyFrameList
+import json
 
 
 class RampEditor(QtGui.QWidget):
@@ -10,7 +12,10 @@ class RampEditor(QtGui.QWidget):
         self.setupUi(self)
 
     def setupUi(self, widget):
-        pass
+        self.grid = QtGui.QGridLayout(self)
+        self.setLayout(self.grid)
 
     def openNewFile(self, path_to_new_file):
-        print(path_to_new_file)
+        with open(path_to_new_file, 'r') as f:
+                data = json.load(f)
+        self.kfl = KeyFrameList(data['keyframes'])

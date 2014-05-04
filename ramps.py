@@ -59,8 +59,93 @@ class KeyFrameList(object):
         if dct is None:
             return
         self.dct = dct
-        for key in dct:
-            print(key)
+
+        # check all parent keys are actually valid
+        for key in self.dct:
+            kf = self.dct[key]
+            parent_name = kf['parent']
+            if parent_name is not None:
+                if parent_name not in self.dct:
+                    error_string = ('KeyFrame "' + key + '" has a parent "' +
+                                    parent_name +
+                                    '"" which is not a known KeyFrame')
+                    raise KeyError(error_string)
+        self.is_baked = False
+        # find absolute times for all the keys
+        self.bake()
+
+    def bake(self):
+        """Find absolute times for all keys."""
+        abs_times = [self.get_absolute_time(key) for key in self.dct]
+        self.is_baked = True
+
+    def unbake(self):
+        """Remove absolute times for all keys."""
+        for key in self.dct:
+            self.dct[key].pop('__abs_time__', None)
+        self.is_baked = False
+
+    def get_absolute_time(self, key):
+        keyframe = self.dct[key]
+        try:
+            # if absolute time is already calculated, return that
+            return keyframe['__abs_time__']
+        except KeyError:
+            # if not, calculate by adding relative time to parent's time
+            if keyframe['parent'] is None:
+                keyframe['__abs_time__'] = keyframe['time']
+            else:
+                parent_time = self.get_absolute_time(keyframe['parent'])
+                abs_time = keyframe['time'] + parent_time
+                keyframe['__abs_time__'] = abs_time
+            return keyframe['__abs_time__']
+
+    def sorted_key_list(self):
+        """Returns list of keys sorted according to their absolute time."""
+        if not self.is_baked:
+            self.bake()
+        key_value_tuple = sorted(kfl.dct.items(),
+                                 key=lambda x: x[1]['__abs_time__'])
+        skl = [k[0] for k in key_value_tuple]
+        return skl
+
+    def set_time(self, key, new_time):
+        """Sets the time of key."""
+        self.unbake()
+        kf = self.dct[key]
+        kf['time'] = new_time
+        self.bake()
+
+    def set_comment(self, key, new_comment):
+        """Sets the comment of key."""
+        kf = self.dct[key]
+        kf['comment'] = new_comment
+
+    def set_parent(self, key, new_parent):
+        """Sets the parent of the key."""
+        self.unbake()
+        kf = self.dct[key]
+        kf['parent'] = new_parent
+        self.bake()
+
+    def add_keyframe(self, new_key, new_key_dict):
+        self.unbake()
+        self.dct[new_key] = new_key_dict
+        self.bake()
+
+    def del_keyframe(self, key):
+        self.unbake()
+        kf = self.dct[key]
+        parent_key = kf['parent']
+
+        # find children of this keyframe
+        child_keys = [k for k in self.dct if self.dct[k]['parent'] == key]
+        # set the parent of child keys to the parent of the deleted key
+        for ck in child_keys:
+            self.dct[ck]['parent'] = parent_key
+        # remove the key
+        self.dct.pop(key)
+        self.bake()
 
 
 if __name__ == '__main__':

@@ -16,7 +16,7 @@
         "image" :
         {
             "time" : 30.0,
-            "parent" : "image",
+            "parent" : "molasses",
             "comment" : "take an image"
         },
         "open shutter" :
@@ -24,6 +24,13 @@
             "time" : -3.0,
             "parent" : "image",
             "comment" : "open camera shutter"
+        },
+        "reset values" :
+        {
+            "time" : 100.0,
+            "parent" : "image",
+            "comment" : "set all values to the default"
         }
+
     }
 }

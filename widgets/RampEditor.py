@@ -162,7 +162,6 @@ class QKeyFrame(QtGui.QWidget):
         self.delete_signal.emit(self.key_name)
 
     def handleTimeChanged(self, new_time):
-        print(repr(self.key_name))
         self.time_changed_signal.emit(self.key_name, float(new_time))
 
 
@@ -170,11 +169,13 @@ class QKeyFrameList(KeyFrameList):
 
     """Gui for editing key frames."""
 
-    def __init__(self, dct, settings, grid, start_pos=(0, 0)):
+    def __init__(self, dct, settings, grid, start_pos=(0, 0),
+                 parent_widget=None):
         super(QKeyFrameList, self).__init__(dct)
         self.settings = settings
         self.start_pos = start_pos
         self.grid = grid
+        self.parent_widget = parent_widget
         self.setupUi(self)
 
     def setupUi(self, widget):
@@ -216,7 +217,17 @@ class QKeyFrameList(KeyFrameList):
         print('insert_before', key_name)
 
     def handleAddChild(self, key_name):
-        print('add child', key_name)
+        new_key_name, ok = QtGui.QInputDialog.getText(self.parent_widget,
+                                                      'Add child',
+                                                      'Enter key name:')
+        if ok:
+            kf = {'time': 1.0, 'parent': key_name, "comment": "comment"}
+            self.add_keyframe(str(new_key_name), kf)
+            kf_gui = QKeyFrame(key_name, self.dct[key_name], self.settings)
+            self.kf_list.append(kf_gui)
+            self.grid.addWidget(kf_gui, self.start_pos[0], self.start_pos[1]
+                                + len(self.kf_list))
+            self.updateAllKeys()
 
     def handleDelete(self, key_name):
         print('delete', key_name)
@@ -244,4 +255,4 @@ class RampEditor(QtGui.QWidget):
         with open(path_to_new_file, 'r') as f:
                 data = json.load(f)
         self.kfl = QKeyFrameList(data['keyframes'], self.settings, self.grid,
-                                 start_pos=(0, 0))
+                                 start_pos=(0, 0), parent_widget=self)

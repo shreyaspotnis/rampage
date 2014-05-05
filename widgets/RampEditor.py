@@ -246,7 +246,20 @@ class QKeyFrameList(KeyFrameList):
             self.updateAllKeys()
 
     def handleDelete(self, key_name):
-        print('delete', key_name)
+        self.del_keyframe(key_name)
+        # remove the last widget from the list
+        kf_del = self.kf_list.pop()
+        # disconnect all signals
+        kf_del.edit_signal.disconnect(self.handleEdit)
+        kf_del.delete_signal.disconnect(self.handleDelete)
+        kf_del.insert_before_signal.disconnect(self.handleInsertBefore)
+        kf_del.add_child_signal.disconnect(self.handleAddChild)
+        kf_del.time_changed_signal.disconnect(self.handleTimeChanged)
+
+        self.grid.removeWidget(kf_del)
+        kf_del.deleteLater()
+
+        self.updateAllKeys()
 
     def updateAllKeys(self):
         # update key frames GUI

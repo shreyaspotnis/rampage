@@ -128,6 +128,16 @@ class KeyFrameList(object):
         kf['parent'] = new_parent
         self.bake()
 
+    def set_name(self, old_name, new_name):
+        if old_name != new_name:
+            self.unbake()
+            self.dct[new_name] = self.dct[old_name]
+            self.dct.pop(old_name)
+            for key in self.dct:
+                if self.dct[key]['parent'] == old_name:
+                    self.dct[key]['parent'] = new_name
+            self.bake()
+
     def add_keyframe(self, new_key, new_key_dict):
         self.unbake()
         self.dct[new_key] = new_key_dict
@@ -147,6 +157,22 @@ class KeyFrameList(object):
         self.dct.pop(key)
         self.bake()
 
+    def is_ancestor(self, child_key, ancestor_key):
+        """Returns True if ancestor lies in the ancestry tree of child."""
+
+        # all keys are descendents of None
+        if ancestor_key is None:
+            return True
+
+        one_up_parent = self.dct[child_key]['parent']
+        if child_key == ancestor_key:
+            # debatable semantics, but a person lies in his/her own
+            # ancestry tree
+            return True
+        elif one_up_parent is None:
+            return False
+        else:
+            return self.is_ancestor(one_up_parent, ancestor_key)
 
 if __name__ == '__main__':
     with open('examples/test_scene.json', 'r') as f:

@@ -2,6 +2,31 @@ from PyQt4 import QtGui, QtCore
 from ramps import KeyFrameList
 import format as fmt
 import json
+from pprint import pprint
+from random import random
+
+
+def clearLayout(layout):
+    """Removes all widgets in the layout. Useful when opening a new file, want
+    to clear everything."""
+    while layout.count():
+        child = layout.takeAt(0)
+        child.widget().deleteLater()
+
+
+class MyDoubleSpinBox(QtGui.QDoubleSpinBox):
+
+    """Selects all text once it receives a focusInEvent."""
+
+    def __init__(self, parent):
+        super(MyDoubleSpinBox, self).__init__()
+
+    def focusInEvent(self, e):
+        super(MyDoubleSpinBox, self).focusInEvent(e)
+        QtCore.QTimer.singleShot(100, self.afterFocus)
+
+    def afterFocus(self):
+        self.selectAll()
 
 
 class QEditKeyFrameDialog(QtGui.QDialog):
@@ -76,7 +101,7 @@ class QKeyFrame(QtGui.QWidget):
         self.settings = settings
 
         self.vbox = QtGui.QVBoxLayout(self)
-        self.time_spin_box = QtGui.QDoubleSpinBox(self)
+        self.time_spin_box = MyDoubleSpinBox(self)
         self.name_label = QtGui.QLabel(self)
         self.abs_time_label = QtGui.QLabel(self)
 
@@ -120,6 +145,13 @@ class QKeyFrame(QtGui.QWidget):
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         signal_str = 'customContextMenuRequested(const QPoint&)'
         self.connect(self, QtCore.SIGNAL(signal_str), self.onContextMenu)
+
+        r = str(int(128.0 + random()*128))
+        g = str(int(128.0 + random()*128))
+        b = str(int(128.0 + random()*128))
+        rgb = ','.join([r, g, b])
+        stylesheet = ('QWidget{ background-color:rgb('+rgb+'); }')
+        # self.setStyleSheet(stylesheet)
 
     def update(self, key_name, kf):
         # disconnect slot before updating, reconnect at the end.
@@ -165,6 +197,84 @@ class QKeyFrame(QtGui.QWidget):
         self.time_changed_signal.emit(self.key_name, float(new_time))
 
 
+class QArrowWidget(QtGui.QLabel):
+
+    """Responsible for drawing arrows which show parent child relationship."""
+
+    def __init__(self, arrow_list, grid, start_pos=(0, 0), parent=None):
+        super(QArrowWidget, self).__init__(parent)
+        self.grid = grid
+        self.start_pos = start_pos
+        self.grid.addWidget(self, self.start_pos[0], self.start_pos[1], 1, -1)
+        self.figureOutHowToDrawArrows(arrow_list)
+        self.setSizePolicy(QtGui.QSizePolicy.Ignored,
+                           QtGui.QSizePolicy.Fixed)
+        stylesheet = ('QWidget{ background-color:rgb(255,125,100); }')
+        # self.setStyleSheet(stylesheet)
+
+    def sizeHint(self):
+        return QtCore.QSize(1000, (self.max_height+1)*10+5)
+
+    def figureOutHowToDrawArrows(self, arrow_list):
+        n_cols = 0
+        for arrow in arrow_list:
+            n_cols = max(max(n_cols, arrow[0]), arrow[1])
+        self.n_cols = n_cols + 1
+        print('NCOLS', self.n_cols)
+
+        self.arrow_list = arrow_list
+
+        availability = []
+        self.height_list = []
+        for arrow in arrow_list:
+            left_index = min(arrow[0], arrow[1])
+            right_index = max(arrow[0], arrow[1])
+            used = [False]*(right_index - left_index)
+            for i, avail in enumerate(availability):
+                if all(avail[left_index:right_index]):
+                    height = i
+                    break
+            else:
+                height = len(availability)
+                availability.append([True]*self.n_cols)
+            availability[height][left_index:right_index] = used
+            self.height_list.append(height)
+        self.max_height = len(availability)
+
+    def paintEvent(self, event):
+        centers = []
+        r = self.grid.cellRect(self.start_pos[0], self.start_pos[1])
+        top_left = r.topLeft()
+        for i in range(self.n_cols):
+            r = self.grid.cellRect(self.start_pos[0], i+self.start_pos[1])
+            c = r.bottomRight() - top_left
+            centers.append(c)
+
+        qp = QtGui.QPainter()
+        qp.begin(self)
+        for arrow, height in zip(self.arrow_list, self.height_list):
+            center_left = centers[arrow[0]]
+            center_right = centers[arrow[1]]
+            hp = 10*height + 5
+
+            def drawArrow(qp, x1, x2, height):
+                length = 5
+                qp.drawLine(x1, height, x2, height)
+                qp.drawLine(x1, height - length, x1, height + length)
+                brush = QtGui.QBrush(QtCore.Qt.SolidPattern)
+                qp.setBrush(brush)
+                if x1 > x2:
+                    length = -5
+                points = [QtCore.QPoint(x2, height),
+                          QtCore.QPoint(x2-length, height-length),
+                          QtCore.QPoint(x2-length, height+length)]
+                arrowHead = QtGui.QPolygon(points)
+                qp.drawPolygon(arrowHead)
+
+            drawArrow(qp, center_left.x(), center_right.x(), hp)
+        qp.end()
+
+
 class QKeyFrameList(KeyFrameList):
 
     """Gui for editing key frames."""
@@ -180,11 +290,31 @@ class QKeyFrameList(KeyFrameList):
 
     def setupUi(self, widget):
         self.kf_list = []
-        for i, key in enumerate(self.sorted_key_list()):
+        skl = self.sorted_key_list()
+        for i, key in enumerate(skl):
             kf = self.createNewKeyFrameWidget(key, self.dct[key])
 
             self.grid.addWidget(kf, self.start_pos[0], self.start_pos[1] + i)
             self.kf_list.append(kf)
+
+        self.arrow_widget = QArrowWidget(self.getArrowList(), self.grid,
+                                         start_pos=(1, 0),
+                                         parent=self.parent_widget)
+
+    def getArrowList(self):
+        arrow_list = []
+        skl = self.sorted_key_list()
+        print(skl)
+        for i, key in enumerate(skl):
+            right_index = i
+            if self.dct[key]['parent'] is None:
+                continue
+            else:
+                left_index = skl.index(self.dct[key]['parent'])
+            arrow = (left_index, right_index)
+            print(arrow)
+            arrow_list.append(arrow)
+        return arrow_list
 
     def createNewKeyFrameWidget(self, key_name, key_dict):
         kf = QKeyFrame(key_name, key_dict, self.settings)
@@ -195,9 +325,19 @@ class QKeyFrameList(KeyFrameList):
         kf.time_changed_signal.connect(self.handleTimeChanged)
         return kf
 
+    def disconnectKeyFrame(self, kf):
+        # disconnect all signals
+        kf.edit_signal.disconnect(self.handleEdit)
+        kf.delete_signal.disconnect(self.handleDelete)
+        kf.insert_before_signal.disconnect(self.handleInsertBefore)
+        kf.add_child_signal.disconnect(self.handleAddChild)
+        kf.time_changed_signal.disconnect(self.handleTimeChanged)
+
     def handleTimeChanged(self, key_name, new_time):
         self.set_time(key_name, new_time)
-        self.updateAllKeys()
+        for kf in self.kf_list:
+            self.disconnectKeyFrame(kf)
+        self.parent_widget.reDoUi()
 
     def handleEdit(self, key_name):
         # find out all keys which are descendents of key_name
@@ -215,7 +355,9 @@ class QKeyFrameList(KeyFrameList):
                 new_parent = None
             self.set_parent(key_name, new_parent)
             self.set_name(key_name, new_key_name)
-            self.updateAllKeys()
+            for kf in self.kf_list:
+                self.disconnectKeyFrame(kf)
+            self.parent_widget.reDoUi()
 
     def handleInsertBefore(self, key_name):
         new_key_name, ok = QtGui.QInputDialog.getText(self.parent_widget,
@@ -226,11 +368,10 @@ class QKeyFrameList(KeyFrameList):
             kf = {'time': 1.0, 'parent': parent_key, "comment": "comment"}
             self.dct[key_name]['parent'] = str(new_key_name)
             self.add_keyframe(str(new_key_name), kf)
-            kf_gui = self.createNewKeyFrameWidget(key_name, self.dct[key_name])
-            self.kf_list.append(kf_gui)
-            self.grid.addWidget(kf_gui, self.start_pos[0], self.start_pos[1]
-                                + len(self.kf_list))
-            self.updateAllKeys()
+
+            for kf in self.kf_list:
+                self.disconnectKeyFrame(kf)
+            self.parent_widget.reDoUi()
 
     def handleAddChild(self, key_name):
         new_key_name, ok = QtGui.QInputDialog.getText(self.parent_widget,
@@ -239,32 +380,21 @@ class QKeyFrameList(KeyFrameList):
         if ok:
             kf = {'time': 1.0, 'parent': key_name, "comment": "comment"}
             self.add_keyframe(str(new_key_name), kf)
-            kf_gui = self.createNewKeyFrameWidget(key_name, self.dct[key_name])
-            self.kf_list.append(kf_gui)
-            self.grid.addWidget(kf_gui, self.start_pos[0], self.start_pos[1]
-                                + len(self.kf_list))
-            self.updateAllKeys()
+            for kf in self.kf_list:
+                self.disconnectKeyFrame(kf)
+            self.parent_widget.reDoUi()
 
     def handleDelete(self, key_name):
         self.del_keyframe(key_name)
-        # remove the last widget from the list
-        kf_del = self.kf_list.pop()
-        # disconnect all signals
-        kf_del.edit_signal.disconnect(self.handleEdit)
-        kf_del.delete_signal.disconnect(self.handleDelete)
-        kf_del.insert_before_signal.disconnect(self.handleInsertBefore)
-        kf_del.add_child_signal.disconnect(self.handleAddChild)
-        kf_del.time_changed_signal.disconnect(self.handleTimeChanged)
-
-        self.grid.removeWidget(kf_del)
-        kf_del.deleteLater()
-
-        self.updateAllKeys()
+        for kf in self.kf_list:
+            self.disconnectKeyFrame(kf)
+        self.parent_widget.reDoUi()
 
     def updateAllKeys(self):
-        # update key frames GUI
+        """Update times for all keys in the layout."""
         for kf, key in zip(self.kf_list, self.sorted_key_list()):
             kf.update(key, self.dct[key])
+
 
 
 class RampEditor(QtGui.QWidget):
@@ -278,10 +408,18 @@ class RampEditor(QtGui.QWidget):
 
     def setupUi(self, widget):
         self.grid = QtGui.QGridLayout(self)
+        self.grid.setSpacing(0)
         self.setLayout(self.grid)
 
     def openNewFile(self, path_to_new_file):
         with open(path_to_new_file, 'r') as f:
                 data = json.load(f)
-        self.kfl = QKeyFrameList(data['keyframes'], self.settings, self.grid,
+        self.data = data
+        self.reDoUi()
+
+    def reDoUi(self):
+        print('reDoUi')
+        clearLayout(self.grid)
+        self.kfl = QKeyFrameList(self.data['keyframes'], self.settings,
+                                 self.grid,
                                  start_pos=(0, 0), parent_widget=self)

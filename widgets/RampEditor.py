@@ -181,15 +181,19 @@ class QKeyFrameList(KeyFrameList):
     def setupUi(self, widget):
         self.kf_list = []
         for i, key in enumerate(self.sorted_key_list()):
-            kf = QKeyFrame(key, self.dct[key], self.settings)
-            kf.edit_signal.connect(self.handleEdit)
-            kf.delete_signal.connect(self.handleDelete)
-            kf.insert_before_signal.connect(self.handleInsertBefore)
-            kf.add_child_signal.connect(self.handleAddChild)
-            kf.time_changed_signal.connect(self.handleTimeChanged)
+            kf = self.createNewKeyFrameWidget(key, self.dct[key])
 
             self.grid.addWidget(kf, self.start_pos[0], self.start_pos[1] + i)
             self.kf_list.append(kf)
+
+    def createNewKeyFrameWidget(self, key_name, key_dict):
+        kf = QKeyFrame(key_name, key_dict, self.settings)
+        kf.edit_signal.connect(self.handleEdit)
+        kf.delete_signal.connect(self.handleDelete)
+        kf.insert_before_signal.connect(self.handleInsertBefore)
+        kf.add_child_signal.connect(self.handleAddChild)
+        kf.time_changed_signal.connect(self.handleTimeChanged)
+        return kf
 
     def handleTimeChanged(self, key_name, new_time):
         self.set_time(key_name, new_time)
@@ -214,7 +218,19 @@ class QKeyFrameList(KeyFrameList):
             self.updateAllKeys()
 
     def handleInsertBefore(self, key_name):
-        print('insert_before', key_name)
+        new_key_name, ok = QtGui.QInputDialog.getText(self.parent_widget,
+                                                      'Add child',
+                                                      'Enter key name:')
+        if ok:
+            parent_key = self.dct[key_name]['parent']
+            kf = {'time': 1.0, 'parent': parent_key, "comment": "comment"}
+            self.dct[key_name]['parent'] = str(new_key_name)
+            self.add_keyframe(str(new_key_name), kf)
+            kf_gui = self.createNewKeyFrameWidget(key_name, self.dct[key_name])
+            self.kf_list.append(kf_gui)
+            self.grid.addWidget(kf_gui, self.start_pos[0], self.start_pos[1]
+                                + len(self.kf_list))
+            self.updateAllKeys()
 
     def handleAddChild(self, key_name):
         new_key_name, ok = QtGui.QInputDialog.getText(self.parent_widget,
@@ -223,7 +239,7 @@ class QKeyFrameList(KeyFrameList):
         if ok:
             kf = {'time': 1.0, 'parent': key_name, "comment": "comment"}
             self.add_keyframe(str(new_key_name), kf)
-            kf_gui = QKeyFrame(key_name, self.dct[key_name], self.settings)
+            kf_gui = self.createNewKeyFrameWidget(key_name, self.dct[key_name])
             self.kf_list.append(kf_gui)
             self.grid.addWidget(kf_gui, self.start_pos[0], self.start_pos[1]
                                 + len(self.kf_list))

@@ -105,6 +105,8 @@ class QKeyFrame(QtGui.QWidget):
         self.name_label = QtGui.QLabel(self)
         self.abs_time_label = QtGui.QLabel(self)
 
+        self.setFocusProxy(self.time_spin_box)
+
         for w in [self.name_label, self.abs_time_label, self.time_spin_box]:
             w.setAlignment(QtCore.Qt.AlignRight)
             self.vbox.addWidget(w)
@@ -280,13 +282,16 @@ class QKeyFrameList(KeyFrameList):
     """Gui for editing key frames."""
 
     def __init__(self, dct, settings, grid, start_pos=(0, 0),
-                 parent_widget=None):
+                 parent_widget=None, set_focus_on=None):
         super(QKeyFrameList, self).__init__(dct)
         self.settings = settings
         self.start_pos = start_pos
         self.grid = grid
         self.parent_widget = parent_widget
+        self.set_focus_on = set_focus_on
         self.setupUi(self)
+
+
 
     def setupUi(self, widget):
         self.kf_list = []
@@ -300,6 +305,10 @@ class QKeyFrameList(KeyFrameList):
         self.arrow_widget = QArrowWidget(self.getArrowList(), self.grid,
                                          start_pos=(1, 0),
                                          parent=self.parent_widget)
+        if self.set_focus_on is not None:
+            index = skl.index(self.set_focus_on)
+            self.kf_list[index].setFocus()
+            print('Setting focus on :', self.set_focus_on, index)
 
     def getArrowList(self):
         arrow_list = []
@@ -337,7 +346,7 @@ class QKeyFrameList(KeyFrameList):
         self.set_time(key_name, new_time)
         for kf in self.kf_list:
             self.disconnectKeyFrame(kf)
-        self.parent_widget.reDoUi()
+        self.parent_widget.reDoUi(set_focus_on=key_name)
 
     def handleEdit(self, key_name):
         # find out all keys which are descendents of key_name
@@ -417,9 +426,16 @@ class RampEditor(QtGui.QWidget):
         self.data = data
         self.reDoUi()
 
-    def reDoUi(self):
+    def reDoUi(self, set_focus_on=None):
         print('reDoUi')
         clearLayout(self.grid)
         self.kfl = QKeyFrameList(self.data['keyframes'], self.settings,
                                  self.grid,
-                                 start_pos=(0, 0), parent_widget=self)
+                                 start_pos=(0, 0), parent_widget=self,
+                                 set_focus_on=set_focus_on)
+
+    def save(self, path_to_file):
+        json_file_as_string = json.dumps(self.data, indent=4,
+                                         separators=(',', ': '))
+        with open(path_to_file, 'w') as f:
+            f.write(json_file_as_string)

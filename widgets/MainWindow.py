@@ -55,7 +55,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super(MainWindow, self).setWindowTitle(title)
 
     def handleSave(self):
-        print('saving file')
+        self.ramp_editor.save(self.path_to_ramp_file)
 
     def handleSaveAs(self):
         print('saving as')

@@ -1,36 +1,40 @@
 {
-    "keyframes" :
-    {
-        "start" :
-        {
-            "time" : 0.0,
-            "parent" : null,
-            "comment" : "start the ramp"
+    "keyframes": {
+        "Image Ref": {
+            "comment": "comment",
+            "__abs_time__": 41.0,
+            "parent": "image",
+            "time": 1.0
         },
-        "molasses" :
-        {
-            "time" : 10.0,
-            "parent" : "start",
-            "comment" : "begin molasses"
+        "open shutter": {
+            "comment": "open camera shutter",
+            "__abs_time__": 37.0,
+            "parent": "image",
+            "time": -3.0
         },
-        "image" :
-        {
-            "time" : 30.0,
-            "parent" : "molasses",
-            "comment" : "take an image"
+        "image": {
+            "comment": "take an image",
+            "__abs_time__": 40.0,
+            "parent": "molasses",
+            "time": 30.0
         },
-        "open shutter" :
-        {
-            "time" : -3.0,
-            "parent" : "image",
-            "comment" : "open camera shutter"
+        "reset values": {
+            "comment": "set all values to the default",
+            "__abs_time__": 146.0,
+            "parent": "Image Ref",
+            "time": 105.0
         },
-        "reset values" :
-        {
-            "time" : 100.0,
-            "parent" : "image",
-            "comment" : "set all values to the default"
+        "start": {
+            "comment": "start the ramp",
+            "__abs_time__": 0.0,
+            "parent": null,
+            "time": 0.0
+        },
+        "molasses": {
+            "comment": "begin molasses",
+            "__abs_time__": 10.0,
+            "parent": "start",
+            "time": 10.0
         }
-
     }
 }

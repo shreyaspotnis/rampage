@@ -16,3 +16,7 @@ def i(s):
 
 def red(s):
     return '<font color="red">'+s+'</font>'
+
+
+def green(s):
+    return '<font color="green">'+s+'</font>'

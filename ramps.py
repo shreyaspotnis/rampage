@@ -1,4 +1,5 @@
 """Provides classes to build arbitrary waveforms."""
+
 import json
 
 
@@ -31,7 +32,8 @@ class KeyFrameList(object):
 
     def bake(self):
         """Find absolute times for all keys."""
-        abs_times = [self.get_absolute_time(key) for key in self.dct]
+        for key in self.dct:
+            self.get_absolute_time(key)
         self.is_baked = True
 
     def unbake(self):
@@ -153,6 +155,10 @@ class Channel(object):
         # for key in self.key_frame_list.dct:
         #     if not key in self.dct:
         #         self.dct[key] = {}
+
+    def set_name(self, new_ch_name):
+        self.ch_name = new_ch_name
+
 
 if __name__ == '__main__':
     with open('examples/test_scene.json', 'r') as f:

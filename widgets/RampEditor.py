@@ -1,6 +1,6 @@
 from PyQt4 import QtGui, QtCore
 from widgets.KeyFrameWidgets import QKeyFrameList
-from widgets.ChannelWidgets import QChannel
+from widgets.ChannelWidgets import QChannel, QEditChannelInfoDialog
 import json
 
 
@@ -30,7 +30,7 @@ class RampEditor(QtGui.QWidget):
 
     def openNewFile(self, path_to_new_file):
         with open(path_to_new_file, 'r') as f:
-                data = json.load(f)
+            data = json.load(f)
         self.data = data
         self.reDoUi()
 
@@ -48,6 +48,36 @@ class RampEditor(QtGui.QWidget):
                           self.settings, self.grid, self,
                           start_pos=(i+2, 0))
             self.channels.append(ch)
+
+    def handleEditChannelInfo(self, ch_name):
+        print(ch_name)
+
+        out_tuple = QEditChannelInfoDialog(ch_name,
+                                           self.data['channels'][ch_name],
+                                           self).exec_()
+        exec_return, new_key_name, new_comment, new_id = out_tuple
+        if exec_return == QtGui.QDialog.Accepted:
+            self.data['channels'][ch_name]['comment'] = new_comment
+            self.data['channels'][ch_name]['id'] = new_id
+            old_channel = self.data['channels'].pop(ch_name)
+            self.data['channels'][new_key_name] = old_channel
+
+            # find the channel which was changed
+            for ch in self.channels:
+                if ch.ch_name == ch_name:
+                    ch.edit_channel_info(new_key_name,
+                                         self.data['channels'][new_key_name])
+
+            self.ramp_changed.emit()
+            print('Accepted')
+            # if new_parent == 'None':
+            #     new_parent = None
+            # self.set_parent(key_name, new_parent)
+            # self.set_name(key_name, new_key_name)
+            # for kf in self.kf_list:
+            #     self.disconnectKeyFrame(kf)
+            # self.parent_widget.reDoUi()
+
 
     def save(self, path_to_file):
         json_file_as_string = json.dumps(self.data, indent=4,

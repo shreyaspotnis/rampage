@@ -100,17 +100,22 @@ class QChannelInfoBox(QtGui.QWidget):
 
 class QChannelSegment(QtGui.QWidget):
 
-    def __init__(self, dct, parent):
+    delete_segment = QtCore.pyqtSignal(object)
+
+    def __init__(self, keyname, dct, parent):
         super(QChannelSegment, self).__init__(parent)
         self.dct = dct
         self.vbox = QtGui.QVBoxLayout(self)
         self.setLayout(self.vbox)
+        self.keyname = keyname
 
         self.ramp_type_list = sorted(ramp_types.keys())
         self.curr_ramp_index = self.ramp_type_list.index(self.dct['ramp_type'])
 
         self.ramp_type_combo = QtGui.QComboBox(self)
         self.ramp_type_combo.addItems(sorted(ramp_types.keys()))
+        self.ramp_type_combo.insertSeparator(len(ramp_types))
+        self.ramp_type_combo.addItem('delete')
         self.ramp_type_combo.setCurrentIndex(self.curr_ramp_index)
         self.ramp_type_combo.currentIndexChanged.connect(self.handleRampTypeChanged)
 
@@ -122,6 +127,8 @@ class QChannelSegment(QtGui.QWidget):
 
     def handleRampTypeChanged(self, new_ramp_type_index):
         print(new_ramp_type_index)
+        if self.ramp_type_combo.itemText(new_ramp_type_index) == 'delete':
+            self.delete_segment.emit(self.keyname)
 
     def handleValueChanged(self, new_values):
         print('new_values', new_values)
@@ -153,7 +160,9 @@ class QChannel(Channel):
         self.ch_segments = []
         for i, key in enumerate(self.key_frame_list.sorted_key_list()):
             if key in self.dct['keys']:
-                ch_seg = QChannelSegment(self.dct['keys'][key], self.parent)
+                ch_seg = QChannelSegment(key, self.dct['keys'][key],
+                                         self.parent)
+                ch_seg.delete_segment.connect(self.handleDeleteSegment)
                 self.grid.addWidget(ch_seg, self.start_pos[0],
                                     self.start_pos[1] + i + 1)
                 self.ch_segments.append(ch_seg)
@@ -166,3 +175,18 @@ class QChannel(Channel):
         self.set_name(new_ch_name)
         self.dct = ch_dct
         self.ch_info.edit_channel_info(new_ch_name, ch_dct)
+
+    def handleDeleteSegment(self, keyname):
+        index = -1
+        for i, ch_seg in enumerate(self.ch_segments):
+            if ch_seg.keyname == keyname:
+                index = i
+        if index is not -1:
+            ch_del = self.ch_segments.pop(index)
+            self.grid.removeWidget(ch_del)
+            ch_del.deleteLater()
+            self.dct['keys'].pop(keyname)
+            # evil hack follows
+            self.parent.ramp_changed.emit()
+
+

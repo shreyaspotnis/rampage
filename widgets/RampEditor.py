@@ -2,6 +2,7 @@ from PyQt4 import QtGui, QtCore
 from widgets.KeyFrameWidgets import QKeyFrameList
 from widgets.ChannelWidgets import QChannel, QEditChannelInfoDialog
 import json
+import operator
 
 
 def clearLayout(layout):
@@ -43,7 +44,10 @@ class RampEditor(QtGui.QWidget):
                                  set_focus_on=set_focus_on)
         # TODO: make channels sorted here
         self.channels = []
-        for i, ch_name in enumerate(self.data['channels']):
+        sorted_repr = sorted(self.data['channels'].items(),
+                             key=lambda x: x[1]['id'])
+        sorted_keys = [sr[0] for sr in sorted_repr]
+        for i, ch_name in enumerate(sorted_keys):
             ch = QChannel(ch_name, self.data['channels'][ch_name], self.kfl,
                           self.settings, self.grid, self,
                           start_pos=(i+2, 0))
@@ -57,6 +61,7 @@ class RampEditor(QtGui.QWidget):
                                            self).exec_()
         exec_return, new_key_name, new_comment, new_id = out_tuple
         if exec_return == QtGui.QDialog.Accepted:
+            old_id = self.data['channels'][ch_name]['id']
             self.data['channels'][ch_name]['comment'] = new_comment
             self.data['channels'][ch_name]['id'] = new_id
             old_channel = self.data['channels'].pop(ch_name)
@@ -67,17 +72,12 @@ class RampEditor(QtGui.QWidget):
                 if ch.ch_name == ch_name:
                     ch.edit_channel_info(new_key_name,
                                          self.data['channels'][new_key_name])
-
-            self.ramp_changed.emit()
+            # re do the whole UI if the channel id has changed
+            if old_id != new_id:
+                self.reDoUi()
+            else:
+                self.ramp_changed.emit()
             print('Accepted')
-            # if new_parent == 'None':
-            #     new_parent = None
-            # self.set_parent(key_name, new_parent)
-            # self.set_name(key_name, new_key_name)
-            # for kf in self.kf_list:
-            #     self.disconnectKeyFrame(kf)
-            # self.parent_widget.reDoUi()
-
 
     def save(self, path_to_file):
         json_file_as_string = json.dumps(self.data, indent=4,

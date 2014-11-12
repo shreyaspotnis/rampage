@@ -136,7 +136,7 @@ ramp_types = {
     "jump": ["value"],
     "linear": ["value"],
     "quadratic": ["value", "slope"],
-    "cubic": ["value", "slope", "curvature"],
+    "cubic": ["value", "slope_left", "slope_right"],
 }
 
 

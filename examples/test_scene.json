@@ -1,26 +1,153 @@
 {
+    "channels": {
+        "probe freq": {
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.5
+                    },
+                    "ramp_type": "linear"
+                }
+            },
+            "comment": "probe frequency",
+            "type": "analog",
+            "id": "dev0:1"
+        },
+        "odt-z": {
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.5
+                    },
+                    "ramp_type": "linear"
+                },
+                "molasses": {
+                    "ramp_data": {
+                        "value": 0.5
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "comment": "odt power",
+            "type": "analog",
+            "id": "dev0:2"
+        },
+        "odt-x1111": {
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.5
+                    },
+                    "ramp_type": "linear"
+                },
+                "molasses": {
+                    "ramp_data": {
+                        "value": 0.5
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "comment": "odt power",
+            "type": "analog",
+            "id": "dev0:3"
+        },
+        "agilent": {
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.5
+                    },
+                    "ramp_type": "linear"
+                },
+                "molasses": {
+                    "ramp_data": {
+                        "value": 0.5
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "comment": "Agilent current control",
+            "type": "analog",
+            "id": "dev0:100"
+        },
+        "barrier am": {
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.5
+                    },
+                    "ramp_type": "linear"
+                },
+                "molasses": {
+                    "ramp_data": {
+                        "value": 0.5
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "comment": "barrier am",
+            "type": "analog",
+            "id": "dev0:4"
+        }
+    },
     "keyframes": {
         "Image Ref": {
             "comment": "comment",
-            "__abs_time__": 41.0,
+            "__abs_time__": 12685.5,
             "parent": "image",
-            "time": 1.0
+            "time": 37.0
+        },
+        "ODT Transfer 1": {
+            "comment": "comment",
+            "__abs_time__": 10619.5,
+            "parent": "RF",
+            "time": 1000.0
         },
         "open shutter": {
             "comment": "open camera shutter",
-            "__abs_time__": 37.0,
+            "__abs_time__": 12645.5,
             "parent": "image",
             "time": -3.0
         },
+        "OP1": {
+            "comment": "comment",
+            "__abs_time__": 219.5,
+            "parent": "molasses4",
+            "time": 1.5
+        },
+        "Quad capture": {
+            "comment": "comment",
+            "__abs_time__": 619.5,
+            "parent": "OP1",
+            "time": 400.0
+        },
+        "ODT Transfer 2": {
+            "comment": "comment",
+            "__abs_time__": 12619.5,
+            "parent": "ODT Transfer 1",
+            "time": 2000.0
+        },
         "image": {
             "comment": "take an image",
-            "__abs_time__": 40.0,
-            "parent": "molasses",
-            "time": 30.0
+            "__abs_time__": 12648.5,
+            "parent": "ODT Transfer 2",
+            "time": 29.0
+        },
+        "molasses3": {
+            "comment": "comment",
+            "__abs_time__": 212.0,
+            "parent": "molasses2",
+            "time": 6.0
+        },
+        "molasses4": {
+            "comment": "comment",
+            "__abs_time__": 218.0,
+            "parent": "molasses3",
+            "time": 6.0
         },
         "reset values": {
             "comment": "set all values to the default",
-            "__abs_time__": 146.0,
+            "__abs_time__": 12790.5,
             "parent": "Image Ref",
             "time": 105.0
         },
@@ -30,11 +157,29 @@
             "parent": null,
             "time": 0.0
         },
+        "RF": {
+            "comment": "comment",
+            "__abs_time__": 9619.5,
+            "parent": "Quad capture",
+            "time": 9000.0
+        },
         "molasses": {
             "comment": "begin molasses",
-            "__abs_time__": 10.0,
+            "__abs_time__": 200.0,
             "parent": "start",
-            "time": 10.0
+            "time": 200.0
+        },
+        "OP switch close": {
+            "comment": "comment",
+            "__abs_time__": 215.0,
+            "parent": "molasses4",
+            "time": -3.0
+        },
+        "molasses2": {
+            "comment": "comment",
+            "__abs_time__": 206.0,
+            "parent": "molasses",
+            "time": 6.0
         }
     }
 }

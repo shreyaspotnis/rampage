@@ -212,6 +212,19 @@ class QChannel(Channel):
             ch_del.deleteLater()
             self.dct['keys'].pop(keyname)
             # evil hack follows
+            add_button = QNamedPushButton('+', keyname, self.parent)
+            add_button.clicked_name.connect(self.handleAddSegment)
+
+            keyindex = -1
+            # find where to place our new channel segment
+            for i, key in enumerate(self.key_frame_list.sorted_key_list()):
+                if keyname == key:
+                    keyindex = i
+
+            self.grid.addWidget(add_button, self.start_pos[0],
+                                self.start_pos[1] + keyindex + 1)
+
+            self.add_buttons.append(add_button)
             self.parent.ramp_changed.emit()
 
     def handleAddSegment(self, keyname):

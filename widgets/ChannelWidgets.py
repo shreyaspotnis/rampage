@@ -129,7 +129,6 @@ class QChannelSegment(QtGui.QWidget):
         self.vbox.addWidget(self.spin_boxes)
 
     def handleRampTypeChanged(self, new_ramp_type_index):
-        print(new_ramp_type_index)
         item_text = str(self.ramp_type_combo.itemText(new_ramp_type_index))
         if item_text == 'delete':
             self.delete_segment.emit(self.keyname)
@@ -144,7 +143,6 @@ class QChannelSegment(QtGui.QWidget):
             self.edit_segment.emit()
 
     def handleValueChanged(self, new_values):
-        print('new_values', new_values)
         ramp_parm_names = ramp_types[self.dct['ramp_type']]
         for rpn, val in zip(ramp_parm_names, new_values):
             self.dct['ramp_data'][rpn] = val
@@ -192,9 +190,6 @@ class QChannel(Channel):
                 self.grid.addWidget(add_button, self.start_pos[0],
                                     self.start_pos[1] + i + 1)
                 self.add_buttons.append(add_button)
-                print('no la tengo')
-
-        print('Creating channel')
 
     def edit_channel_info(self, new_ch_name, ch_dct):
         self.set_name(new_ch_name)

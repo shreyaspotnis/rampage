@@ -56,7 +56,6 @@ class RampEditor(QtGui.QWidget):
             self.channels.append(ch)
 
     def handleEditChannelInfo(self, ch_name):
-        print(ch_name)
 
         out_tuple = QEditChannelInfoDialog(ch_name,
                                            self.data['channels'][ch_name],

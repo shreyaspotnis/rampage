@@ -304,10 +304,18 @@ class QKeyFrameList(KeyFrameList):
         kf.time_changed_signal.disconnect(self.handleTimeChanged)
 
     def handleTimeChanged(self, key_name, new_time):
+        skl = self.sorted_key_list()
+        prev_index = skl.index(key_name)
         self.set_time(key_name, new_time)
-        for kf in self.kf_list:
-            self.disconnectKeyFrame(kf)
-        self.parent_widget.reDoUi(set_focus_on=key_name)
+        skl = self.sorted_key_list()
+        new_index = skl.index(key_name)
+        print('prev_index', prev_index, 'new_index', new_index)
+        if new_index != prev_index:
+            for kf in self.kf_list:
+                self.disconnectKeyFrame(kf)
+            self.parent_widget.reDoUi(set_focus_on=key_name)
+        else:
+            self.parent_widget.ramp_changed.emit()
 
     def handleEdit(self, key_name):
         # find out all keys which are descendents of key_name

@@ -17,15 +17,17 @@
             "keys": {
                 "start": {
                     "ramp_data": {
-                        "value": 0.5
+                        "value": 0.0
                     },
-                    "ramp_type": "linear"
+                    "ramp_type": "jump"
                 },
                 "molasses": {
                     "ramp_data": {
-                        "value": 0.5
+                        "slope_left": 0.0,
+                        "slope_right": 0.0,
+                        "value": 0.0
                     },
-                    "ramp_type": "jump"
+                    "ramp_type": "cubic"
                 }
             },
             "comment": "odt power",
@@ -42,9 +44,10 @@
                 },
                 "molasses": {
                     "ramp_data": {
-                        "value": 0.5
+                        "slope": 0.0,
+                        "value": 0.0
                     },
-                    "ramp_type": "jump"
+                    "ramp_type": "quadratic"
                 }
             },
             "comment": "odt power",
@@ -55,15 +58,18 @@
             "keys": {
                 "start": {
                     "ramp_data": {
-                        "value": 0.5
+                        "slope": 0.0,
+                        "value": 0.0
                     },
-                    "ramp_type": "linear"
+                    "ramp_type": "quadratic"
                 },
                 "molasses": {
                     "ramp_data": {
-                        "value": 0.5
+                        "slope_left": 0.0,
+                        "slope_right": 0.0,
+                        "value": 0.0
                     },
-                    "ramp_type": "jump"
+                    "ramp_type": "cubic"
                 }
             },
             "comment": "Agilent current control",
@@ -74,15 +80,19 @@
             "keys": {
                 "start": {
                     "ramp_data": {
-                        "value": 0.5
+                        "slope_left": 0.0,
+                        "slope_right": 0.0,
+                        "value": 0.0
                     },
-                    "ramp_type": "linear"
+                    "ramp_type": "cubic"
                 },
                 "molasses": {
                     "ramp_data": {
-                        "value": 0.5
+                        "slope_left": 0.0,
+                        "slope_right": 0.0,
+                        "value": 0.0
                     },
-                    "ramp_type": "jump"
+                    "ramp_type": "cubic"
                 }
             },
             "comment": "barrier am",

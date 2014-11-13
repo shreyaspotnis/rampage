@@ -101,6 +101,7 @@ class QChannelInfoBox(QtGui.QWidget):
 class QChannelSegment(QtGui.QWidget):
 
     delete_segment = QtCore.pyqtSignal(object)
+    edit_segment = QtCore.pyqtSignal()
 
     def __init__(self, keyname, dct, parent):
         super(QChannelSegment, self).__init__(parent)
@@ -119,16 +120,28 @@ class QChannelSegment(QtGui.QWidget):
         self.ramp_type_combo.setCurrentIndex(self.curr_ramp_index)
         self.ramp_type_combo.currentIndexChanged.connect(self.handleRampTypeChanged)
 
-        ramp_parm_names = ramp_types[self.dct['ramp_type']]
-        self.spin_boxes = QMultipleSpinBoxEdit(ramp_parm_names, self)
+        ramp_parm_names = sorted(ramp_types[self.dct['ramp_type']])
+        ramp_parm_values = [self.dct['ramp_data'][k] for k in ramp_parm_names]
+        self.spin_boxes = QMultipleSpinBoxEdit(ramp_parm_names, self,
+                                               ramp_parm_values)
         self.spin_boxes.valueChanged.connect(self.handleValueChanged)
         self.vbox.addWidget(self.ramp_type_combo)
         self.vbox.addWidget(self.spin_boxes)
 
     def handleRampTypeChanged(self, new_ramp_type_index):
         print(new_ramp_type_index)
-        if self.ramp_type_combo.itemText(new_ramp_type_index) == 'delete':
+        item_text = str(self.ramp_type_combo.itemText(new_ramp_type_index))
+        if item_text == 'delete':
             self.delete_segment.emit(self.keyname)
+        else:
+            ramp_parm_names = ramp_types[item_text]
+            self.spin_boxes.editAttributes(ramp_parm_names)
+            self.dct['ramp_type'] = item_text
+            ramp_data_dct = {}
+            for rpn in ramp_parm_names:
+                ramp_data_dct[rpn] = 0.0
+            self.dct['ramp_data'] = ramp_data_dct
+            self.edit_segment.emit()
 
     def handleValueChanged(self, new_values):
         print('new_values', new_values)
@@ -163,6 +176,8 @@ class QChannel(Channel):
                 ch_seg = QChannelSegment(key, self.dct['keys'][key],
                                          self.parent)
                 ch_seg.delete_segment.connect(self.handleDeleteSegment)
+                # evil hack
+                ch_seg.edit_segment.connect(self.parent.ramp_changed)
                 self.grid.addWidget(ch_seg, self.start_pos[0],
                                     self.start_pos[1] + i + 1)
                 self.ch_segments.append(ch_seg)

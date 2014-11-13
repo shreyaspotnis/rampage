@@ -1,6 +1,6 @@
 from PyQt4 import QtGui, QtCore
 from ramps import Channel, ramp_types
-from widgets.CommonWidgets import QMultipleSpinBoxEdit
+from widgets.CommonWidgets import QMultipleSpinBoxEdit, QNamedPushButton
 import format as fmt
 
 
@@ -120,7 +120,7 @@ class QChannelSegment(QtGui.QWidget):
         self.ramp_type_combo.setCurrentIndex(self.curr_ramp_index)
         self.ramp_type_combo.currentIndexChanged.connect(self.handleRampTypeChanged)
 
-        ramp_parm_names = sorted(ramp_types[self.dct['ramp_type']])
+        ramp_parm_names = ramp_types[self.dct['ramp_type']]
         ramp_parm_values = [self.dct['ramp_data'][k] for k in ramp_parm_names]
         self.spin_boxes = QMultipleSpinBoxEdit(ramp_parm_names, self,
                                                ramp_parm_values)
@@ -145,6 +145,10 @@ class QChannelSegment(QtGui.QWidget):
 
     def handleValueChanged(self, new_values):
         print('new_values', new_values)
+        ramp_parm_names = ramp_types[self.dct['ramp_type']]
+        for rpn, val in zip(ramp_parm_names, new_values):
+            self.dct['ramp_data'][rpn] = val
+        self.edit_segment.emit()
 
 
 class QChannel(Channel):
@@ -171,6 +175,7 @@ class QChannel(Channel):
         # cycle through all keys keys in key list and find out which ones
         # we have in our channel
         self.ch_segments = []
+        self.add_buttons = []
         for i, key in enumerate(self.key_frame_list.sorted_key_list()):
             if key in self.dct['keys']:
                 ch_seg = QChannelSegment(key, self.dct['keys'][key],
@@ -182,6 +187,11 @@ class QChannel(Channel):
                                     self.start_pos[1] + i + 1)
                 self.ch_segments.append(ch_seg)
             else:
+                add_button = QNamedPushButton('+', key, self.parent)
+                add_button.clicked_name.connect(self.handleAddSegment)
+                self.grid.addWidget(add_button, self.start_pos[0],
+                                    self.start_pos[1] + i + 1)
+                self.add_buttons.append(add_button)
                 print('no la tengo')
 
         print('Creating channel')
@@ -204,4 +214,37 @@ class QChannel(Channel):
             # evil hack follows
             self.parent.ramp_changed.emit()
 
+    def handleAddSegment(self, keyname):
+        index = -1
+        for i, add_button in enumerate(self.add_buttons):
+            if add_button.name == keyname:
+                index = i
+                break
+        if index is not -1:
+            add_button = self.add_buttons.pop(index)
+            self.grid.removeWidget(add_button)
+            add_button.deleteLater()
+            segment_dct = {}
+            ramp_type = sorted(ramp_types.keys())[0]
+            segment_dct['ramp_type'] = ramp_type
+            segment_dct['ramp_data'] = {}
+            for rpn in ramp_types[ramp_type]:
+                segment_dct['ramp_data'][rpn] = 0.0
+            self.dct['keys'][keyname] = segment_dct
 
+            ch_seg = QChannelSegment(keyname, self.dct['keys'][keyname],
+                                     self.parent)
+            ch_seg.delete_segment.connect(self.handleDeleteSegment)
+            # evil hack
+            ch_seg.edit_segment.connect(self.parent.ramp_changed)
+            keyindex = -1
+
+            # find where to place our new channel segment
+            for i, key in enumerate(self.key_frame_list.sorted_key_list()):
+                if keyname == key:
+                    keyindex = i
+
+            self.grid.addWidget(ch_seg, self.start_pos[0],
+                                self.start_pos[1] + keyindex + 1)
+            self.ch_segments.append(ch_seg)
+            self.parent.ramp_changed.emit()

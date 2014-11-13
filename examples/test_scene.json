@@ -7,6 +7,18 @@
                         "value": 0.5
                     },
                     "ramp_type": "linear"
+                },
+                "molasses": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "Quad capture": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
                 }
             },
             "comment": "probe frequency",
@@ -17,7 +29,7 @@
             "keys": {
                 "start": {
                     "ramp_data": {
-                        "value": 0.0
+                        "value": 5.5
                     },
                     "ramp_type": "jump"
                 },
@@ -59,7 +71,7 @@
                 "start": {
                     "ramp_data": {
                         "slope": 0.0,
-                        "value": 0.0
+                        "value": -1.0
                     },
                     "ramp_type": "quadratic"
                 },
@@ -67,7 +79,7 @@
                     "ramp_data": {
                         "slope_left": 0.0,
                         "slope_right": 0.0,
-                        "value": 0.0
+                        "value": 1.0
                     },
                     "ramp_type": "cubic"
                 }
@@ -103,19 +115,19 @@
     "keyframes": {
         "Image Ref": {
             "comment": "comment",
-            "__abs_time__": 12685.5,
+            "__abs_time__": 12676.5,
             "parent": "image",
             "time": 37.0
         },
         "ODT Transfer 1": {
             "comment": "comment",
-            "__abs_time__": 10619.5,
+            "__abs_time__": 10610.5,
             "parent": "RF",
             "time": 1000.0
         },
         "open shutter": {
             "comment": "open camera shutter",
-            "__abs_time__": 12645.5,
+            "__abs_time__": 12636.5,
             "parent": "image",
             "time": -3.0
         },
@@ -127,19 +139,19 @@
         },
         "Quad capture": {
             "comment": "comment",
-            "__abs_time__": 619.5,
+            "__abs_time__": 610.5,
             "parent": "OP1",
-            "time": 400.0
+            "time": 391.0
         },
         "ODT Transfer 2": {
             "comment": "comment",
-            "__abs_time__": 12619.5,
+            "__abs_time__": 12610.5,
             "parent": "ODT Transfer 1",
             "time": 2000.0
         },
         "image": {
             "comment": "take an image",
-            "__abs_time__": 12648.5,
+            "__abs_time__": 12639.5,
             "parent": "ODT Transfer 2",
             "time": 29.0
         },
@@ -157,7 +169,7 @@
         },
         "reset values": {
             "comment": "set all values to the default",
-            "__abs_time__": 12790.5,
+            "__abs_time__": 12781.5,
             "parent": "Image Ref",
             "time": 105.0
         },
@@ -169,7 +181,7 @@
         },
         "RF": {
             "comment": "comment",
-            "__abs_time__": 9619.5,
+            "__abs_time__": 9610.5,
             "parent": "Quad capture",
             "time": 9000.0
         },

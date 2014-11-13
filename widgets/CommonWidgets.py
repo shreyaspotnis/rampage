@@ -16,6 +16,22 @@ class MyDoubleSpinBox(QtGui.QDoubleSpinBox):
         self.selectAll()
 
 
+class QNamedPushButton(QtGui.QPushButton):
+
+    """Push button with a name identifier. Use this when multiple push buttons
+    are connected to the same slot."""
+
+    clicked_name = QtCore.pyqtSignal(object)
+
+    def __init__(self, label, name, parent):
+        super(QNamedPushButton, self).__init__(label, parent)
+        self.name = name
+        self.clicked.connect(self.handleClicked)
+
+    def handleClicked(self):
+        self.clicked_name.emit(self.name)
+
+
 class QMultipleSpinBoxEdit(QtGui.QWidget):
 
     """Widget to edit a list of floats."""

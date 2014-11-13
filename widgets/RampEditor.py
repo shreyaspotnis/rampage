@@ -48,9 +48,11 @@ class RampEditor(QtGui.QWidget):
                              key=lambda x: x[1]['id'])
         sorted_keys = [sr[0] for sr in sorted_repr]
         for i, ch_name in enumerate(sorted_keys):
-            ch = QChannel(ch_name, self.data['channels'][ch_name], self.kfl,
-                          self.settings, self.grid, self,
-                          start_pos=(i+2, 0))
+            ch_dct = self.data['channels'][ch_name]
+            if ch_dct['type'] == 'analog':
+                ch = QChannel(ch_name, ch_dct, self.kfl,
+                              self.settings, self.grid, self,
+                              start_pos=(i+2, 0))
             self.channels.append(ch)
 
     def handleEditChannelInfo(self, ch_name):

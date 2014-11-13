@@ -150,6 +150,40 @@ class QChannelSegment(QtGui.QWidget):
         self.edit_segment.emit()
 
 
+class QDigitalChannelSegment(QChannelSegment):
+    def __init__(self, keyname, dct, parent, ramp_types):
+        super(QDigitalChannelSegment, self).__init__(keyname, dct,
+                                                     parent, ramp_types)
+        # super(QDigitalChannelSegment, self).setupUi()
+        self.boolButton = QtGui.QPushButton(self)
+        self.boolButton.setCheckable(True)
+        self.state = self.dct['state']
+        self.boolButton.setChecked(self.state)
+        if self.state:
+            text = 'ON'
+        else:
+            text = 'OFF'
+        self.boolButton.setText(text)
+        self.boolButton.clicked.connect(self.handleBoolButtonClicked)
+        stylesheet = ('QPushButton:checked { background-color:'
+                      'rgb(100,255,125); }'
+                      'QPushButton { background-color:'
+                      'rgb(255,125,100); }')
+        self.boolButton.setStyleSheet(stylesheet)
+        self.vbox.addWidget(self.boolButton)
+        print('adding button')
+
+    def handleBoolButtonClicked(self, checked):
+        print('clicked')
+        self.state = bool(checked)
+        if self.state:
+            text = 'ON'
+        else:
+            text = 'OFF'
+        self.boolButton.setText(text)
+        self.dct['state'] = self.state
+        self.edit_segment.emit()
+
 class QChannel(Channel):
 
     """Edits channels.
@@ -166,6 +200,7 @@ class QChannel(Channel):
         self.parent = parent
         self.grid = grid
         self.ramp_types = ramp_types
+        self.channel_type = dct['type']
         self.setupUi()
 
     def setupUi(self):
@@ -178,8 +213,14 @@ class QChannel(Channel):
         self.add_buttons = []
         for i, key in enumerate(self.key_frame_list.sorted_key_list()):
             if key in self.dct['keys']:
-                ch_seg = QChannelSegment(key, self.dct['keys'][key],
-                                         self.parent, self.ramp_types)
+                if self.channel_type == 'analog':
+                    ch_seg = QChannelSegment(key, self.dct['keys'][key],
+                                             self.parent, self.ramp_types)
+                elif self.channel_type == 'digital':
+                    ch_seg = QDigitalChannelSegment(key, self.dct['keys'][key],
+                                                    self.parent,
+                                                    self.ramp_types)
+
                 ch_seg.delete_segment.connect(self.handleDeleteSegment)
                 # evil hack
                 ch_seg.edit_segment.connect(self.parent.ramp_changed)
@@ -238,12 +279,20 @@ class QChannel(Channel):
             ramp_type = sorted(self.ramp_types.keys())[0]
             segment_dct['ramp_type'] = ramp_type
             segment_dct['ramp_data'] = {}
+            if self.channel_type == 'digital':
+                segment_dct['state'] = False
             for rpn in self.ramp_types[ramp_type]:
                 segment_dct['ramp_data'][rpn] = 0.0
             self.dct['keys'][keyname] = segment_dct
 
-            ch_seg = QChannelSegment(keyname, self.dct['keys'][keyname],
-                                     self.parent, self.ramp_types)
+            if self.channel_type == 'analog':
+                ch_seg = QChannelSegment(keyname, self.dct['keys'][keyname],
+                                         self.parent, self.ramp_types)
+            elif self.channel_type == 'digital':
+                ch_seg = QDigitalChannelSegment(keyname,
+                                                self.dct['keys'][keyname],
+                                                self.parent, self.ramp_types)
+
             ch_seg.delete_segment.connect(self.handleDeleteSegment)
             # evil hack
             ch_seg.edit_segment.connect(self.parent.ramp_changed)
@@ -258,3 +307,4 @@ class QChannel(Channel):
                                 self.start_pos[1] + keyindex + 1)
             self.ch_segments.append(ch_seg)
             self.parent.ramp_changed.emit()
+

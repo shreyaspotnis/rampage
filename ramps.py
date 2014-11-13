@@ -132,14 +132,6 @@ class KeyFrameList(object):
             return self.is_ancestor(one_up_parent, ancestor_key)
 
 
-ramp_types = {
-    "jump": ["value"],
-    "linear": ["value"],
-    "quadratic": ["value", "slope"],
-    "cubic": ["value", "slope_left", "slope_right"],
-}
-
-
 class Channel(object):
 
     """Arbitrary waveform channel."""
@@ -150,12 +142,6 @@ class Channel(object):
         self.ch_name = ch_name
         self.dct = dct
         self.key_frame_list = key_frame_list
-        # fill in all entries that are left blank
-        print(self.key_frame_list)
-        # for key in self.key_frame_list.dct:
-        #     if not key in self.dct:
-        #         self.dct[key] = {}
-
     def set_name(self, new_ch_name):
         self.ch_name = new_ch_name
 

@@ -1,5 +1,5 @@
 from PyQt4 import QtGui, QtCore
-from ramps import Channel, ramp_types
+from ramps import Channel
 from widgets.CommonWidgets import QMultipleSpinBoxEdit, QNamedPushButton
 import format as fmt
 
@@ -103,24 +103,25 @@ class QChannelSegment(QtGui.QWidget):
     delete_segment = QtCore.pyqtSignal(object)
     edit_segment = QtCore.pyqtSignal()
 
-    def __init__(self, keyname, dct, parent):
+    def __init__(self, keyname, dct, parent, ramp_types):
         super(QChannelSegment, self).__init__(parent)
         self.dct = dct
         self.vbox = QtGui.QVBoxLayout(self)
         self.setLayout(self.vbox)
         self.keyname = keyname
+        self.ramp_types = ramp_types
 
-        self.ramp_type_list = sorted(ramp_types.keys())
+        self.ramp_type_list = sorted(self.ramp_types.keys())
         self.curr_ramp_index = self.ramp_type_list.index(self.dct['ramp_type'])
 
         self.ramp_type_combo = QtGui.QComboBox(self)
-        self.ramp_type_combo.addItems(sorted(ramp_types.keys()))
-        self.ramp_type_combo.insertSeparator(len(ramp_types))
+        self.ramp_type_combo.addItems(sorted(self.ramp_types.keys()))
+        self.ramp_type_combo.insertSeparator(len(self.ramp_types))
         self.ramp_type_combo.addItem('delete')
         self.ramp_type_combo.setCurrentIndex(self.curr_ramp_index)
         self.ramp_type_combo.currentIndexChanged.connect(self.handleRampTypeChanged)
 
-        ramp_parm_names = ramp_types[self.dct['ramp_type']]
+        ramp_parm_names = self.ramp_types[self.dct['ramp_type']]
         ramp_parm_values = [self.dct['ramp_data'][k] for k in ramp_parm_names]
         self.spin_boxes = QMultipleSpinBoxEdit(ramp_parm_names, self,
                                                ramp_parm_values)
@@ -133,7 +134,7 @@ class QChannelSegment(QtGui.QWidget):
         if item_text == 'delete':
             self.delete_segment.emit(self.keyname)
         else:
-            ramp_parm_names = ramp_types[item_text]
+            ramp_parm_names = self.ramp_types[item_text]
             self.spin_boxes.editAttributes(ramp_parm_names)
             self.dct['ramp_type'] = item_text
             ramp_data_dct = {}
@@ -143,7 +144,7 @@ class QChannelSegment(QtGui.QWidget):
             self.edit_segment.emit()
 
     def handleValueChanged(self, new_values):
-        ramp_parm_names = ramp_types[self.dct['ramp_type']]
+        ramp_parm_names = self.ramp_types[self.dct['ramp_type']]
         for rpn, val in zip(ramp_parm_names, new_values):
             self.dct['ramp_data'][rpn] = val
         self.edit_segment.emit()
@@ -159,11 +160,12 @@ class QChannel(Channel):
     """
 
     def __init__(self, ch_name, dct, key_frame_list, settings, grid, parent,
-                 start_pos=(0, 0)):
+                 ramp_types, start_pos=(0, 0)):
         super(QChannel, self).__init__(ch_name, dct, key_frame_list)
         self.start_pos = start_pos
         self.parent = parent
         self.grid = grid
+        self.ramp_types = ramp_types
         self.setupUi()
 
     def setupUi(self):
@@ -177,7 +179,7 @@ class QChannel(Channel):
         for i, key in enumerate(self.key_frame_list.sorted_key_list()):
             if key in self.dct['keys']:
                 ch_seg = QChannelSegment(key, self.dct['keys'][key],
-                                         self.parent)
+                                         self.parent, self.ramp_types)
                 ch_seg.delete_segment.connect(self.handleDeleteSegment)
                 # evil hack
                 ch_seg.edit_segment.connect(self.parent.ramp_changed)
@@ -233,15 +235,15 @@ class QChannel(Channel):
             self.grid.removeWidget(add_button)
             add_button.deleteLater()
             segment_dct = {}
-            ramp_type = sorted(ramp_types.keys())[0]
+            ramp_type = sorted(self.ramp_types.keys())[0]
             segment_dct['ramp_type'] = ramp_type
             segment_dct['ramp_data'] = {}
-            for rpn in ramp_types[ramp_type]:
+            for rpn in self.ramp_types[ramp_type]:
                 segment_dct['ramp_data'][rpn] = 0.0
             self.dct['keys'][keyname] = segment_dct
 
             ch_seg = QChannelSegment(keyname, self.dct['keys'][keyname],
-                                     self.parent)
+                                     self.parent, self.ramp_types)
             ch_seg.delete_segment.connect(self.handleDeleteSegment)
             # evil hack
             ch_seg.edit_segment.connect(self.parent.ramp_changed)

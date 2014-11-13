@@ -1,96 +1,5 @@
 {
     "channels": {
-        "probe freq": {
-            "keys": {
-                "OP1": {
-                    "ramp_type": "cubic",
-                    "ramp_data": {
-                        "slope_left": 0.0,
-                        "slope_right": 0.0,
-                        "value": 0.0
-                    }
-                },
-                "Quad capture": {
-                    "ramp_type": "jump",
-                    "ramp_data": {
-                        "value": 0.0
-                    }
-                },
-                "ODT Transfer 2": {
-                    "ramp_data": {
-                        "slope_left": 0.0,
-                        "slope_right": 0.0,
-                        "value": 0.0
-                    },
-                    "ramp_type": "cubic"
-                },
-                "molasses2": {
-                    "ramp_type": "cubic",
-                    "ramp_data": {
-                        "slope_left": 0.0,
-                        "slope_right": 0.0,
-                        "value": 0.0
-                    }
-                },
-                "molasses3": {
-                    "ramp_type": "cubic",
-                    "ramp_data": {
-                        "slope_left": 0.0,
-                        "slope_right": 0.0,
-                        "value": 0.0
-                    }
-                },
-                "start": {
-                    "ramp_data": {
-                        "value": 0.5
-                    },
-                    "ramp_type": "linear"
-                },
-                "molasses": {
-                    "ramp_type": "jump",
-                    "ramp_data": {
-                        "value": 0.0
-                    }
-                }
-            },
-            "comment": "probe frequency",
-            "type": "analog",
-            "id": "dev0:1"
-        },
-        "odt-z": {
-            "keys": {
-                "ODT Transfer 2": {
-                    "ramp_data": {
-                        "slope": 0.0,
-                        "value": 0.0
-                    },
-                    "ramp_type": "quadratic"
-                },
-                "start": {
-                    "ramp_data": {
-                        "value": 5.5
-                    },
-                    "ramp_type": "jump"
-                },
-                "molasses": {
-                    "ramp_data": {
-                        "slope_left": 0.0,
-                        "slope_right": 0.0,
-                        "value": 0.0
-                    },
-                    "ramp_type": "cubic"
-                },
-                "Quad capture": {
-                    "ramp_data": {
-                        "value": 0.0
-                    },
-                    "ramp_type": "linear"
-                }
-            },
-            "comment": "odt power",
-            "type": "analog",
-            "id": "dev0:2"
-        },
         "odt-x1111": {
             "keys": {
                 "start": {
@@ -133,15 +42,108 @@
             "type": "analog",
             "id": "dev0:100"
         },
-        "barrier am": {
+        "FET": {
             "keys": {
                 "start": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                }
+            },
+            "comment": "switches the FET on or off",
+            "type": "digital",
+            "id": "dev3:0"
+        },
+        "probe freq": {
+            "keys": {
+                "OP1": {
+                    "ramp_type": "cubic",
+                    "ramp_data": {
+                        "slope_left": 0.0,
+                        "slope_right": 0.0,
+                        "value": 0.0
+                    }
+                },
+                "Quad capture": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "ODT Transfer 2": {
                     "ramp_data": {
                         "slope_left": 0.0,
                         "slope_right": 0.0,
                         "value": 0.0
                     },
                     "ramp_type": "cubic"
+                },
+                "molasses2": {
+                    "ramp_type": "cubic",
+                    "ramp_data": {
+                        "slope_left": 0.0,
+                        "slope_right": 0.0,
+                        "value": 0.0
+                    }
+                },
+                "molasses3": {
+                    "ramp_type": "cubic",
+                    "ramp_data": {
+                        "slope_left": 0.0,
+                        "slope_right": 0.0,
+                        "value": 60.0
+                    }
+                },
+                "start": {
+                    "ramp_data": {
+                        "value": 0.5
+                    },
+                    "ramp_type": "linear"
+                },
+                "molasses": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "comment": "probe frequency",
+            "type": "analog",
+            "id": "dev0:1"
+        },
+        "barrier am": {
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "linear"
+                },
+                "molasses": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "linear"
+                }
+            },
+            "comment": "barrier am",
+            "type": "analog",
+            "id": "dev0:4"
+        },
+        "odt-z": {
+            "keys": {
+                "ODT Transfer 2": {
+                    "ramp_data": {
+                        "slope": 0.0,
+                        "value": 0.0
+                    },
+                    "ramp_type": "quadratic"
+                },
+                "start": {
+                    "ramp_data": {
+                        "value": 5.5
+                    },
+                    "ramp_type": "jump"
                 },
                 "molasses": {
                     "ramp_data": {
@@ -150,11 +152,17 @@
                         "value": 0.0
                     },
                     "ramp_type": "cubic"
+                },
+                "Quad capture": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "linear"
                 }
             },
-            "comment": "barrier am",
+            "comment": "odt power",
             "type": "analog",
-            "id": "dev0:4"
+            "id": "dev0:2"
         }
     },
     "keyframes": {
@@ -248,5 +256,11 @@
             "parent": "molasses",
             "time": 68.0
         }
+    },
+    "analog_ramp_types": {
+        "jump": ["value"],
+        "linear": ["value"],
+        "quadratic": ["value", "slope"],
+        "cubic": ["value", "slope_left", "slope_right"]
     }
 }

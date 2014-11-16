@@ -2,6 +2,7 @@ from PyQt4 import QtGui, QtCore
 from widgets.KeyFrameWidgets import QKeyFrameList
 from widgets.ChannelWidgets import QChannel
 from widgets.ChannelWidgets import QEditChannelInfoDialog
+from widgets.RampViewer import RampViewer
 import json
 
 
@@ -85,6 +86,9 @@ class RampEditor(QtGui.QWidget):
             else:
                 self.ramp_changed.emit()
             print('Accepted')
+
+    def handleViewChannel(self, ch_name):
+        RampViewer(self.data, ch_name, self.settings, self).exec_()
 
     def save(self, path_to_file):
         json_file_as_string = json.dumps(self.data, indent=4,

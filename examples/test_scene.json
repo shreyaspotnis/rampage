@@ -3,17 +3,17 @@
         "odt-x1111": {
             "keys": {
                 "start": {
+                    "ramp_type": "linear",
                     "ramp_data": {
                         "value": 0.5
-                    },
-                    "ramp_type": "linear"
+                    }
                 },
                 "molasses": {
+                    "ramp_type": "quadratic",
                     "ramp_data": {
                         "slope": 0.0,
                         "value": 0.0
-                    },
-                    "ramp_type": "quadratic"
+                    }
                 }
             },
             "comment": "odt power",
@@ -23,19 +23,19 @@
         "agilent": {
             "keys": {
                 "start": {
+                    "ramp_type": "quadratic",
                     "ramp_data": {
                         "slope": 0.0,
                         "value": -1.0
-                    },
-                    "ramp_type": "quadratic"
+                    }
                 },
                 "molasses": {
+                    "ramp_type": "cubic",
                     "ramp_data": {
                         "slope_left": 0.0,
                         "slope_right": 0.0,
                         "value": 1.0
-                    },
-                    "ramp_type": "cubic"
+                    }
                 }
             },
             "comment": "Agilent current control",
@@ -44,45 +44,45 @@
         },
         "FET": {
             "keys": {
-                "molasses3": {
+                "ODT Transfer 1": {
                     "state": false,
-                    "ramp_type": "jump",
-                    "ramp_data": {}
+                    "ramp_data": {},
+                    "ramp_type": "jump"
                 },
                 "OP1": {
                     "state": true,
-                    "ramp_type": "jump",
-                    "ramp_data": {}
+                    "ramp_data": {},
+                    "ramp_type": "jump"
                 },
                 "Quad capture": {
                     "state": false,
-                    "ramp_type": "jump",
-                    "ramp_data": {}
+                    "ramp_data": {},
+                    "ramp_type": "jump"
                 },
                 "molasses2": {
                     "state": true,
-                    "ramp_data": {},
-                    "ramp_type": "jump"
-                },
-                "ODT Transfer 1": {
-                    "state": false,
                     "ramp_type": "jump",
                     "ramp_data": {}
+                },
+                "molasses3": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
                 },
                 "molasses4": {
                     "state": false,
-                    "ramp_type": "jump",
-                    "ramp_data": {}
+                    "ramp_data": {},
+                    "ramp_type": "jump"
                 },
                 "start": {
                     "state": true,
-                    "ramp_data": {},
-                    "ramp_type": "jump"
+                    "ramp_type": "jump",
+                    "ramp_data": {}
                 },
                 "OP switch close": {
                     "state": true,
-                    "ramp_data": {},
-                    "ramp_type": "jump"
+                    "ramp_type": "jump",
+                    "ramp_data": {}
                 }
             },
             "comment": "switches the FET on or off",
@@ -92,20 +92,6 @@
         "probe freq": {
             "keys": {
                 "OP1": {
-                    "ramp_type": "cubic",
-                    "ramp_data": {
-                        "slope_left": 0.0,
-                        "slope_right": 0.0,
-                        "value": 0.0
-                    }
-                },
-                "Quad capture": {
-                    "ramp_type": "jump",
-                    "ramp_data": {
-                        "value": 0.0
-                    }
-                },
-                "ODT Transfer 2": {
                     "ramp_data": {
                         "slope_left": 0.0,
                         "slope_right": 0.0,
@@ -113,7 +99,13 @@
                     },
                     "ramp_type": "cubic"
                 },
-                "molasses2": {
+                "Quad capture": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "ODT Transfer 2": {
                     "ramp_type": "cubic",
                     "ramp_data": {
                         "slope_left": 0.0,
@@ -121,25 +113,33 @@
                         "value": 0.0
                     }
                 },
+                "molasses2": {
+                    "ramp_data": {
+                        "slope_left": 0.0,
+                        "slope_right": 0.0,
+                        "value": 0.0
+                    },
+                    "ramp_type": "cubic"
+                },
                 "molasses3": {
-                    "ramp_type": "cubic",
                     "ramp_data": {
                         "slope_left": 0.0,
                         "slope_right": 0.0,
                         "value": 60.0
-                    }
+                    },
+                    "ramp_type": "cubic"
                 },
                 "start": {
+                    "ramp_type": "linear",
                     "ramp_data": {
                         "value": 0.5
-                    },
-                    "ramp_type": "linear"
+                    }
                 },
                 "molasses": {
-                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    }
+                    },
+                    "ramp_type": "jump"
                 }
             },
             "comment": "probe frequency",
@@ -149,31 +149,31 @@
         "odt-z": {
             "keys": {
                 "ODT Transfer 2": {
+                    "ramp_type": "quadratic",
                     "ramp_data": {
                         "slope": 0.0,
                         "value": 0.0
-                    },
-                    "ramp_type": "quadratic"
+                    }
                 },
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 5.5
-                    },
-                    "ramp_type": "jump"
+                    }
                 },
                 "molasses": {
+                    "ramp_type": "cubic",
                     "ramp_data": {
                         "slope_left": 0.0,
                         "slope_right": 0.0,
                         "value": 0.0
-                    },
-                    "ramp_type": "cubic"
+                    }
                 },
                 "Quad capture": {
+                    "ramp_type": "linear",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "linear"
+                    }
                 }
             },
             "comment": "odt power",
@@ -183,16 +183,16 @@
         "barrier am": {
             "keys": {
                 "start": {
+                    "ramp_type": "linear",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "linear"
+                    }
                 },
                 "molasses": {
+                    "ramp_type": "linear",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "linear"
+                    }
                 }
             },
             "comment": "barrier am",
@@ -232,17 +232,17 @@
             "parent": "image",
             "time": 37.0
         },
-        "ODT Transfer 1": {
-            "comment": "comment",
-            "__abs_time__": 10672.5,
-            "parent": "RF",
-            "time": 1000.0
+        "molasses": {
+            "comment": "begin molasses",
+            "__abs_time__": 200.0,
+            "parent": "start",
+            "time": 200.0
         },
-        "open shutter": {
-            "comment": "open camera shutter",
-            "__abs_time__": 12698.5,
-            "parent": "image",
-            "time": -3.0
+        "molasses3": {
+            "comment": "comment",
+            "__abs_time__": 274.0,
+            "parent": "molasses2",
+            "time": 6.0
         },
         "OP1": {
             "comment": "this value is set so that the shutter has enough time to close",
@@ -268,11 +268,11 @@
             "parent": "ODT Transfer 2",
             "time": 29.0
         },
-        "molasses3": {
+        "ODT Transfer 1": {
             "comment": "comment",
-            "__abs_time__": 274.0,
-            "parent": "molasses2",
-            "time": 6.0
+            "__abs_time__": 10672.5,
+            "parent": "RF",
+            "time": 1000.0
         },
         "molasses4": {
             "comment": "comment",
@@ -298,16 +298,10 @@
             "parent": "Quad capture",
             "time": 9000.0
         },
-        "molasses": {
-            "comment": "begin molasses",
-            "__abs_time__": 200.0,
-            "parent": "start",
-            "time": 200.0
-        },
-        "OP switch close": {
-            "comment": "comment",
-            "__abs_time__": 277.0,
-            "parent": "molasses4",
+        "open shutter": {
+            "comment": "open camera shutter",
+            "__abs_time__": 12698.5,
+            "parent": "image",
             "time": -3.0
         },
         "molasses2": {

@@ -37,10 +37,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.settings.beginGroup('mainwindow')
         geometry = self.settings.value('geometry').toByteArray()
         state = self.settings.value('windowstate').toByteArray()
-        dock_string = str(self.settings.value('dockstate').toString())
-        if dock_string is not "":
-            dock_state = eval(dock_string)
-            self.dock_area.restoreState(dock_state)
+        # dock_string = str(self.settings.value('dockstate').toString())
+        # if dock_string is not "":
+        #     dock_state = eval(dock_string)
+        #     self.dock_area.restoreState(dock_state)
 
         self.path_to_ramp_file = str(self.settings.value('path_to_ramp_file',
                                         'examples/test_scene.json').toString())

@@ -48,6 +48,7 @@ class QChannelInfoBox(QtGui.QWidget):
     """Displays channel name, comment and other info."""
 
     edit_signal = QtCore.pyqtSignal(object)
+    view_signal = QtCore.pyqtSignal(object)
 
     def __init__(self, ch_name, dct, parent):
         super(QChannelInfoBox, self).__init__(parent)
@@ -64,13 +65,16 @@ class QChannelInfoBox(QtGui.QWidget):
 
         # create actions to edit the keyframe
         self.edit_action = QtGui.QAction('&Edit', self)
+        self.view_action = QtGui.QAction('&View Ramp', self)
 
         # connect actions to slots
         self.edit_action.triggered.connect(self.edit)
+        self.view_action.triggered.connect(self.view)
 
         # create context menu
         self.pop_menu = QtGui.QMenu(self)
         self.pop_menu.addAction(self.edit_action)
+        self.pop_menu.addAction(self.view_action)
 
         # right clicking on the keyframe will bring up the context menu
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
@@ -86,6 +90,9 @@ class QChannelInfoBox(QtGui.QWidget):
 
     def edit(self):
         self.edit_signal.emit(self.ch_name)
+
+    def view(self):
+        self.view_signal.emit(self.ch_name)
 
     def onContextMenu(self, point):
         # show context menu
@@ -206,6 +213,7 @@ class QChannel(Channel):
     def setupUi(self):
         self.ch_info = QChannelInfoBox(self.ch_name, self.dct, self.parent)
         self.ch_info.edit_signal.connect(self.parent.handleEditChannelInfo)
+        self.ch_info.view_signal.connect(self.parent.handleViewChannel)
         self.grid.addWidget(self.ch_info, self.start_pos[0], self.start_pos[1])
         # cycle through all keys keys in key list and find out which ones
         # we have in our channel

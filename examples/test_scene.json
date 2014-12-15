@@ -91,55 +91,23 @@
         },
         "probe freq": {
             "keys": {
-                "OP1": {
+                "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
-                        "slope_left": 0.0,
-                        "slope_right": 0.0,
-                        "value": 0.0
-                    },
-                    "ramp_type": "cubic"
-                },
-                "Quad capture": {
-                    "ramp_data": {
-                        "value": 0.0
-                    },
-                    "ramp_type": "jump"
-                },
-                "ODT Transfer 2": {
-                    "ramp_type": "cubic",
-                    "ramp_data": {
-                        "slope_left": 0.0,
-                        "slope_right": 0.0,
-                        "value": 0.0
+                        "value": 10.0
                     }
                 },
                 "molasses2": {
+                    "ramp_type": "jump",
                     "ramp_data": {
-                        "slope_left": 0.0,
-                        "slope_right": 0.0,
                         "value": 0.0
-                    },
-                    "ramp_type": "cubic"
-                },
-                "molasses3": {
-                    "ramp_data": {
-                        "slope_left": 0.0,
-                        "slope_right": 0.0,
-                        "value": 60.0
-                    },
-                    "ramp_type": "cubic"
-                },
-                "start": {
-                    "ramp_type": "linear",
-                    "ramp_data": {
-                        "value": 0.5
                     }
                 },
                 "molasses": {
+                    "ramp_type": "linear",
                     "ramp_data": {
-                        "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                        "value": 5.0
+                    }
                 }
             },
             "comment": "probe frequency",
@@ -226,89 +194,29 @@
         ]
     },
     "keyframes": {
-        "Image Ref": {
-            "comment": "comment",
-            "__abs_time__": 12738.5,
-            "parent": "image",
-            "time": 37.0
-        },
-        "molasses": {
-            "comment": "begin molasses",
-            "__abs_time__": 200.0,
-            "parent": "start",
-            "time": 200.0
-        },
-        "molasses3": {
-            "comment": "comment",
-            "__abs_time__": 274.0,
-            "parent": "molasses2",
-            "time": 6.0
-        },
-        "OP1": {
-            "comment": "this value is set so that the shutter has enough time to close",
-            "__abs_time__": 281.5,
-            "parent": "molasses4",
-            "time": 1.5
-        },
-        "Quad capture": {
-            "comment": "comment",
-            "__abs_time__": 672.5,
-            "parent": "OP1",
-            "time": 391.0
-        },
-        "ODT Transfer 2": {
-            "comment": "comment",
-            "__abs_time__": 12672.5,
-            "parent": "ODT Transfer 1",
-            "time": 2000.0
-        },
-        "image": {
-            "comment": "take an image",
-            "__abs_time__": 12701.5,
-            "parent": "ODT Transfer 2",
-            "time": 29.0
-        },
-        "ODT Transfer 1": {
-            "comment": "comment",
-            "__abs_time__": 10672.5,
-            "parent": "RF",
-            "time": 1000.0
-        },
-        "molasses4": {
-            "comment": "comment",
-            "__abs_time__": 280.0,
-            "parent": "molasses3",
-            "time": 6.0
-        },
-        "reset values": {
-            "comment": "set all values to the default",
-            "__abs_time__": 12843.5,
-            "parent": "Image Ref",
-            "time": 105.0
-        },
         "start": {
             "comment": "start the ramp",
             "__abs_time__": 0.0,
             "parent": null,
             "time": 0.0
         },
-        "RF": {
-            "comment": "comment",
-            "__abs_time__": 9672.5,
-            "parent": "Quad capture",
-            "time": 9000.0
-        },
-        "open shutter": {
-            "comment": "open camera shutter",
-            "__abs_time__": 12698.5,
-            "parent": "image",
-            "time": -3.0
-        },
         "molasses2": {
             "comment": "comment",
-            "__abs_time__": 268.0,
+            "__abs_time__": 280.0,
             "parent": "molasses",
             "time": 68.0
+        },
+        "molasses": {
+            "comment": "begin molasses",
+            "__abs_time__": 212.0,
+            "parent": "start",
+            "time": 212.0
         }
+    },
+    "analog_ramp_functions": {
+        "jump": "lambda parms: parms[0][\"value\"]",
+        "quadratic": "lambda parms: parms[0][\"value\"]",
+        "linear": "lambda parms: parms[0][\"value\"] + (parms[4]-parms[1])/(parms[2] - parms[1])*parms[3]",
+        "cubic": "lambda parms: parms[0][\"value\"]"
     }
 }

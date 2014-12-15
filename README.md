@@ -17,3 +17,11 @@ Keyframes are positions in time defined with respect to other frames. Every keyf
 
 
 ## channels
+
+parms tuple
+
+parms(0) ramp_data
+parms(1) t_initial
+parms(2) t_final
+parms(3) value_final
+prams(4) time_array

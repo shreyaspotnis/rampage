@@ -1,6 +1,7 @@
 """Provides classes to build arbitrary waveforms."""
 
 import json
+import numpy as np
 
 
 class KeyFrameList(object):
@@ -142,8 +143,46 @@ class Channel(object):
         self.ch_name = ch_name
         self.dct = dct
         self.key_frame_list = key_frame_list
+
     def set_name(self, new_ch_name):
         self.ch_name = new_ch_name
+
+    def generate_ramp(self, analog_ramp_functions, time_div=4e-3):
+        skl = self.key_frame_list.sorted_key_list()
+        used_key_frames = []
+        for kf in skl:
+            if kf in self.dct['keys']:
+                used_key_frames.append((kf, self.dct['keys'][kf]))
+        max_time = self.key_frame_list.get_absolute_time(skl[-1])
+        print('max_time', max_time)
+        time = np.arange(0.0, max_time, time_div)
+        voltage = np.zeros(time.shape)
+        kf_times = np.array([self.key_frame_list.get_absolute_time(ukf[0])
+                             for ukf in used_key_frames])
+        kf_positions = kf_times/time_div
+
+        # set the start and the end part of the ramp
+        start_voltage = used_key_frames[0][1]['ramp_data']['value']
+        end_voltage = used_key_frames[-1][1]['ramp_data']['value']
+        voltage[0:kf_positions[0]] = start_voltage
+        voltage[kf_positions[-1]:] = end_voltage
+
+        for i in range(len(kf_times)-1):
+            start_time = kf_times[i]
+            end_time = kf_times[i+1]
+            start_index = kf_positions[i]
+            end_index = kf_positions[i+1]
+            time_subarray = time[start_index:end_index]
+            value_final = used_key_frames[i+1][1]['ramp_data']['value']
+            ramp_type = used_key_frames[i][1]['ramp_type']
+
+            parms_tuple = (used_key_frames[i][1]['ramp_data'], start_time,
+                           end_time, value_final, time_subarray)
+            ramp_function = eval(analog_ramp_functions[ramp_type])
+            voltage_sub = ramp_function(parms_tuple)
+            voltage[start_voltage:end_index] = voltage_sub
+
+        return time, voltage
 
 
 if __name__ == '__main__':

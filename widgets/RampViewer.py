@@ -1,6 +1,7 @@
 from PyQt4 import QtGui, QtCore
 import pyqtgraph as pg
 import numpy as np
+import ramps
 
 
 class RampPlot(pg.PlotWidget):
@@ -41,9 +42,20 @@ class RampViewer(QtGui.QDialog):
 
         self.loadSettings()
 
+        self.kfl = ramps.KeyFrameList(self.data_dict['keyframes'])
+        self.updatePlot()
+
+    def updatePlot(self):
+        ch_dict = self.data_dict['channels'][self.current_channel]
+        analog_ramp_functions = self.data_dict['analog_ramp_functions']
+        channel = ramps.Channel(self.current_channel, ch_dict, self.kfl)
+        time, voltage = channel.generate_ramp(analog_ramp_functions)
+        self.ramp_plot.handleDataChanged(time, voltage)
+
     def handleChannelChanged(self, new_ch_index):
         self.current_channel = self.channel_list[new_ch_index]
         self.ramp_plot.setTitle(self.current_channel)
+        self.updatePlot()
 
     def loadSettings(self):
         """Load window state from self.settings"""

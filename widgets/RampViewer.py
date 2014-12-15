@@ -47,9 +47,8 @@ class RampViewer(QtGui.QDialog):
 
     def updatePlot(self):
         ch_dict = self.data_dict['channels'][self.current_channel]
-        analog_ramp_functions = self.data_dict['analog_ramp_functions']
         channel = ramps.Channel(self.current_channel, ch_dict, self.kfl)
-        time, voltage = channel.generate_ramp(analog_ramp_functions)
+        time, voltage = channel.generate_ramp()
         self.ramp_plot.handleDataChanged(time, voltage)
 
     def handleChannelChanged(self, new_ch_index):

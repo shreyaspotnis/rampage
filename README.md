@@ -25,3 +25,14 @@ parms(1) t_initial
 parms(2) t_final
 parms(3) value_final
 prams(4) time_array
+
+ramp types
+- linear - Ramps from the current value to the next value linearly
+- quadratic - Ramps from the current value to the next value, but with an
+              added option of the initial slope
+
+v = vi + a*(t-t0) + b*(t-t0)^2
+v = vi + a*(t-t0) + b*(t-t0)^2
+vf = vi + sl*(tf-t0) + b*(tf-t0)^2
+b = ((vf-vi) - sl*(tf-t0))/(tf-t0)^2
+

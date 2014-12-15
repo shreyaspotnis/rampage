@@ -316,6 +316,7 @@ class QKeyFrameList(KeyFrameList):
             self.parent_widget.reDoUi(set_focus_on=key_name)
         else:
             self.parent_widget.ramp_changed.emit()
+            self.updateAllKeys()
 
     def handleEdit(self, key_name):
         # find out all keys which are descendents of key_name

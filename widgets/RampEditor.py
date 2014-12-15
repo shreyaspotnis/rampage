@@ -19,6 +19,7 @@ class RampEditor(QtGui.QWidget):
     """Edits ramps. Main widget of the application."""
 
     ramp_changed = QtCore.pyqtSignal()
+    time_changed = QtCore.pyqtSignal()
 
     def __init__(self, settings):
         super(RampEditor, self).__init__()
@@ -29,12 +30,16 @@ class RampEditor(QtGui.QWidget):
         self.grid = QtGui.QGridLayout(self)
         self.grid.setSpacing(0)
         self.setLayout(self.grid)
+        self.time_changed.connect(self.handleTimeChanged)
 
     def openNewFile(self, path_to_new_file):
         with open(path_to_new_file, 'r') as f:
             data = json.load(f)
         self.data = data
         self.reDoUi()
+
+    def handleTimeChanged(self):
+        print('Time changed')
 
     def reDoUi(self, set_focus_on=None):
         self.ramp_changed.emit()

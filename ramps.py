@@ -153,13 +153,14 @@ class Channel(object):
         for kf in skl:
             if kf in self.dct['keys']:
                 used_key_frames.append((kf, self.dct['keys'][kf]))
-        max_time = self.key_frame_list.get_absolute_time(skl[-1])
-        print('max_time', max_time)
+        max_time = self.key_frame_list.get_absolute_time(skl[-1]) + time_div
+        # print('max_time', max_time)
         time = np.arange(0.0, max_time, time_div)
         voltage = np.zeros(time.shape)
         kf_times = np.array([self.key_frame_list.get_absolute_time(ukf[0])
                              for ukf in used_key_frames])
         kf_positions = kf_times/time_div
+        # print(kf_positions)
 
         # set the start and the end part of the ramp
         start_voltage = used_key_frames[0][1]['ramp_data']['value']
@@ -175,13 +176,23 @@ class Channel(object):
             time_subarray = time[start_index:end_index]
             value_final = used_key_frames[i+1][1]['ramp_data']['value']
             ramp_type = used_key_frames[i][1]['ramp_type']
+            ramp_data = used_key_frames[i][1]['ramp_data']
 
-            parms_tuple = (used_key_frames[i][1]['ramp_data'], start_time,
-                           end_time, value_final, time_subarray)
+            print('start_time', start_time)
+            print('end_time', end_time)
+            print('start_index', start_index)
+            print('end_index', end_index)
+            print('ramp_data', ramp_data)
+            print('time_subarray', time_subarray)
+            print('value_final', value_final)
+
+            parms_tuple = (ramp_data, value_final, time_subarray)
             ramp_function = eval(analog_ramp_functions[ramp_type])
             voltage_sub = ramp_function(parms_tuple)
-            voltage[start_voltage:end_index] = voltage_sub
+            print('voltage_sub', voltage_sub)
+            voltage[start_index:end_index] = voltage_sub
 
+        print(voltage)
         return time, voltage
 
 

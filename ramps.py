@@ -147,7 +147,7 @@ class Channel(object):
     def set_name(self, new_ch_name):
         self.ch_name = new_ch_name
 
-    def generate_ramp(self, analog_ramp_functions, time_div=4e-3):
+    def generate_ramp(self, arf, time_div=4e-3):
         skl = self.key_frame_list.sorted_key_list()
         used_key_frames = []
         for kf in skl:
@@ -186,15 +186,55 @@ class Channel(object):
             print('time_subarray', time_subarray)
             print('value_final', value_final)
 
-            parms_tuple = (ramp_data, value_final, time_subarray)
-            ramp_function = eval(analog_ramp_functions[ramp_type])
-            voltage_sub = ramp_function(parms_tuple)
+            parms_tuple = (ramp_data, start_time, end_time, value_final,
+                           time_subarray)
+            ramp_function = analog_ramp_functions[ramp_type]
+            voltage_sub = ramp_function(*parms_tuple)
             print('voltage_sub', voltage_sub)
             voltage[start_index:end_index] = voltage_sub
 
         print(voltage)
         return time, voltage
 
+# Analog Ramp functions
+
+
+def linear_ramp(ramp_data, start_time, end_time, value_final, time_subarray):
+    value_initial = ramp_data["value"]
+    interp = (time_subarray - start_time)/(end_time - start_time)
+    return value_initial*(1.0 - interp) + value_final*interp
+
+
+def quadratic_ramp(ramp_data, start_time, end_time, value_final,
+                   time_subarray):
+    value_initial = ramp_data["value"]
+    slope = ramp_data["slope"]
+    delta_t = end_time - start_time
+    delta_v = value_final - value_initial
+    curvature = (delta_v - slope*delta_t)/delta_t**2
+    tmt0 = time_subarray - start_time
+    return value_initial + slope*tmt0 + curvature*tmt0**2
+
+
+def jump_ramp(ramp_data, start_time, end_time, value_final, time_subarray):
+    return np.ones(time_subarray.shape)*(ramp_data["value"])
+
+
+def cubic_ramp(ramp_data, start_time, end_time, value_final, time_subarray):
+    return jump_ramp(ramp_data, start_time, end_time, value_final,
+                     time_subarray)
+
+analog_ramp_types = {"jump": ["value"],
+                     "quadratic": ["value", "slope"],
+                     "linear": ["value"],
+                     "cubic": ["value", "slope_left", "slope_right"]}
+digital_ramp_types = {"jump": [],
+                      "pulsetrain": ["freq", "phase", "duty_cycle"]}
+
+analog_ramp_functions = {"jump": jump_ramp,
+                         "linear": linear_ramp,
+                         "quadratic": quadratic_ramp,
+                         "cubic": cubic_ramp}
 
 if __name__ == '__main__':
     with open('examples/test_scene.json', 'r') as f:

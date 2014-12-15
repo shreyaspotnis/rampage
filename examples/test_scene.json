@@ -91,17 +91,36 @@
         },
         "probe freq": {
             "keys": {
+                "test": {
+                    "ramp_type": "linear",
+                    "ramp_data": {
+                        "value": 3.0
+                    }
+                },
                 "molasses2": {
                     "ramp_data": {
-                        "value": 10.0
+                        "slope": -2.0,
+                        "value": 5.0
                     },
-                    "ramp_type": "jump"
+                    "ramp_type": "quadratic"
                 },
                 "molasses": {
                     "ramp_data": {
                         "value": 5.0
                     },
                     "ramp_type": "linear"
+                },
+                "aoeu": {
+                    "ramp_type": "linear",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "BLaaoeu": {
+                    "ramp_type": "linear",
+                    "ramp_data": {
+                        "value": 3.0
+                    }
                 }
             },
             "comment": "probe frequency",
@@ -188,11 +207,23 @@
         ]
     },
     "keyframes": {
-        "test": {
+        "molasses2": {
             "comment": "comment",
-            "__abs_time__": 6.0,
-            "parent": "molasses2",
-            "time": 3.0
+            "__abs_time__": 3.0,
+            "parent": "molasses",
+            "time": 2.0
+        },
+        "sanaetheu": {
+            "comment": "comment",
+            "__abs_time__": 9.0,
+            "parent": "BLaaoeu",
+            "time": 1.0
+        },
+        "BLaaoeu": {
+            "comment": "comment",
+            "__abs_time__": 8.0,
+            "parent": "aoeu",
+            "time": 1.0
         },
         "start": {
             "comment": "start the ramp",
@@ -200,23 +231,29 @@
             "parent": null,
             "time": 0.0
         },
-        "molasses2": {
+        "aoeu": {
             "comment": "comment",
-            "__abs_time__": 3.0,
-            "parent": "molasses",
-            "time": 2.0
+            "__abs_time__": 7.0,
+            "parent": "test",
+            "time": 1.0
         },
         "molasses": {
             "comment": "begin molasses",
             "__abs_time__": 1.0,
             "parent": "start",
             "time": 1.0
+        },
+        "test": {
+            "comment": "comment",
+            "__abs_time__": 6.0,
+            "parent": "molasses2",
+            "time": 3.0
         }
     },
     "analog_ramp_functions": {
         "jump": "lambda parms: parms[0][\"value\"]",
         "quadratic": "lambda parms: parms[0][\"value\"]",
-        "linear": "lambda parms: parms[0][\"value\"] + (parms[1]-parms[0][\"value\"])*(parms[2]-parms[2][0])/(parms[2][-1]-parms[2][0])",
+        "linear": "lambda parms: parms[0][\"value\"] + (parms[3]-parms[0][\"value\"])*(parms[4]-parms[1])/(parms[2]-parms[1])",
         "cubic": "lambda parms: parms[0][\"value\"]"
     }
 }

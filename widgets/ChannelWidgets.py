@@ -60,7 +60,11 @@ class QChannelInfoBox(QtGui.QWidget):
 
         self.ch_name_label = QtGui.QLabel(self)
         self.vbox.addWidget(self.ch_name_label)
-        self.ch_name_label.setText(fmt.b(fmt.green(ch_name)))
+        if dct['type'] == 'analog':
+            fmter = fmt.green
+        else:
+            fmter = fmt.blue
+        self.ch_name_label.setText(fmt.b(fmter(ch_name)))
         self.generateToolTip()
 
         # create actions to edit the keyframe
@@ -101,7 +105,11 @@ class QChannelInfoBox(QtGui.QWidget):
     def edit_channel_info(self, new_ch_name, ch_dct):
         self.ch_name = new_ch_name
         self.dct = ch_dct
-        self.ch_name_label.setText(fmt.b(fmt.green(self.ch_name)))
+        if ch_dct['type'] == 'analog':
+            fmter = fmt.green
+        else:
+            fmter = fmt.blue
+        self.ch_name_label.setText(fmt.b(fmter(self.ch_name)))
         self.generateToolTip()
 
 

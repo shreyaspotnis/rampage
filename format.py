@@ -20,3 +20,8 @@ def red(s):
 
 def green(s):
     return '<font color="green">'+s+'</font>'
+
+
+def blue(s):
+    return '<font color="blue">'+s+'</font>'
+

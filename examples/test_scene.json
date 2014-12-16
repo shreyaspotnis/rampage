@@ -86,12 +86,8 @@
                 },
                 "test": {
                     "state": true,
-                    "ramp_type": "pulsetrain",
-                    "ramp_data": {
-                        "phase": 0.0,
-                        "freq": 10.0,
-                        "duty_cycle": 0.5
-                    }
+                    "ramp_type": "jump",
+                    "ramp_data": {}
                 },
                 "OP switch close": {
                     "state": true,
@@ -126,9 +122,12 @@
                 },
                 "aoeu": {
                     "ramp_data": {
-                        "value": 0.0
+                        "phase": 0.0,
+                        "amp": 0.5,
+                        "freq": 1.0,
+                        "value": 1.0
                     },
-                    "ramp_type": "linear"
+                    "ramp_type": "sine"
                 },
                 "BLaaoeu": {
                     "ramp_data": {

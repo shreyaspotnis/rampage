@@ -241,6 +241,33 @@ def analog_quadratic_ramp(ramp_data, start_time, end_time, value_final,
     return value_initial + slope*tmt0 + curvature*tmt0**2
 
 
+def analog_quadratic2_ramp(ramp_data, start_time, end_time, value_final,
+                           time_subarray):
+    value_initial = ramp_data["value"]
+    curvature = ramp_data["curvature"]
+    delta_t = end_time - start_time
+    delta_v = value_final - value_initial
+    slope = (delta_v - curvature*delta_t**2)/delta_t
+    tmt0 = time_subarray - start_time
+    return value_initial + slope*tmt0 + curvature*tmt0**2
+
+
+def analog_exp_ramp(ramp_data, start_time, end_time, value_final,
+                    time_subarray):
+    value_initial = ramp_data["value"]
+    tau = ramp_data["tau"]
+    if tau == 0:
+        return analog_jump_ramp(ramp_data, start_time, end_time, value_final,
+                                time_subarray)
+    delta_t = end_time - start_time
+    delta_v = value_final - value_initial
+    tmt0 = time_subarray - start_time
+    b = delta_v/(np.exp(delta_t/tau) - 1.0)
+    a = value_initial - b
+    return a + b*np.exp(tmt0/tau)
+
+
+
 def analog_sine_ramp(ramp_data, start_time, end_time, value_final,
                      time_subarray):
     delta_t = time_subarray - start_time
@@ -280,7 +307,9 @@ analog_ramp_types = {"jump": ["value"],
                      "quadratic": ["value", "slope"],
                      "linear": ["value"],
                      "cubic": ["value", "slope_left", "slope_right"],
-                     "sine": ["value", "amp", "freq", "phase"]}
+                     "sine": ["value", "amp", "freq", "phase"],
+                     "quadratic2": ["value", "curvature"],
+                     "exp": ["value", "tau"]}
 
 digital_ramp_types = {"jump": [],
                       "pulsetrain": ["freq", "phase", "duty_cycle"]}
@@ -289,7 +318,9 @@ analog_ramp_functions = {"jump": analog_jump_ramp,
                          "linear": analog_linear_ramp,
                          "quadratic": analog_quadratic_ramp,
                          "cubic": analog_cubic_ramp,
-                         "sine": analog_sine_ramp}
+                         "sine": analog_sine_ramp,
+                         "quadratic2": analog_quadratic2_ramp,
+                         "exp": analog_exp_ramp}
 
 digital_ramp_functions = {"jump": digital_jump_ramp,
                           "pulsetrain": digital_pulsetrain_ramp}

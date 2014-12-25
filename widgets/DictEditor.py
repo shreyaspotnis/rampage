@@ -94,7 +94,7 @@ class NamedEditor(QtGui.QWidget):
 
 class DictEditor(QtGui.QDialog):
 
-    def __init__(self, dct, parent=None):
+    def __init__(self, dct, dct_name=None, parent=None):
         super(DictEditor, self).__init__(parent)
 
         grid = QtGui.QGridLayout()
@@ -116,6 +116,9 @@ class DictEditor(QtGui.QDialog):
         i = len(dct)
         grid.addWidget(self.button_cancel, i, 0)
         grid.addWidget(self.button_ok, i, 1)
+
+        if dct_name is not None:
+            self.setWindowTitle(dct_name)
 
     def handleValueChanged(self, key_name, new_value):
         if type(new_value) is QtCore.QString:

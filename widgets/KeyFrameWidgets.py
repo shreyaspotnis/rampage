@@ -2,6 +2,10 @@ from PyQt4 import QtGui, QtCore
 from ramps import KeyFrameList
 from widgets.CommonWidgets import MyDoubleSpinBox
 import format as fmt
+import server
+from DictEditor import DictEditor
+
+all_hooks_dict = dict(server.Hooks.default_mesgs)
 
 
 class QEditKeyFrameDialog(QtGui.QDialog):
@@ -70,6 +74,7 @@ class QKeyFrame(QtGui.QWidget):
     insert_before_signal = QtCore.pyqtSignal(object)
     add_child_signal = QtCore.pyqtSignal(object)
     time_changed_signal = QtCore.pyqtSignal(object, object)
+    edit_hooks = QtCore.pyqtSignal()
 
     def __init__(self, key_name, kf, settings):
         super(QKeyFrame, self).__init__()
@@ -110,11 +115,21 @@ class QKeyFrame(QtGui.QWidget):
         self.add_action.triggered.connect(self.add)
         self.delete_action.triggered.connect(self.delete)
 
+        # create hook menu
+        self.hook_menu = QtGui.QMenu('Hooks', self)
+        self.add_hook_menu = QtGui.QMenu('Add', self)
+        self.edit_hook_menu = QtGui.QMenu('Edit', self)
+        self.del_hook_menu = QtGui.QMenu('Delete', self)
+        self.hook_menu.addMenu(self.add_hook_menu)
+        self.hook_menu.addMenu(self.edit_hook_menu)
+        self.hook_menu.addMenu(self.del_hook_menu)
         # create context menu
         self.pop_menu = QtGui.QMenu(self)
         self.pop_menu.addAction(self.edit_action)
         self.pop_menu.addAction(self.insert_action)
         self.pop_menu.addAction(self.add_action)
+        self.pop_menu.addSeparator()
+        self.pop_menu.addMenu(self.hook_menu)
         self.pop_menu.addSeparator()
         self.pop_menu.addAction(self.delete_action)
 
@@ -125,10 +140,13 @@ class QKeyFrame(QtGui.QWidget):
 
     def update(self, key_name, kf):
         # disconnect slot before updating, reconnect at the end.
-        self.time_spin_box.valueChanged.disconnect(self.handleTimeChanged)
 
         self.key_name = key_name
         self.kf = kf
+        self.updateUI()
+
+    def updateUI(self):
+        self.time_spin_box.valueChanged.disconnect(self.handleTimeChanged)
         self.time_spin_box.setValue(self.kf['time'])
         self.name_label.setText(fmt.b(fmt.red(self.key_name)))
         self.abs_time_label.setText(str(self.kf['__abs_time__']))
@@ -144,12 +162,77 @@ class QKeyFrame(QtGui.QWidget):
         else:
             tt += 'Parent: ' + fmt.b(fmt.red("None"))
         tt += '<br>Abs. Time: ' + str(self.kf['__abs_time__'])
+
+        # get info on hooks
+        tt += '<br> Hooks: '
+        if 'hooks' not in self.kf:
+            tt += 'None'
+        else:
+            l = list(self.kf['hooks'].iterkeys())
+            if len(l) is 0:
+                tt += 'None'
+            else:
+                tt += ', '.join(l)
         tt += '<br><i>right-click label to edit...</i>'
         self.setToolTip(tt)
 
     def onContextMenu(self, point):
         # show context menu
+        self.add_hook_menu.clear()
+        for hook_name in all_hooks_dict.iterkeys():
+            action = self.add_hook_menu.addAction(hook_name)
+            action.triggered[()].connect(lambda x=hook_name: self.addHook(x))
+        self.edit_hook_menu.clear()
+        if 'hooks' in self.kf:
+            for hook_name in self.kf['hooks'].iterkeys():
+                action = self.edit_hook_menu.addAction(hook_name)
+                action.triggered[()].connect(lambda x=hook_name: self.editHook(x))
+
+        self.edit_hook_menu.clear()
+        self.del_hook_menu.clear()
+        if 'hooks' in self.kf:
+            for hook_name in self.kf['hooks'].iterkeys():
+                action = self.edit_hook_menu.addAction(hook_name)
+                action.triggered[()].connect(lambda x=hook_name: self.addHook(x))
+                action = self.del_hook_menu.addAction(hook_name)
+                action.triggered[()].connect(lambda x=hook_name: self.delHook(x))
+
         self.pop_menu.exec_(self.mapToGlobal(point))
+
+    def addHook(self, hook_name):
+        hook_name = str(hook_name)
+        print('ADDING', hook_name)
+        print(all_hooks_dict[hook_name])
+        # if hook is already added, then edit it
+        if 'hooks' in self.kf:
+            if hook_name in self.kf['hooks']:
+                data_dict = dict(self.kf['hooks'][hook_name])
+            else:
+                data_dict = dict(all_hooks_dict[hook_name])
+        else:
+            data_dict = dict(all_hooks_dict[hook_name])
+        dct_editor = DictEditor(data_dict, hook_name)
+        if dct_editor.exec_():
+            print('EDITOR Said OK')
+            if 'hooks' not in self.kf:
+                self.kf['hooks'] = {}
+            self.kf['hooks'][hook_name] = data_dict
+            self.generateToolTip()
+            self.edit_hooks.emit()
+
+    def delHook(self, hook_name):
+        print('DELETING', hook_name)
+        # else, ask if user wants to save file
+        msg_str = "Really delete hook:" + hook_name+"?"
+        reply = QtGui.QMessageBox.warning(self, 'Delete hook',
+                                          msg_str,
+                                          (QtGui.QMessageBox.Yes |
+                                           QtGui.QMessageBox.No),
+                                          QtGui.QMessageBox.No)
+        if reply == QtGui.QMessageBox.Yes:
+            self.kf['hooks'].pop(hook_name)
+            self.generateToolTip()
+            self.edit_hooks.emit()
 
     def edit(self):
         self.edit_signal.emit(self.key_name)
@@ -293,6 +376,7 @@ class QKeyFrameList(KeyFrameList):
         kf.insert_before_signal.connect(self.handleInsertBefore)
         kf.add_child_signal.connect(self.handleAddChild)
         kf.time_changed_signal.connect(self.handleTimeChanged)
+        kf.edit_hooks.connect(self.handleEditHooks)
         return kf
 
     def disconnectKeyFrame(self, kf):
@@ -302,6 +386,9 @@ class QKeyFrameList(KeyFrameList):
         kf.insert_before_signal.disconnect(self.handleInsertBefore)
         kf.add_child_signal.disconnect(self.handleAddChild)
         kf.time_changed_signal.disconnect(self.handleTimeChanged)
+
+    def handleEditHooks(self):
+        self.parent_widget.ramp_changed.emit()
 
     def handleTimeChanged(self, key_name, new_time):
         skl = self.sorted_key_list()

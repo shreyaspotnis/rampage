@@ -132,6 +132,25 @@ class KeyFrameList(object):
         else:
             return self.is_ancestor(one_up_parent, ancestor_key)
 
+    def add_hook(self, key, hook_name, hook_dict):
+        kf = self.dct[key]
+        if 'hooks' not in kf:
+            kf['hooks'] = {}
+        kf['hooks'][str(hook_name)] = hook_dict
+
+    def remove_hook(self, key, hook_name):
+        kf = self.dct[key]
+        if 'hooks' in kf:
+            if hook_name in kf['hooks']:
+                return kf['hooks'].pop(hook_name)
+
+    def list_hooks(self, key):
+        kf = self.dct[key]
+        if 'hooks' not in kf:
+            return []
+        else:
+            return kf['hooks'].iterkeys()
+
 
 class Channel(object):
 

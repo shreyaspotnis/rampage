@@ -11,3 +11,5 @@ PCI 6713 - 2x Analog cards
 
 
 
+- set max and min values to 10.0 and -10.0
+- set view ramp such that you can view and change at the same time

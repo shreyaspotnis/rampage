@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from PyQt4 import QtGui, QtCore
 from ramps import KeyFrameList
 from widgets.CommonWidgets import MyDoubleSpinBox
@@ -148,14 +150,21 @@ class QKeyFrame(QtGui.QWidget):
     def updateUI(self):
         self.time_spin_box.valueChanged.disconnect(self.handleTimeChanged)
         self.time_spin_box.setValue(self.kf['time'])
-        self.name_label.setText(fmt.b(fmt.red(self.key_name)))
         self.abs_time_label.setText(str(self.kf['__abs_time__']))
         self.generateToolTip()
-
+        if 'hooks' in self.kf:
+            print(len(self.kf['hooks']))
+            add_hook_symbol = len(self.kf['hooks']) > 0
+        else:
+            add_hook_symbol = False
+        if add_hook_symbol:
+            self.name_label.setText(fmt.b(fmt.red(self.key_name+' !')))
+        else:
+            self.name_label.setText(fmt.b(fmt.red(self.key_name)))
         self.time_spin_box.valueChanged.connect(self.handleTimeChanged)
 
     def generateToolTip(self):
-        tt = 'Name: ' + fmt.b(fmt.red(self.key_name)) + '<br>'
+        tt = 'Name: ' + fmt.b(fmt.red(self.key_name)) + '<br>\n'
         tt += 'Comment: ' + fmt.i(self.kf['comment']) + '<br>\n'
         if self.kf['parent'] is not None:
             tt += 'Parent: ' + fmt.b(fmt.red(self.kf['parent']))
@@ -213,15 +222,13 @@ class QKeyFrame(QtGui.QWidget):
             data_dict = dict(all_hooks_dict[hook_name])
         dct_editor = DictEditor(data_dict, hook_name)
         if dct_editor.exec_():
-            print('EDITOR Said OK')
             if 'hooks' not in self.kf:
                 self.kf['hooks'] = {}
             self.kf['hooks'][hook_name] = data_dict
-            self.generateToolTip()
+            self.updateUI()
             self.edit_hooks.emit()
 
     def delHook(self, hook_name):
-        print('DELETING', hook_name)
         # else, ask if user wants to save file
         msg_str = "Really delete hook:" + hook_name+"?"
         reply = QtGui.QMessageBox.warning(self, 'Delete hook',
@@ -231,7 +238,7 @@ class QKeyFrame(QtGui.QWidget):
                                           QtGui.QMessageBox.No)
         if reply == QtGui.QMessageBox.Yes:
             self.kf['hooks'].pop(hook_name)
-            self.generateToolTip()
+            self.updateUI()
             self.edit_hooks.emit()
 
     def edit(self):

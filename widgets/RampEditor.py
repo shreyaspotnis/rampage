@@ -99,3 +99,14 @@ class RampEditor(QtGui.QWidget):
                                          separators=(',', ': '))
         with open(path_to_file, 'w') as f:
             f.write(json_file_as_string)
+
+    def getTimeCellRectangles(self):
+        n_cols = self.grid.columnCount()
+        labels = self.kfl.sorted_key_list()
+        return [self.grid.cellRect(0, i) for i in range(1, n_cols)], labels
+
+    def getChannelCellRectangles(self):
+        n_rows = self.grid.columnCount()
+        labels = [ch.ch_name for ch in self.channels]
+        return [self.grid.cellRect(i, 0) for i in range(2, n_rows)], labels
+

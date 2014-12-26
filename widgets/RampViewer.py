@@ -76,3 +76,4 @@ class RampViewer(QtGui.QDialog):
         self.saveSettings()
         return execReturn
 
+

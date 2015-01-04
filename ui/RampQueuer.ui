@@ -68,13 +68,6 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QPushButton" name="pushSync">
-       <property name="text">
-        <string>Sync</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
@@ -92,6 +85,23 @@
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>Ramps Queued</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QPushButton" name="pushSync">
+       <property name="text">
+        <string>Sync</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="serverIPAndPort"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Server IP:Port</string>
        </property>
       </widget>
      </item>
@@ -117,8 +127,42 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushAddCurrent</sender>
+   <signal>clicked()</signal>
+   <receiver>RampQueuer</receiver>
+   <slot>handleAddCurrent()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>359</x>
+     <y>484</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>571</x>
+     <y>467</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>push1DScan</sender>
+   <signal>clicked()</signal>
+   <receiver>RampQueuer</receiver>
+   <slot>handle1DScanPressed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>378</x>
+     <y>421</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>572</x>
+     <y>429</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>handleChangePrependRamp()</slot>
+  <slot>handleAddCurrent()</slot>
+  <slot>handle1DScanPressed()</slot>
  </slots>
 </ui>

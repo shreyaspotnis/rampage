@@ -20,8 +20,8 @@ class FloatBox(QtGui.QDoubleSpinBox):
 
     def __init__(self, value, parent=None):
         super(FloatBox, self).__init__(parent)
-        self.setValue(value)
         self.setRange(-1e100, 1e100)
+        self.setValue(value)
         self.valueChanged.connect(self.myValueChanged)
 
     def mySetValue(self, val):
@@ -67,7 +67,7 @@ class ListBox(QtGui.QPlainTextEdit):
 
 
 widgets_for_type = {int: IntBox, float: FloatBox, str: StringBox,
-                    list: ListBox}
+                    list: ListBox, unicode: StringBox}
 
 
 class NamedEditor(QtGui.QWidget):

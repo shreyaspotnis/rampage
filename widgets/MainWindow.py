@@ -25,6 +25,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ramp_editor.openNewFile(self.path_to_ramp_file)
         self.ramp_editor.ramp_changed.connect(self.rampChanged)
+        self.ramp_editor.setScrollWidget(self.scrollArea)
         self.setWindowTitle(self.path_to_ramp_file)
 
         # self.overlay = Overlay(self.centralWidget())
@@ -156,6 +157,7 @@ class Overlay(QtGui.QWidget):
         self.show_overlay = False
         self.bg_color = ramp_editor.palette().color(ramp_editor.backgroundRole())
         self.bg_color.setAlpha(220)
+        self.fontPen = QtGui.QPen(QtGui.QColor(0, 0, 0, 255))
         self.brush = QtGui.QBrush(self.bg_color)
 
     def setShowOverlay(self, show):
@@ -171,7 +173,7 @@ class Overlay(QtGui.QWidget):
             painter = QtGui.QPainter()
             painter.begin(self)
             painter.setRenderHint(QtGui.QPainter.Antialiasing)
-            painter.setPen(QtGui.QPen(QtGui.QColor(0, 0, 0)))
+            painter.setPen(self.fontPen)
             font = painter.font()
             font.setBold(True)
             painter.setFont(font)

@@ -3,6 +3,7 @@ from widgets.KeyFrameWidgets import QKeyFrameList
 from widgets.ChannelWidgets import QChannel
 from widgets.ChannelWidgets import QEditChannelInfoDialog
 from widgets.RampViewer import RampViewer
+from widgets.DictEditor import DictEditor
 import json
 import ramps
 
@@ -32,6 +33,17 @@ class RampEditor(QtGui.QWidget):
         self.grid.setSpacing(0)
         self.setLayout(self.grid)
         self.time_changed.connect(self.handleTimeChanged)
+        self.scroll_area = None
+
+    def handleProperties(self):
+        d_new = dict(self.data['properties'])
+        d = DictEditor(d_new, 'Properties', self)
+        if d.exec_():
+            self.data['properties'] = d_new
+            self.ramp_changed.emit()
+
+    def setScrollWidget(self, scroll_area):
+        self.scroll_area = scroll_area
 
     def openNewFile(self, path_to_new_file):
         with open(path_to_new_file, 'r') as f:
@@ -65,6 +77,10 @@ class RampEditor(QtGui.QWidget):
                               self.settings, self.grid, self,
                               ramps.digital_ramp_types, start_pos=(i+2, 0))
             self.channels.append(ch)
+
+        self.properties_button = QtGui.QPushButton('Properties')
+        self.properties_button.clicked.connect(self.handleProperties)
+        self.grid.addWidget(self.properties_button, 0, 0)
 
     def handleEditChannelInfo(self, ch_name):
 
@@ -109,4 +125,3 @@ class RampEditor(QtGui.QWidget):
         n_rows = self.grid.columnCount()
         labels = [ch.ch_name for ch in self.channels]
         return [self.grid.cellRect(i, 0) for i in range(2, n_rows)], labels
-

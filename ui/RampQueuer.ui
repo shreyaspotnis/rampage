@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RampQueuer</class>
+ <widget class="QWidget" name="RampQueuer">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>578</width>
+    <height>504</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Ramp Queuer</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="checkPrependRamp">
+       <property name="text">
+        <string>Prepend Ramp</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2" colspan="2">
+      <widget class="QLineEdit" name="lineEditPrependRamp">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="3">
+      <widget class="QSpinBox" name="spinNumberReps">
+       <property name="toolTip">
+        <string>Number of reps</string>
+       </property>
+       <property name="value">
+        <number>1</number>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QPushButton" name="push2DScan">
+       <property name="text">
+        <string>Add 2D Scan</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QPushButton" name="pushAddCurrent">
+       <property name="text">
+        <string>Add Current</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QPushButton" name="push1DScan">
+       <property name="text">
+        <string>Add 1D Scan</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="pushChangeFile">
+       <property name="text">
+        <string>Change Prepend Ramp</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QPushButton" name="pushSync">
+       <property name="text">
+        <string>Sync</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Ramps to Queue</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="2">
+      <widget class="QListWidget" name="listToQueue"/>
+     </item>
+     <item row="1" column="2" colspan="2">
+      <widget class="QListWidget" name="listQueued"/>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Ramps Queued</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushChangeFile</sender>
+   <signal>clicked()</signal>
+   <receiver>RampQueuer</receiver>
+   <slot>handleChangePrependRamp()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>174</x>
+     <y>391</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>433</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>handleChangePrependRamp()</slot>
+ </slots>
+</ui>

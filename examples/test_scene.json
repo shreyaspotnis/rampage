@@ -281,5 +281,10 @@
             "parent": "a1",
             "time": 1.0
         }
+    },
+    "properties": {
+        "comment": "A test file blabla",
+        "ramp_resolution": 100.0,
+        "jump_resolution": 4.0
     }
 }

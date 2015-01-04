@@ -36,3 +36,6 @@ v = vi + a*(t-t0) + b*(t-t0)^2
 vf = vi + sl*(tf-t0) + b*(tf-t0)^2
 b = ((vf-vi) - sl*(tf-t0))/(tf-t0)^2
 
+
+## Notes
+Keyframes cannot have --> in them

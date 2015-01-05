@@ -6,6 +6,7 @@ import ramps
 import copy
 import os
 import numpy as np
+import server
 
 
 def flatten_dict(dct, separator='-->', allowed_types=[int, float, bool]):
@@ -119,6 +120,9 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
         self.lineEditPrependRamp.setText(self.path_to_prepend_file)
         self.ramp_dict = ramp_dict
         self.ramps_to_queue = []
+        print(self.serverIPAndPort.text())
+        self.client = server.ClientForServer(server.BECServer,
+                                             str(self.serverIPAndPort.text()))
 
     def loadSettings(self):
         self.settings.beginGroup('rampqueuer')
@@ -199,6 +203,19 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
         self.saveSettings()
         super(RampQueuer, self).closeEvent(event)
 
+    def handleQueueToServerPressed(self):
+        for ramp in self.ramps_to_queue:
+            self.client.queue_ramp(ramp)
+
+        self.ramps_to_queue = []
+        self.listToQueue.clear()
+
+    def handleUpdateServerQueuePressed(self):
+        self.listQueued.clear()
+        reply = self.client.get_queue_comments({})
+        self.listQueued.addItems(reply['comment_list'])
+        print('pressed server queue update')
+
 
 def main():
     app = QtGui.QApplication(sys.argv)
@@ -213,5 +230,11 @@ def main():
     w.show()
     return app.exec_()
 
+
+def main1():
+    client = server.ClientForServer(server.BECServer, "localhost:6023")
+    client.queue_ramp("{'a': 'test'}")
+
 if __name__ == '__main__':
     main()
+    # main1()

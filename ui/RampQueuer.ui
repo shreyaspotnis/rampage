@@ -30,7 +30,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="2">
+     <item row="4" column="2">
       <widget class="QPushButton" name="push1DScan">
        <property name="text">
         <string>Add 1D Scan</string>
@@ -64,45 +64,21 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
+     <item row="5" column="1">
+      <widget class="QPushButton" name="pushUpdateServerQueue">
+       <property name="text">
+        <string>Update Server Queue</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Server Mesg:</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
-      <widget class="QLineEdit" name="serverIPAndPort"/>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Server IP:Port</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="3">
-      <widget class="QPushButton" name="push2DScan">
-       <property name="text">
-        <string>Add 2D Scan</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QPushButton" name="pushQueueToServer">
-       <property name="text">
-        <string>Queue to server</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2">
-      <widget class="QPushButton" name="pushAddCurrent">
-       <property name="text">
-        <string>Add Current</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="3">
+     <item row="5" column="3">
       <widget class="QSpinBox" name="spinNumberReps">
        <property name="toolTip">
         <string>Number of reps</string>
@@ -112,17 +88,51 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="1" colspan="3">
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="serverIPAndPort"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Server IP:Port</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="3">
+      <widget class="QPushButton" name="push2DScan">
+       <property name="text">
+        <string>Add 2D Scan</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QPushButton" name="pushAddCurrent">
+       <property name="text">
+        <string>Add Current</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1" colspan="3">
       <widget class="QTextEdit" name="textServerMesg">
        <property name="readOnly">
         <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
-      <widget class="QPushButton" name="pushUpdateServerQueue">
+     <item row="5" column="0">
+      <widget class="QPushButton" name="pushQueueToServer">
        <property name="text">
-        <string>Update Server Queue</string>
+        <string>Queue to server</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2" colspan="2">
+      <widget class="QLineEdit" name="lineEditMainRamp"/>
+     </item>
+     <item row="3" column="1">
+      <widget class="QPushButton" name="pushChangeMainRamp">
+       <property name="text">
+        <string>Change Main Ramp</string>
        </property>
       </widget>
      </item>
@@ -156,7 +166,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>359</x>
-     <y>292</y>
+     <y>306</y>
     </hint>
     <hint type="destinationlabel">
      <x>571</x>
@@ -172,7 +182,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>378</x>
-     <y>258</y>
+     <y>272</y>
     </hint>
     <hint type="destinationlabel">
      <x>572</x>
@@ -204,11 +214,27 @@
    <hints>
     <hint type="sourcelabel">
      <x>210</x>
-     <y>286</y>
+     <y>300</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
      <y>372</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushChangeMainRamp</sender>
+   <signal>clicked()</signal>
+   <receiver>RampQueuer</receiver>
+   <slot>handleChangeMainRamp()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>219</x>
+     <y>239</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>2</x>
+     <y>250</y>
     </hint>
    </hints>
   </connection>
@@ -219,5 +245,6 @@
   <slot>handle1DScanPressed()</slot>
   <slot>handleQueueToServerPressed()</slot>
   <slot>handleUpdateServerQueuePressed()</slot>
+  <slot>handleChangeMainRamp()</slot>
  </slots>
 </ui>

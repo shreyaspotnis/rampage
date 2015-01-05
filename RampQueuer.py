@@ -56,7 +56,7 @@ class Ramp1DScan(QRamp1DScan, Ui_Ramp1DScan):
         self.addScanColumn()
 
     def addScanColumn(self):
-        start_index = 3
+        start_index = 5
         grid_row_number = start_index + self.num_scan_cols + 1
         self.num_scan_cols += 1
 
@@ -93,17 +93,54 @@ class Ramp1DScan(QRamp1DScan, Ui_Ramp1DScan):
 
             print(col_name, start_val, step_val)
 
-    def exec_(self):
-        execReturn = super(Ramp1DScan, self).exec_()
-        num_cols = self.num_scan_cols
+    def getTableArray(self):
+        num_cols = self.tableScanPoints.columnCount()
         num_rows = self.tableScanPoints.rowCount()
-        vals = [[str(self.tableScanPoints.item(nr, nc).text())
+        vals = [[float(self.tableScanPoints.item(nr, nc).text())
                  for nc in range(num_cols)]
                 for nr in range(num_rows)]
-        vals = np.array(vals)
+        return np.array(vals)
 
-        col_names = [str(self.scan_columns[i][0].currentText())
-                     for i in range(num_cols)]
+    def setTableArray(self, arr):
+        num_cols = self.tableScanPoints.columnCount()
+        num_rows = self.tableScanPoints.rowCount()
+        for nr in range(num_rows):
+            for nc in range(num_cols):
+                item = QtGui.QTableWidgetItem(str(arr[nr, nc]))
+                self.tableScanPoints.setItem(nr, nc, item)
+
+    def handleRandomizeClicked(self):
+        print('randomize')
+        vals = self.getTableArray()
+        np.random.shuffle(vals)
+        self.setTableArray(vals)
+
+    def handleSaveClicked(self):
+        vals = self.getTableArray()
+        fname = str(QtGui.QFileDialog.getSaveFileName(self, 'Save file', '.'))
+        if fname != '':
+            np.savetxt(fname, vals)
+
+    def handleLoadClicked(self):
+        print('load')
+        fname = str(QtGui.QFileDialog.getOpenFileName(self, "Open File"))
+        if fname != '':
+            vals = np.loadtxt(fname)
+            nrows, ncols = vals.shape
+            self.spinNumPoints.setValue(nrows)
+            self.setTableArray(vals)
+
+    def exec_(self):
+        execReturn = super(Ramp1DScan, self).exec_()
+        if execReturn:
+            num_cols = self.num_scan_cols
+            num_rows = self.tableScanPoints.rowCount()
+            vals = self.getTableArray()
+            col_names = [str(self.scan_columns[i][0].currentText())
+                         for i in range(num_cols)]
+        else:
+            col_names = []
+            vals = np.array([])
         return execReturn, col_names, vals
 
 
@@ -118,17 +155,22 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
         self.settings = settings
         self.loadSettings()
         self.lineEditPrependRamp.setText(self.path_to_prepend_file)
+        self.lineEditMainRamp.setText(self.path_to_main_file)
         self.ramp_dict = ramp_dict
         self.ramps_to_queue = []
         print(self.serverIPAndPort.text())
-        self.client = server.ClientForServer(server.BECServer,
-                                             str(self.serverIPAndPort.text()))
+
+    def get_client(self):
+        return server.ClientForServer(server.BECServer,
+                                      str(self.serverIPAndPort.text()))
 
     def loadSettings(self):
         self.settings.beginGroup('rampqueuer')
         geometry = self.settings.value('geometry').toByteArray()
         self.path_to_prepend_file = str(self.settings.value('path_to_prepend_file',
                                         'examples/test_scene.json').toString())
+        self.path_to_main_file = str(self.settings.value('path_to_main_file',
+                                     'examples/test_scene.json').toString())
 
         check_state, _ = self.settings.value('check_prepend_ramp', 0).toInt()
         text = self.settings.value('server_ip_and_port', 'localhost:6024').toString()
@@ -145,6 +187,8 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
         self.settings.setValue('geometry', self.saveGeometry())
         self.settings.setValue('path_to_prepend_file',
                                self.path_to_prepend_file)
+        self.settings.setValue('path_to_main_file',
+                               self.path_to_main_file)
         prepend_ramp_state = int(self.checkPrependRamp.isChecked())
         print('prepend_ramp_state', prepend_ramp_state)
         self.settings.setValue('check_prepend_ramp', prepend_ramp_state)
@@ -153,7 +197,6 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
         self.settings.endGroup()
 
     def handleChangePrependRamp(self):
-        # save old opened file
         func = QtGui.QFileDialog.getOpenFileName
         path_to_new_file = str(func(self, "Open File",
                                     self.path_to_prepend_file,
@@ -162,6 +205,16 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
         if path_to_new_file is not '':
             self.path_to_prepend_file = path_to_new_file
             self.lineEditPrependRamp.setText(self.path_to_prepend_file)
+
+    def handleChangeMainRamp(self):
+        func = QtGui.QFileDialog.getOpenFileName
+        path_to_new_file = str(func(self, "Open File",
+                                    self.path_to_main_file,
+                                    "Ramp files (*.json)"))
+
+        if path_to_new_file is not '':
+            self.path_to_main_file = path_to_new_file
+            self.lineEditMainRamp.setText(self.path_to_main_file)
 
     def handleAddCurrent(self):
         n_add = self.spinNumberReps.value()
@@ -205,16 +258,21 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
 
     def handleQueueToServerPressed(self):
         for ramp in self.ramps_to_queue:
-            self.client.queue_ramp(ramp)
+            self.textServerMesg.append('Queueing')
+            reply = self.get_client().queue_ramp(ramp)
+            self.textServerMesg.append(str(reply))
 
         self.ramps_to_queue = []
         self.listToQueue.clear()
+        self.handleUpdateServerQueuePressed()
 
     def handleUpdateServerQueuePressed(self):
         self.listQueued.clear()
-        reply = self.client.get_queue_comments({})
+        self.textServerMesg.append('Getting Queue on Server')
+        reply = self.get_client().get_queue_comments({})
         self.listQueued.addItems(reply['comment_list'])
-        print('pressed server queue update')
+        num_queued = len(reply['comment_list'])
+        self.textServerMesg.append('# of queued ramps: '+str(num_queued))
 
 
 def main():
@@ -230,11 +288,5 @@ def main():
     w.show()
     return app.exec_()
 
-
-def main1():
-    client = server.ClientForServer(server.BECServer, "localhost:6023")
-    client.queue_ramp("{'a': 'test'}")
-
 if __name__ == '__main__':
     main()
-    # main1()

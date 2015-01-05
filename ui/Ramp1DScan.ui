@@ -16,19 +16,6 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Number of points:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QSpinBox" name="spinNumPoints"/>
-     </item>
-     <item row="0" column="0" colspan="2">
-      <widget class="QTableWidget" name="tableScanPoints"/>
-     </item>
      <item row="2" column="0">
       <widget class="QPushButton" name="pushAdd">
        <property name="text">
@@ -36,10 +23,44 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Number of points:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QPushButton" name="pushSave">
+       <property name="text">
+        <string>Save Values</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QPushButton" name="pushRandomize">
+       <property name="text">
+        <string>Randomize</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QSpinBox" name="spinNumPoints"/>
+     </item>
      <item row="2" column="1">
       <widget class="QPushButton" name="pushProgramValues">
        <property name="text">
         <string>Program Values</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="2">
+      <widget class="QTableWidget" name="tableScanPoints"/>
+     </item>
+     <item row="4" column="1">
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Load Values</string>
        </property>
       </widget>
      </item>
@@ -99,7 +120,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>391</x>
-     <y>441</y>
+     <y>383</y>
     </hint>
     <hint type="destinationlabel">
      <x>667</x>
@@ -115,7 +136,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>204</x>
-     <y>472</y>
+     <y>414</y>
     </hint>
     <hint type="destinationlabel">
      <x>396</x>
@@ -131,11 +152,59 @@
    <hints>
     <hint type="sourcelabel">
      <x>612</x>
-     <y>466</y>
+     <y>408</y>
     </hint>
     <hint type="destinationlabel">
      <x>666</x>
      <y>483</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushRandomize</sender>
+   <signal>clicked()</signal>
+   <receiver>ramp1dScan</receiver>
+   <slot>handleRandomizeClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>119</x>
+     <y>448</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>451</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushSave</sender>
+   <signal>clicked()</signal>
+   <receiver>ramp1dScan</receiver>
+   <slot>handleSaveClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>510</x>
+     <y>445</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>666</x>
+     <y>402</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ramp1dScan</receiver>
+   <slot>handleLoadClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>572</x>
+     <y>478</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>485</y>
     </hint>
    </hints>
   </connection>
@@ -144,5 +213,8 @@
   <slot>handleNumPointsChanged()</slot>
   <slot>handleAddClicked()</slot>
   <slot>handleProgramValues()</slot>
+  <slot>handleRandomizeClicked()</slot>
+  <slot>handleSaveClicked()</slot>
+  <slot>handleLoadClicked()</slot>
  </slots>
 </ui>

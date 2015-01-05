@@ -149,14 +149,13 @@ Ui_RampQueuer, QRampQueuer = uic.loadUiType("ui/RampQueuer.ui")
 
 class RampQueuer(QRampQueuer, Ui_RampQueuer):
 
-    def __init__(self, ramp_dict, settings, parent=None):
+    def __init__(self, settings, parent=None):
         super(RampQueuer, self).__init__(parent)
         self.setupUi(self)
         self.settings = settings
         self.loadSettings()
         self.lineEditPrependRamp.setText(self.path_to_prepend_file)
         self.lineEditMainRamp.setText(self.path_to_main_file)
-        self.ramp_dict = ramp_dict
         self.ramps_to_queue = []
         print(self.serverIPAndPort.text())
 
@@ -178,7 +177,6 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
         print(check_state)
         self.checkPrependRamp.setChecked(bool(check_state))
         self.settings.endGroup()
-
         self.restoreGeometry(geometry)
         # self.restoreState(state)
 
@@ -218,8 +216,10 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
 
     def handleAddCurrent(self):
         n_add = self.spinNumberReps.value()
+        with open(self.path_to_main_file, 'r') as f:
+            ramp_dict = json.load(f)
         for ni in range(n_add):
-            self.addRamp(self.ramp_dict)
+            self.addRamp(ramp_dict)
 
     def addRamp(self, ramp_dict):
         if self.checkPrependRamp.isChecked():
@@ -273,6 +273,16 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
         self.listQueued.addItems(reply['comment_list'])
         num_queued = len(reply['comment_list'])
         self.textServerMesg.append('# of queued ramps: '+str(num_queued))
+
+    def getMainRampDict(self):
+        with open(self.path_to_main_file, 'r') as f:
+            ramp_dict = json.load(f)
+        return ramp_dict
+
+    def getPrependRampDict(self):
+        with open(self.path_to_prepend_file, 'r') as f:
+            ramp_dict = json.load(f)
+        return ramp_dict
 
 
 def main():

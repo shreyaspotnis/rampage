@@ -96,6 +96,10 @@ class BECServer(RequestProcessor):
         RequestProcessor.__init__(self, bind_port)
         self.ramps_queue = []
 
+    def start(self, mesg):
+        reply = {'status': 'ok'}
+        return reply
+
     def queue_ramp(self, mesg):
         print('Queueing ramp')
         self.ramps_queue.append(mesg)
@@ -120,7 +124,7 @@ class BECServer(RequestProcessor):
         reply = {'comment_list': comments}
         return reply
 
-    def stop_run(self, mesg):
+    def abort_current_run(self, mesg):
         print(mesg)
         reply = {'status': 'ok'}
         return reply

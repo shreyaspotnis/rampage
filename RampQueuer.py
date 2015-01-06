@@ -216,26 +216,24 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
 
     def handleAddCurrent(self):
         n_add = self.spinNumberReps.value()
-        with open(self.path_to_main_file, 'r') as f:
-            ramp_dict = json.load(f)
+        ramp_dict = self.getMainRampDict()
         for ni in range(n_add):
             self.addRamp(ramp_dict)
 
     def addRamp(self, ramp_dict):
         if self.checkPrependRamp.isChecked():
             print('is checked')
-            with open(self.path_to_prepend_file, 'r') as f:
-                prepend_data = json.load(f)
-            self.ramps_to_queue.append(copy.deepcopy(prepend_data))
+            prepend_data = self.getPrependRampDict()
+            self.ramps_to_queue.append(prepend_data)
             self.listToQueue.addItem(prepend_data['properties']['comment'])
-        self.ramps_to_queue.append(copy.deepcopy(ramp_dict))
+        self.ramps_to_queue.append(ramp_dict)
         self.listToQueue.addItem(ramp_dict['properties']['comment'])
 
     def add1dScanRamps(self, col_names, vals):
         n_rows, n_cols = vals.shape
         for nr in range(n_rows):
             val_data = vals[nr, :]
-            new_ramp_dict = copy.deepcopy(self.ramp_dict)
+            new_ramp_dict = self.getMainRampDict()
             comment_string = []
             for i, cn in enumerate(col_names):
                 set_dict_item(new_ramp_dict, cn, val_data[i])
@@ -245,7 +243,7 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
             self.addRamp(new_ramp_dict)
 
     def handle1DScanPressed(self):
-        column_names_list = flatten_dict(self.ramp_dict)
+        column_names_list = flatten_dict(self.getMainRampDict())
         ramp_1d_scan_generator = Ramp1DScan(column_names_list, self)
         exec_return, col_names, vals = ramp_1d_scan_generator.exec_()
         if exec_return:
@@ -274,6 +272,31 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
         num_queued = len(reply['comment_list'])
         self.textServerMesg.append('# of queued ramps: '+str(num_queued))
 
+    def handlePauseAfterCurrent(self):
+        print('pasue after current')
+        reply = self.get_client().pause_after_current_ramp({})
+        self.textServerMesg.append('Pausing after current run.')
+        self.textServerMesg.append('Reply: '+str(reply))
+
+    def handleClearServerQueue(self):
+        print('cleaning server queue')
+        reply = self.get_client().clear_queue({})
+        self.textServerMesg.append('Clearing queue')
+        self.textServerMesg.append('Reply: '+str(reply))
+        self.handleUpdateServerQueuePressed()
+
+    def handleAbortCurrentRun(self):
+        print('abort current run')
+        reply = self.get_client().abort_current_run({})
+        self.textServerMesg.append('Aborting current run')
+        self.textServerMesg.append('Reply: '+str(reply))
+
+    def handlePushStart(self):
+        print('starting BEC')
+        reply = self.get_client().start({})
+        self.textServerMesg.append('Starting ramps')
+        self.textServerMesg.append('Reply: '+str(reply))
+
     def getMainRampDict(self):
         with open(self.path_to_main_file, 'r') as f:
             ramp_dict = json.load(f)
@@ -285,6 +308,7 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
         return ramp_dict
 
 
+
 def main():
     app = QtGui.QApplication(sys.argv)
 
@@ -292,9 +316,7 @@ def main():
     path_to_settings = os.path.join(main_dir, 'settings.ini')
     settings = QtCore.QSettings(path_to_settings, QtCore.QSettings.IniFormat)
 
-    with open('examples/test_scene_big.json', 'r') as f:
-        data = json.load(f)
-    w = RampQueuer(data, settings, None)
+    w = RampQueuer(settings, None)
     w.show()
     return app.exec_()
 

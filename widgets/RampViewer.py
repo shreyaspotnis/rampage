@@ -2,7 +2,6 @@ from PyQt4 import QtGui, QtCore
 import pyqtgraph as pg
 import numpy as np
 import ramps
-import brewer2mpl
 
 
 class RampPlot(pg.PlotWidget):
@@ -21,8 +20,6 @@ class RampPlot(pg.PlotWidget):
 class MultipleRampPlot(pg.PlotWidget):
     def __init__(self, parent=None, title='Plot1d'):
         super(MultipleRampPlot, self).__init__(title=title, parent=parent)
-        color_map = brewer2mpl.get_map('Set2', 'qualitative', 8)
-        self.set2 = color_map.mpl_colors
 
         self.n_plots = 0
         self.plot_dict = {}

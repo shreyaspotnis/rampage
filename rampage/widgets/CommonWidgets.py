@@ -1,9 +1,20 @@
+"""Provides useful utility widgets.
+
+Widgets:
+    MyDoubleSpinBox(QtGui.QDoubleSpinBox)
+    QNamedPushButton(QtGui.QPushButton)
+    QMultipleSpinBoxEdit(QtGui.QWidget)
+"""
+
 from PyQt4 import QtGui, QtCore
 
 
 class MyDoubleSpinBox(QtGui.QDoubleSpinBox):
 
-    """Selects all text once it receives a focusInEvent."""
+    """Selects all text once it receives a focusInEvent.
+
+    Use this widget instead of the usual QDoubleSpinBox for quick editing.
+    """
 
     def __init__(self, parent):
         super(MyDoubleSpinBox, self).__init__()
@@ -19,7 +30,12 @@ class MyDoubleSpinBox(QtGui.QDoubleSpinBox):
 class QNamedPushButton(QtGui.QPushButton):
 
     """Push button with a name identifier. Use this when multiple push buttons
-    are connected to the same slot."""
+    are connected to the same slot.
+
+    Signals:
+    clicked_name(object) - Emitted whenever user clicks the button. It sends
+    its name.
+    """
 
     clicked_name = QtCore.pyqtSignal(object)
 
@@ -34,7 +50,12 @@ class QNamedPushButton(QtGui.QPushButton):
 
 class QMultipleSpinBoxEdit(QtGui.QWidget):
 
-    """Widget to edit a list of floats."""
+    """Widget to edit a list of floats.
+
+    Signals:
+
+    valueChanged(list) - Emits a list of values whenever any value is changed.
+    """
 
     valueChanged = QtCore.pyqtSignal(list)
 
@@ -77,6 +98,3 @@ class QMultipleSpinBoxEdit(QtGui.QWidget):
         else:
             self.attribute_values = new_attribute_values
         self.makeSpinBoxes()
-
-
-

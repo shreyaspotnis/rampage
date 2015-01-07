@@ -1,3 +1,5 @@
+"""All widgets related to editing channels are here."""
+
 from PyQt4 import QtGui, QtCore
 from ..ramps import Channel
 from CommonWidgets import QMultipleSpinBoxEdit, QNamedPushButton
@@ -5,6 +7,11 @@ import rampage.format as fmt
 
 
 class QEditChannelInfoDialog(QtGui.QDialog):
+    """Dialog to edit channel info.
+
+    This dialog is called when the user right clicks on the channel name and
+    selects edit.
+    """
 
     def __init__(self, ch_name, dct, parent):
         super(QEditChannelInfoDialog, self).__init__(parent)
@@ -45,7 +52,17 @@ class QEditChannelInfoDialog(QtGui.QDialog):
 
 class QChannelInfoBox(QtGui.QWidget):
 
-    """Displays channel name, comment and other info."""
+    """Displays channel name, comment and other info.
+
+    This widget sits on the left-most column of every channel row.
+
+    Signals:
+    edit_signal(ch_name) - Emits this with its channel name whenever the user
+    clicks the edit menu item on the right-click menu. It is the job of the
+    parent widget to do something afterwards.
+
+    view_signal(ch_name) - Same as edit, but emitted when the user clicks view
+    """
 
     edit_signal = QtCore.pyqtSignal(object)
     view_signal = QtCore.pyqtSignal(object)
@@ -80,7 +97,7 @@ class QChannelInfoBox(QtGui.QWidget):
         self.pop_menu.addAction(self.edit_action)
         self.pop_menu.addAction(self.view_action)
 
-        # right clicking on the keyframe will bring up the context menu
+        # right clicking on this will bring up the context menu
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         signal_str = 'customContextMenuRequested(const QPoint&)'
         self.connect(self, QtCore.SIGNAL(signal_str), self.onContextMenu)
@@ -103,6 +120,8 @@ class QChannelInfoBox(QtGui.QWidget):
         self.pop_menu.exec_(self.mapToGlobal(point))
 
     def edit_channel_info(self, new_ch_name, ch_dct):
+        """Parent widget calls this whenever the user edits channel info.
+        """
         self.ch_name = new_ch_name
         self.dct = ch_dct
         if ch_dct['type'] == 'analog':
@@ -198,6 +217,7 @@ class QDigitalChannelSegment(QChannelSegment):
         self.boolButton.setText(text)
         self.dct['state'] = self.state
         self.edit_segment.emit()
+
 
 class QChannel(Channel):
 
@@ -323,4 +343,3 @@ class QChannel(Channel):
                                 self.start_pos[1] + keyindex + 1)
             self.ch_segments.append(ch_seg)
             self.parent.ramp_changed.emit()
-

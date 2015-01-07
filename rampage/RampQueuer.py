@@ -2,11 +2,10 @@ from PyQt4 import QtGui, QtCore
 from PyQt4 import uic
 import sys
 import json
-import ramps
-import copy
 import os
 import numpy as np
-import server
+
+from rampage import server
 
 
 def flatten_dict(dct, separator='-->', allowed_types=[int, float, bool]):
@@ -33,8 +32,9 @@ def set_dict_item(dct, name_string, set_to):
     item_type = type(d[key_strings[-1]])
     d[key_strings[-1]] = item_type(set_to)
 
-
-Ui_Ramp1DScan, QRamp1DScan = uic.loadUiType("ui/Ramp1DScan.ui")
+main_package_dir = os.path.dirname(__file__)
+ui_filename = os.path.join(main_package_dir, "ui/Ramp1DScan.ui")
+Ui_Ramp1DScan, QRamp1DScan = uic.loadUiType(ui_filename)
 
 
 class Ramp1DScan(QRamp1DScan, Ui_Ramp1DScan):
@@ -144,7 +144,9 @@ class Ramp1DScan(QRamp1DScan, Ui_Ramp1DScan):
         return execReturn, col_names, vals
 
 
-Ui_RampQueuer, QRampQueuer = uic.loadUiType("ui/RampQueuer.ui")
+main_package_dir = os.path.dirname(__file__)
+ui_filename = os.path.join(main_package_dir, "ui/RampQueuer.ui")
+Ui_RampQueuer, QRampQueuer = uic.loadUiType(ui_filename)
 
 
 class RampQueuer(QRampQueuer, Ui_RampQueuer):

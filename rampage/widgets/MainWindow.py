@@ -1,9 +1,13 @@
 from PyQt4 import uic
 from PyQt4.QtGui import QFileDialog
 from PyQt4 import QtGui, QtCore
-from widgets import RampEditor
+import os
 
-Ui_MainWindow, QMainWindow = uic.loadUiType("ui/MainWindow.ui")
+from RampEditor import RampEditor
+
+main_package_dir = os.path.join(os.path.dirname(__file__), os.pardir)
+ui_filename = os.path.join(main_package_dir, "ui/MainWindow.ui")
+Ui_MainWindow, QMainWindow = uic.loadUiType(ui_filename)
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):

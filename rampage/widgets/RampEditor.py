@@ -1,11 +1,12 @@
 from PyQt4 import QtGui, QtCore
-from widgets.KeyFrameWidgets import QKeyFrameList
-from widgets.ChannelWidgets import QChannel
-from widgets.ChannelWidgets import QEditChannelInfoDialog
-from widgets.RampViewer import RampViewer
-from widgets.DictEditor import DictEditor
 import json
-import ramps
+
+from KeyFrameWidgets import QKeyFrameList
+from ChannelWidgets import QChannel
+from ChannelWidgets import QEditChannelInfoDialog
+from RampViewer import RampViewer
+from DictEditor import DictEditor
+from rampage import ramps
 
 
 def clearLayout(layout):

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from PyQt4 import QtGui, QtCore
-from ramps import KeyFrameList
-from widgets.CommonWidgets import MyDoubleSpinBox
-import format as fmt
-import server
+from ..ramps import KeyFrameList
+from CommonWidgets import MyDoubleSpinBox
+import rampage.format as fmt
+import rampage.server as server
 from DictEditor import DictEditor
 
 all_hooks_dict = dict(server.Hooks.default_mesgs)

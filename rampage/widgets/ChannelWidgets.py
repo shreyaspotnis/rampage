@@ -1,7 +1,7 @@
 from PyQt4 import QtGui, QtCore
-from ramps import Channel
-from widgets.CommonWidgets import QMultipleSpinBoxEdit, QNamedPushButton
-import format as fmt
+from ..ramps import Channel
+from CommonWidgets import QMultipleSpinBoxEdit, QNamedPushButton
+import rampage.format as fmt
 
 
 class QEditChannelInfoDialog(QtGui.QDialog):

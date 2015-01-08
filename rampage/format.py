@@ -1,3 +1,6 @@
+"""Provides HTML tags wrappers for pretty printing."""
+
+
 def bold(s):
     return '<b>'+s+'</b>'
 
@@ -24,4 +27,3 @@ def green(s):
 
 def blue(s):
     return '<font color="blue">'+s+'</font>'
-

@@ -37,9 +37,11 @@ class RampEditor(QtGui.QWidget):
         self.scroll_area = None
 
     def handleProperties(self):
+        if 'properties' not in self.data:
+            self.data['properties'] = {}
         d_new = dict(self.data['properties'])
-        d = DictEditor(d_new, 'Properties', self)
-        if d.exec_():
+        dialog = DictEditor(d_new, 'Properties', self)
+        if dialog.exec_():
             self.data['properties'] = d_new
             self.ramp_changed.emit()
 

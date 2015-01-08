@@ -1,3 +1,5 @@
+"""Create queues of ramps to upload to server.
+"""
 from PyQt4 import QtGui, QtCore
 from PyQt4 import uic
 import sys
@@ -9,6 +11,22 @@ from rampage import server
 
 
 def flatten_dict(dct, separator='-->', allowed_types=[int, float, bool]):
+    """Returns a list of string identifiers for each element in dct.
+
+    Recursively scans through dct and finds every element whose type is in
+    allowed_types and adds a string indentifier for it.
+
+    eg:
+    dct = {
+            'a': 'a string',
+            'b': {
+                'c': 1.0,
+                'd': True
+            }
+          }
+    flatten_dict(dct) would return
+    ['a', 'b-->c', 'b-->d']
+    """
     flat_list = []
     for key in sorted(dct):
         if key[:2] == '__':
@@ -25,6 +43,13 @@ def flatten_dict(dct, separator='-->', allowed_types=[int, float, bool]):
 
 
 def set_dict_item(dct, name_string, set_to):
+    """Sets dictionary item identified by name_string to set_to.
+
+    name_string is the indentifier generated using flatten_dict.
+
+    Maintains the type of the orginal object in dct and tries to convert set_to
+    to that type.
+    """
     key_strings = str(name_string).split('-->')
     d = dct
     for ks in key_strings[:-1]:
@@ -308,7 +333,6 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
         with open(self.path_to_prepend_file, 'r') as f:
             ramp_dict = json.load(f)
         return ramp_dict
-
 
 
 def main():

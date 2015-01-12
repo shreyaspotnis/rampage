@@ -228,10 +228,20 @@ class Channel(object):
         self.ch_name = ch_name
         self.dct = dct
         self.key_frame_list = key_frame_list
+        self.del_unused_keyframes()
 
     def set_name(self, new_ch_name):
         """Sets the name of the channel."""
         self.ch_name = new_ch_name
+
+    def del_unused_keyframes(self):
+        """Scans through list of keyframes in the channel and removes those
+        which are not in self.key_frame_list."""
+        skl = self.key_frame_list.sorted_key_list()
+        unused_keys = [k for k in self.dct['keys']
+                       if k not in skl]
+        for k in unused_keys:
+            del self.dct['keys'][k]
 
     def generate_ramp(self, time_div=4e-3):
         """Returns the generated ramp and a time array.

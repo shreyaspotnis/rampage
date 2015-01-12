@@ -32,7 +32,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ramp_editor.setScrollWidget(self.scrollArea)
         self.setWindowTitle(self.path_to_ramp_file)
 
-        # self.overlay = Overlay(self.centralWidget())
         self.overlay = Overlay(self.ramp_editor, self.scrollArea)
 
         self.show_overlay = False
@@ -51,10 +50,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.settings.beginGroup('mainwindow')
         geometry = self.settings.value('geometry').toByteArray()
         state = self.settings.value('windowstate').toByteArray()
-        # dock_string = str(self.settings.value('dockstate').toString())
-        # if dock_string is not "":
-        #     dock_state = eval(dock_string)
-        #     self.dock_area.restoreState(dock_state)
 
         self.path_to_ramp_file = str(self.settings.value('path_to_ramp_file',
                                         'examples/test_scene.json').toString())

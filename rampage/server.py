@@ -28,12 +28,15 @@ class Hooks(object):
 
 class RequestProcessor():
     def __init__(self, bind_port):
+        # find names of all functions in the class
         members = inspect.getmembers(self, predicate=inspect.ismethod)
         self._messages_dict = {}
         for func_name, func in members:
+            # ignore hidden functions that start with '_'
             if func_name[0] is not '_':
                 self._messages_dict[func_name] = func
 
+        # start a REQ-REP server, zmq stuff
         bind_addr = 'tcp://*:' + str(bind_port)
         print(bind_addr)
         self._context = zmq.Context(1)

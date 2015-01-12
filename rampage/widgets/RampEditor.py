@@ -125,6 +125,6 @@ class RampEditor(QtGui.QWidget):
         return [self.grid.cellRect(0, i) for i in range(1, n_cols)], labels
 
     def getChannelCellRectangles(self):
-        n_rows = self.grid.columnCount()
+        n_rows = self.grid.rowCount()
         labels = [ch.ch_name for ch in self.channels]
         return [self.grid.cellRect(i, 0) for i in range(2, n_rows)], labels

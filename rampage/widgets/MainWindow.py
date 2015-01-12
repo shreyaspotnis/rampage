@@ -52,7 +52,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         state = self.settings.value('windowstate').toByteArray()
 
         self.path_to_ramp_file = str(self.settings.value('path_to_ramp_file',
-                                        'examples/test_scene.json').toString())
+                                     'examples/test_scene.json').toString())
+        if not os.path.isfile(self.path_to_ramp_file):
+            self.path_to_ramp_file = 'examples/test_scene.json'
         self.settings.endGroup()
 
         self.restoreGeometry(geometry)

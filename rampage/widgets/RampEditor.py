@@ -92,7 +92,25 @@ class RampEditor(QtGui.QWidget):
                                            self).exec_()
         exec_return, new_key_name, new_comment, new_id = out_tuple
         if exec_return == QtGui.QDialog.Accepted:
+            # Find out if there is a name conflict if channel name has changed
+            if new_key_name != ch_name:
+                if new_key_name in self.data['channels']:
+                    msg_str = 'Each channel should have a unique name.'
+                    reply = QtGui.QMessageBox.critical(self, 'Duplicate Channel Name',
+                                          msg_str)
+                    return
+
             old_id = self.data['channels'][ch_name]['id']
+            # find out if there is a conflict in id if id has changed
+            if new_id != old_id:
+                id_list = [self.data['channels'][ch_name]['id'] for ch_name in
+                           self.data['channels']]
+                if new_id in id_list:
+                    msg_str = 'Each channel should have a unique id.'
+                    reply = QtGui.QMessageBox.critical(self, 'Duplicate Channel Id',
+                                          msg_str)
+                    return
+
             self.data['channels'][ch_name]['comment'] = new_comment
             self.data['channels'][ch_name]['id'] = new_id
             old_channel = self.data['channels'].pop(ch_name)
@@ -108,7 +126,6 @@ class RampEditor(QtGui.QWidget):
                 self.reDoUi()
             else:
                 self.ramp_changed.emit()
-            print('Accepted')
 
     def handleViewChannel(self, ch_name):
         RampViewer(self.data, ch_name, self.settings, self).exec_()

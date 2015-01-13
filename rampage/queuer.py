@@ -199,7 +199,7 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
                                      'examples/test_scene.json').toString())
 
         check_state, _ = self.settings.value('check_prepend_ramp', 0).toInt()
-        text = self.settings.value('server_ip_and_port', 'localhost:6024').toString()
+        text = self.settings.value('server_ip_and_port', 'tcp://localhost:6024').toString()
         self.serverIPAndPort.setText(text)
         print(check_state)
         self.checkPrependRamp.setChecked(bool(check_state))

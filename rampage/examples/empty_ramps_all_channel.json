@@ -1,0 +1,547 @@
+{
+    "channels": {
+        "ditial1.0.30": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line30"
+        },
+        "ditial1.0.13": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line13"
+        },
+        "ditial1.0.12": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line12"
+        },
+        "ditial1.0.11": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line11"
+        },
+        "ditial1.0.10": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line10"
+        },
+        "ditial1.0.17": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line17"
+        },
+        "ditial1.0.16": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line16"
+        },
+        "ditial1.0.15": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line15"
+        },
+        "ditial1.0.14": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line14"
+        },
+        "ditial1.0.19": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line19"
+        },
+        "ditial1.0.18": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line18"
+        },
+        "analog3.4": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev3/ao4"
+        },
+        "analog3.5": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev3/ao5"
+        },
+        "analog3.6": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev3/ao6"
+        },
+        "analog3.7": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev3/ao7"
+        },
+        "analog3.0": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev3/ao0"
+        },
+        "analog3.1": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev3/ao1"
+        },
+        "analog3.2": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev3/ao2"
+        },
+        "analog3.3": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev3/ao3"
+        },
+        "ditial1.0.28": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line28"
+        },
+        "ditial1.0.29": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line29"
+        },
+        "ditial1.0.26": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line26"
+        },
+        "ditial1.0.27": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line27"
+        },
+        "ditial1.0.24": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line24"
+        },
+        "ditial1.0.25": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line25"
+        },
+        "ditial1.0.22": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line22"
+        },
+        "ditial1.0.23": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line23"
+        },
+        "ditial1.0.20": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line20"
+        },
+        "ditial1.0.21": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line21"
+        },
+        "ditial1.0.08": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line08"
+        },
+        "ditial1.0.09": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line09"
+        },
+        "analog2.1": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev2/ao1"
+        },
+        "analog2.0": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev2/ao0"
+        },
+        "analog2.3": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev2/ao3"
+        },
+        "analog2.2": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev2/ao2"
+        },
+        "analog2.5": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev2/ao5"
+        },
+        "analog2.4": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev2/ao4"
+        },
+        "analog2.7": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev2/ao7"
+        },
+        "analog2.6": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev2/ao6"
+        }
+    },
+    "properties": {
+        "comment": "An empty ramp with all channels. Use this to build other ramps",
+        "ramp_resolution": 100.0,
+        "jump_resolution": 4.0
+    },
+    "keyframes": {
+        "start": {
+            "comment": "start the ramp",
+            "__abs_time__": 0.0,
+            "parent": null,
+            "time": 0.0
+        }
+    }
+}

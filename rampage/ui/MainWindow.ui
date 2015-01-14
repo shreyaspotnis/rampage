@@ -39,8 +39,15 @@
     </property>
     <addaction name="actionToggle_Overlay"/>
    </widget>
+   <widget class="QMenu" name="menuRamp">
+    <property name="title">
+     <string>Ramp</string>
+    </property>
+    <addaction name="actionCheck_for_Errors"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
+   <addaction name="menuRamp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen">
@@ -75,6 +82,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Tab</string>
+   </property>
+  </action>
+  <action name="actionCheck_for_Errors">
+   <property name="text">
+    <string>Check for Errors</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
    </property>
   </action>
  </widget>
@@ -160,11 +175,28 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionCheck_for_Errors</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>handleCheckForErrors()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>handleSave()</slot>
   <slot>handleSaveAs()</slot>
   <slot>handleOpen()</slot>
   <slot>handleToggleOverlay()</slot>
+  <slot>handleCheckForErrors()</slot>
  </slots>
 </ui>

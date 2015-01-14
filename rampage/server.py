@@ -2,6 +2,13 @@
 import inspect
 import zmq
 import json
+import os
+
+from rampage import ramps
+
+
+main_package_dir = os.path.dirname(__file__)
+ui_filename = os.path.join(main_package_dir, "ui/MainWindow.ui")
 
 
 class Hooks(object):
@@ -137,10 +144,47 @@ class BECServer(RequestProcessor):
         return reply
 
 
+def check_ramp_for_errors(ramp_data):
+    """Checks ramp for errors. This is experiment specific checklist."""
+    error_list = []
+    keyframe_list = ramps.KeyFrameList(ramp_data['keyframes'])
+    sorted_key_list = keyframe_list.sorted_key_list()
+    channel_list = [ramps.Channel(ch_name, ramp_data['channels'][ch_name],
+                                  keyframe_list)
+                    for ch_name in ramp_data['channels']]
+    sorted_absolute_times = [keyframe_list.get_absolute_time(sk) for sk
+                             in sorted_key_list]
+    ramp_properties = ramp_data['properties']
+    jump_resolution = ramp_properties['jump_resolution']
+    for key_name, abs_time in zip(sorted_key_list, sorted_absolute_times):
+        # check if all times are +ve
+        if abs_time < 0.0:
+            error_fmt = "keyframe \'{0}\' has negative absolute time {1}"
+            error_str = error_fmt.format(key_name, abs_time)
+            error_list.append(error_str)
+
+        # check if all times are a multiple of minimum resolution
+        steps_float = abs_time / jump_resolution
+        steps_residue = steps_float - int(steps_float)
+        if steps_residue > 0.0001:
+            error_fmt = ("keyframe \'{0}\' has absolute time {1} which is not"
+                         " a multiple of jump_resolution {2}")
+            error_str = error_fmt.format(key_name, abs_time, jump_resolution)
+            error_list.append(error_str)
+    return error_list
+
+
 def main():
     s = BECServer(6023)
     s._run()
 
 
+def test_check_ramp_for_errors():
+    fname = os.path.join(main_package_dir, 'examples/load_mot.json')
+    with open(fname, 'r') as f:
+        data = json.load(f)
+    check_ramp_for_errors(data)
+
 if __name__ == '__main__':
-    main()
+    # main()
+    test_check_ramp_for_errors()

@@ -118,6 +118,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.show_overlay = not self.show_overlay
         self.overlay.setShowOverlay(self.show_overlay)
 
+    def handleCheckForErrors(self):
+        self.ramp_editor.checkForErrors()
+
     def handleOpen(self):
         # save old opened file
         if not self.is_saved:

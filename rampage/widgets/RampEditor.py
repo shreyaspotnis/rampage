@@ -127,6 +127,11 @@ class RampEditor(QtGui.QWidget):
             else:
                 self.ramp_changed.emit()
 
+    def checkForErrors(self):
+        from rampage.server import check_ramp_for_errors
+        error_list = check_ramp_for_errors(self.data)
+        print(error_list)
+
     def handleViewChannel(self, ch_name):
         RampViewer(self.data, ch_name, self.settings, self).exec_()
 

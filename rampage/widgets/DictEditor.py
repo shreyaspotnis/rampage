@@ -22,6 +22,7 @@ class FloatBox(QtGui.QDoubleSpinBox):
         super(FloatBox, self).__init__(parent)
         self.setRange(-1e100, 1e100)
         self.setValue(value)
+        self.setDecimals(10)
         self.valueChanged.connect(self.myValueChanged)
 
     def mySetValue(self, val):

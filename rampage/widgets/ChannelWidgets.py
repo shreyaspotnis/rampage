@@ -141,6 +141,7 @@ class QChannelSegment(QtGui.QWidget):
         super(QChannelSegment, self).__init__(parent)
         self.dct = dct
         self.vbox = QtGui.QVBoxLayout(self)
+        self.vbox.setSpacing(0)
         self.setLayout(self.vbox)
         self.keyname = keyname
         self.ramp_types = ramp_types
@@ -205,7 +206,6 @@ class QDigitalChannelSegment(QChannelSegment):
                       'rgb(255,125,100); }')
         self.boolButton.setStyleSheet(stylesheet)
         self.vbox.addWidget(self.boolButton)
-        print('adding button')
 
     def handleBoolButtonClicked(self, checked):
         print('clicked')

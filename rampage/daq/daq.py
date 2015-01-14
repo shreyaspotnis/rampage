@@ -63,7 +63,6 @@ def reset_analog_sample_clock(state=False):
     Use this just before starting a run to avoid timing issues.
     """
     set_digital_line_state(expt_settings.analog_clock_line, state)
-    
 
 
 def set_digital_line_state(line_name, state):
@@ -82,13 +81,14 @@ def set_digital_line_state(line_name, state):
     # get the line number from the line name. Thats the number of bits to shift
     bits_to_shift = int(line_name.split('line')[-1])
     dig_data = np.ones(2, dtype="uint32")*bool(state)*(2**bits_to_shift)
-    # Note here that the number of samples written here are 2, which is the 
+    # Note here that the number of samples written here are 2, which is the
     # minimum required for a buffered write. If we configure a timing for the
     # write, it is considered buffered.
     # see http://zone.ni.com/reference/en-XX/help/370471Y-01/daqmxcfunc/daqmxwritedigitalu32/
     DigitalOutputTask(line_name, dig_data).StartAndWait()
 
     # create_digital_output_task(line_name, dig_data)
+
 
 class DigitalOutputTask(daq.Task):
     """A digital output task.
@@ -101,7 +101,7 @@ class DigitalOutputTask(daq.Task):
         see http://zone.ni.com/reference/en-XX/help/370466W-01/mxcncpts/physchannames/
         for details of naming lines.
 
-    digital_data (numpy.array of uint32) - 
+    digital_data (numpy.array of uint32) -
         The length of the array is the number of samples
 
     name_for_lines(str) - optional name to refer to the lines specified.
@@ -138,7 +138,7 @@ class DigitalOutputTask(daq.Task):
         n_written = daq.int32()
         n_dig_samples = len(self.digital_data)
         self.CreateDOChan(self.lines, self.name_for_lines,
-                             daq.DAQmx_Val_ChanForAllLines)
+                          daq.DAQmx_Val_ChanForAllLines)
         self.CfgSampClkTiming(self.ext_clock_line,
                               expt_settings.max_expected_rate,
                               daq.DAQmx_Val_Rising,
@@ -148,8 +148,7 @@ class DigitalOutputTask(daq.Task):
                              self.digital_data, ctypes.byref(n_written),
                              None)
         print('Digital n_written', n_written.value)
-    
-        
+
     def StartAndWait(self):
         """Starts the task and waits until it is done."""
         self.StartTask()
@@ -168,7 +167,7 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
         see http://zone.ni.com/reference/en-XX/help/370466W-01/mxcncpts/physchannames/
         for details of naming lines.
 
-    digital_data (numpy.array of uint32) - 
+    digital_data (numpy.array of uint32) -
         The length of the array is the number of samples
 
     name_for_lines(str) - optional name to refer to the lines specified.
@@ -193,10 +192,9 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
                  ext_clock_line=expt_settings.external_clock_line):
         DigitalOutputTask.__init__(self, lines, digital_data, name_for_lines,
                                    ext_clock_line, auto_configure=False)
-        
 
         # calculate number of samples to wait before callback
-        n_wait = int(expt_settings.ext_clock_frequency*
+        n_wait = int(expt_settings.ext_clock_frequency *
                      expt_settings.callback_resolution)
         self.n_wait = n_wait
         self.n_callbacks = 0
@@ -210,9 +208,8 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
 
         self.ConfigureTask()
         self.RegisterCallbacks()
-        
+
     def RegisterCallbacks(self):
-        
         self.AutoRegisterEveryNSamplesEvent(daq.DAQmx_Val_Transferred_From_Buffer,
                                             self.n_wait, 0)
         self.AutoRegisterDoneEvent(0)
@@ -232,13 +229,15 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
             return np.concatenate((dig_data, dig_data_add))
 
     def EveryNCallback(self):
-        self.n_callbacks+=1
+        """Called by PyDAQmx whenever a callback event occurs."""
+        self.n_callbacks += 1
         print('n_callbacks', self.n_callbacks)
-        return 0 # The function should return an integer
+        return 0  # The function should return an integer
 
     def DoneCallback(self, status):
+        """Called whenever the task is done."""
         print "Status, done", status
-        return 0 # The function should return an integer
+        return 0  # The function should return an integer
 
 
 class ContinuousAnalogOutputTask(daq.Task):
@@ -247,7 +246,7 @@ class ContinuousAnalogOutputTask(daq.Task):
                  clock_line=expt_settings.analog_clock_input_line):
         daq.Task.__init__(self)
         n_written = daq.int32()
-        
+
         print('analog lines')
         self.CreateAOVoltageChan(analog_lines, None, -10.0, 10.0,
                                  daq.DAQmx_Val_Volts, None)
@@ -267,7 +266,7 @@ class ContinuousAnalogOutputTask(daq.Task):
 class FiniteAnalogOutputTask(daq.Task):
     """An analog output task for outputting finite samples.
     This task uses a sample clock and changes the voltage at the analog outputs
-    whenever there is a rising edge at the clock. 
+    whenever there is a rising edge at the clock.
 
     Arguments
     ---------
@@ -277,7 +276,7 @@ class FiniteAnalogOutputTask(daq.Task):
         see http://zone.ni.com/reference/en-XX/help/370466W-01/mxcncpts/physchannames/
         for details of naming lines.
 
-    analog_data (numpy.array of float64) - 
+    analog_data (numpy.array of float64) -
         The length of the array is n_samples * n_channels
         The data should be formatted in a certain way. For example, if you have
         two channels A and B, and 5 samples, the ordering of the data is -
@@ -295,7 +294,7 @@ class FiniteAnalogOutputTask(daq.Task):
         daq.Task.__init__(self)
 
         n_written = daq.int32()
-        
+
         print('analog lines')
         self.CreateAOVoltageChan(analog_lines, None, -10.0, 10.0,
                                  daq.DAQmx_Val_Volts, None)
@@ -318,11 +317,9 @@ def p24_pulse_train(n_samples=100):
 
     n_samples - number of on off samples.
     """
-    n_written = daq.int32()
     samples = (np.arange(n_samples, dtype="uint32") % 2)*(2**24)
     samples[-1] = 0
     DigitalOutputTask("Dev1/port0/line24", samples).StartAndWait()
-
 
 
 def write_analog_channel(time_array, voltage_array, analog_lines="Dev2/ao0",
@@ -352,7 +349,7 @@ def write_analog_channel(time_array, voltage_array, analog_lines="Dev2/ao0",
     test_cont_samples = np.arange(n_cont_samples*1.0)
     test_cont_samples /= test_cont_samples[-1]
     test_cont_samples[-1] = 0.0
-    
+
     ana_cont_task = ContinuousAnalogOutputTask("Dev3/ao0", test_cont_samples,
                                                len(test_cont_samples),
                                                sample_rate)
@@ -361,12 +358,12 @@ def write_analog_channel(time_array, voltage_array, analog_lines="Dev2/ao0",
     ana_task = FiniteAnalogOutputTask(analog_lines, voltage_array,
                                       n_ana_samples)
     ana_task.StartTask()
-    
+
     DigitalOutputTaskWithCallbacks("Dev1/port0/line24, Dev1/port0/line31",
                       digital_data).StartAndWait()
     # create_digital_output_task("Dev1/port0/line24, Dev1/port0/line31",
     #                            digital_data)
-    
+
 
 if __name__ == '__main__':
     #p24_pulse_train(100)
@@ -375,7 +372,7 @@ if __name__ == '__main__':
     #time_array = np.array([0., 3000.], dtype=float)*8e-3
     time_array = np.array([0., (int(50./8e-3))*8e-3], dtype=float)
     # zero_index = 2050
-    print('Time array shape:',time_array.shape)
+    print('Time array shape:', time_array.shape)
     voltage_list = [np.zeros(time_array.shape, dtype=float) for i in range(8)]
     #voltage_list[0] = np.sin(time_array*2.0*np.pi*1e-1)
     #voltage_list[1] = time_array/np.max(time_array)

@@ -3,6 +3,9 @@ import inspect
 import zmq
 import json
 import os
+import numpy as np
+
+import matplotlib.pyplot as plt
 
 from rampage import ramps
 
@@ -144,6 +147,94 @@ class BECServer(RequestProcessor):
         return reply
 
 
+def digital_channel_ids():
+    """Returns list of digital channels used in the experiment."""
+    line_fmt = 'Dev1/port0/line{0:02d}'
+    line_ids = [line_fmt.format(n) for n in range(8, 31)]
+    return line_ids
+
+
+def dev2_analog_ids():
+    line_fmt = 'Dev2/ao{0:1d}'
+    line_ids = [line_fmt.format(n) for n in range(8)]
+    return line_ids
+
+
+def get_digital_channels(channel_list):
+    """Goes through channel list and returns digital channels with ids
+    Dev1/port0/line08, Dev1/port0/line09... Dev1/port0/line30."""
+    dig_ids = digital_channel_ids()
+    dig_channels = []
+    for ln in dig_ids:
+        for ch in channel_list:
+            if ch.dct['id'] == ln:
+                dig_channels.append(ch)
+                break
+    return dig_channels
+
+
+def get_dev2_analog_channels(channel_list):
+    an_ids = dev2_analog_ids()
+    analog_channels = []
+    for ln in an_ids:
+        for ch in channel_list:
+            if ch.dct['id'] == ln:
+                analog_channels.append(ch)
+                break
+    return analog_channels
+
+
+def make_dev2_analog_ramps(ramp_data):
+    keyframe_list = ramps.KeyFrameList(ramp_data['keyframes'])
+    sorted_key_list = keyframe_list.sorted_key_list()
+    channel_list = [ramps.Channel(ch_name, ramp_data['channels'][ch_name],
+                                  keyframe_list)
+                    for ch_name in ramp_data['channels']]
+
+    ramp_properties = ramp_data['properties']
+    jump_resolution = ramp_properties['jump_resolution']
+    ramp_resolution = ramp_properties['ramp_resolution']
+    dev2_channels = get_dev2_analog_channels(channel_list)
+
+    ramp_regions = np.zeros(len(sorted_key_list) - 1)
+    for an_ch in dev2_channels:
+        ramp_regions += an_ch.get_ramp_regions()
+    for an_ch in dev2_channels:
+        time_array1, voltages1 = an_ch.get_analog_ramp_data(ramp_regions,
+                                                            jump_resolution,
+                                                            ramp_resolution)
+        time_array2, voltages2 = an_ch.generate_ramp(jump_resolution)
+        plt.plot(time_array2, voltages2)
+        plt.plot(time_array1, voltages1, 'o')
+        plt.show()
+
+
+
+    print(ramp_regions)
+
+
+def make_digital_ramps(ramp_data):
+    keyframe_list = ramps.KeyFrameList(ramp_data['keyframes'])
+    channel_list = [ramps.Channel(ch_name, ramp_data['channels'][ch_name],
+                                  keyframe_list)
+                    for ch_name in ramp_data['channels']]
+
+    ramp_properties = ramp_data['properties']
+    jump_resolution = ramp_properties['jump_resolution']
+
+    # The channels used are Dev1/port0/line8:31
+    dig_channels = get_digital_channels(channel_list)
+
+    for line_number, dig_ch in zip(range(8, 31), dig_channels):
+        time, ramp_uint = dig_ch.generate_ramp(time_div=jump_resolution)
+        if line_number == 8:
+            steps = len(ramp_uint)
+            digital_data = np.zeros(steps, dtype='uint32')
+        digital_data += ramp_uint*(2**line_number)
+
+    return digital_data
+
+
 def check_ramp_for_errors(ramp_data):
     """Checks ramp for errors. This is experiment specific checklist."""
     error_list = []
@@ -171,6 +262,21 @@ def check_ramp_for_errors(ramp_data):
                          " a multiple of jump_resolution {2}")
             error_str = error_fmt.format(key_name, abs_time, jump_resolution)
             error_list.append(error_str)
+
+    # find missing channels
+    ch_ids = digital_channel_ids()
+    ch_ids += dev2_analog_ids()
+    # ignore p31, since we used that for Dev1 timing
+    for ch_id in ch_ids:
+        n_found = 0
+        for ch in channel_list:
+            if ch.dct['id'] == ch_id:
+                n_found += 1
+        if n_found != 1:
+            error_fmt = '{0} copies of {1} found. There should only be 1'
+            error_str = error_fmt.format(n_found, ch_id)
+            error_list.append(error_str)
+
     return error_list
 
 
@@ -180,10 +286,12 @@ def main():
 
 
 def test_check_ramp_for_errors():
-    fname = os.path.join(main_package_dir, 'examples/load_mot.json')
+    fname = os.path.join(main_package_dir, 'examples/dev2_test.json')
     with open(fname, 'r') as f:
         data = json.load(f)
     check_ramp_for_errors(data)
+    make_digital_ramps(data)
+    make_dev2_analog_ramps(data)
 
 if __name__ == '__main__':
     # main()

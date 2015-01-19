@@ -243,6 +243,120 @@ class Channel(object):
         for k in unused_keys:
             del self.dct['keys'][k]
 
+    def get_used_key_frames(self):
+        """Returns a list of the keyframes used by this channel, sorted with
+        time. Each element in the list is a tuple. The first element is the
+        key_name and the second is the channel data at that keyframe."""
+
+        skl = self.key_frame_list.sorted_key_list()
+        # each element in used_key_frames is a tuple (key_name, key_dict)
+        used_key_frames = []
+        for kf in skl:
+            if kf in self.dct['keys']:
+                used_key_frames.append((kf, self.dct['keys'][kf]))
+        return used_key_frames
+
+    def get_used_key_frame_list(self):
+        """Returns a list of the keyframes used by this channel, sorted with
+        time."""
+        skl = self.key_frame_list.sorted_key_list()
+        # each element in used_key_frames is a tuple (key_name, key_dict)
+        used_key_frames = []
+        for kf in skl:
+            if kf in self.dct['keys']:
+                used_key_frames.append(kf)
+        return used_key_frames
+
+    def get_ramp_regions(self):
+        """Returns a numpy array where each element corresponds to whether to
+        ramp in that region or jump."""
+        skl = self.key_frame_list.sorted_key_list()
+        ramp_or_jump = np.zeros(len(skl) - 1)
+        used_key_frames = self.get_used_key_frame_list()
+        for region_number, start_key in enumerate(skl[:-1]):
+            if start_key in used_key_frames:
+                key_data = self.dct['keys'][start_key]
+                ramp_type = key_data['ramp_type']
+                if ramp_type != "jump":
+                    # this means that a ramp starts in this region. Figure
+                    # out where it ends
+                    print('Used keyframes', used_key_frames)
+                    curr_key_num = used_key_frames.index(start_key)
+                    end_key_number = curr_key_num + 1
+                    # figure out if the current key was the last key
+                    if end_key_number < len(used_key_frames):
+                        # if it wasnt, then find the end region
+                        end_key_name = used_key_frames[end_key_number]
+                        end_region_index = skl.index(end_key_name)
+                        ramp_or_jump[region_number:end_region_index] = 1
+        return ramp_or_jump
+
+    def get_analog_ramp_data(self, ramp_regions, jump_resolution,
+                             ramp_resolution):
+        print('generating ramp')
+        skl = self.key_frame_list.sorted_key_list()
+        used_key_frame_list = self.get_used_key_frame_list()
+        all_kf_times = np.array([self.key_frame_list.get_absolute_time(kf)
+                                 for kf in skl])
+        time_array_list = []
+        n_points = 0
+        kf_positions = []
+        for region_number, ramp_or_jump in enumerate(ramp_regions):
+            kf_positions.append(n_points)
+            if ramp_or_jump == 0:
+                time_array_list.append(np.array([all_kf_times[region_number]]))
+                n_points += 1
+            else:
+                start_time = all_kf_times[region_number]
+                end_time = all_kf_times[region_number + 1]
+                time_array = np.arange(start_time, end_time, ramp_resolution)
+                time_array_list.append(time_array)
+                n_points += len(time_array)
+        time_array_list.append([all_kf_times[-1]])
+        time_array = np.concatenate(time_array_list)
+        kf_positions.append(n_points)
+        n_points += 1
+
+        voltages = np.zeros(n_points, dtype=float)
+
+        start_voltage = self.dct['keys'][used_key_frame_list[0]]['ramp_data']['value']
+        end_voltage = self.dct['keys'][used_key_frame_list[-1]]['ramp_data']['value']
+
+        start_index = skl.index(used_key_frame_list[0])
+        end_index = skl.index(used_key_frame_list[-1])
+
+        voltages[0:kf_positions[start_index]] = start_voltage
+        voltages[kf_positions[end_index]:] = end_voltage
+
+        for i, ukf in enumerate(used_key_frame_list[:-1]):
+            start_pos = kf_positions[skl.index(ukf)]
+            end_pos = kf_positions[skl.index(used_key_frame_list[i+1])]
+            time_subarray = time_array[start_pos:end_pos]
+            start_time = time_subarray[0]
+            end_time = time_array[end_pos]
+
+            print('start end')
+            print(start_pos, end_pos)
+
+
+            value_final = self.dct['keys'][used_key_frame_list[i+1]]['ramp_data']['value']
+            print('value final:', value_final)
+            ramp_type = self.dct['keys'][used_key_frame_list[i]]['ramp_type']
+            ramp_data = self.dct['keys'][used_key_frame_list[i]]['ramp_data']
+
+            parms_tuple = (ramp_data, start_time, end_time, value_final,
+                           time_subarray)
+
+            ramp_function = analog_ramp_functions[ramp_type]
+            voltage_sub = ramp_function(*parms_tuple)
+            voltages[start_pos:end_pos] = voltage_sub
+
+        print('time array')
+        print time_array
+        print('voltages')
+        print voltages
+        return time_array, voltages
+
     def generate_ramp(self, time_div=4e-3):
         """Returns the generated ramp and a time array.
 
@@ -256,17 +370,14 @@ class Channel(object):
             is_analog = False
         skl = self.key_frame_list.sorted_key_list()
         # each element in used_key_frames is a tuple (key_name, key_dict)
-        used_key_frames = []
-        for kf in skl:
-            if kf in self.dct['keys']:
-                used_key_frames.append((kf, self.dct['keys'][kf]))
+        used_key_frames = self.get_used_key_frames()
         max_time = self.key_frame_list.get_absolute_time(skl[-1]) + time_div
 
         time = np.arange(0.0, max_time, time_div)
         if is_analog:
             voltage = np.zeros(time.shape, dtype=float)
         else:
-            voltage = np.zeros(time.shape, dtype=int)
+            voltage = np.zeros(time.shape, dtype='uint32')
         kf_times = np.array([self.key_frame_list.get_absolute_time(ukf[0])
                              for ukf in used_key_frames])
         kf_positions = kf_times/time_div

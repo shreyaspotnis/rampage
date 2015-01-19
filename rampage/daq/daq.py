@@ -309,6 +309,29 @@ class FiniteAnalogOutputTask(daq.Task):
         print('Analog n_written', n_written.value)
 
 
+def create_all_tasks(digital_data, dev2_trigger_line, dev2_voltages,
+                     dev3_trigger_line, dev3_voltages):
+
+    # create Dev2 Task
+    _, n_dev2_samples = dev2_voltages.shape
+    dev2_task = FiniteAnalogOutputTask("Dev2/ao0:7", dev2_voltages.T.flatten(),
+                                       n_dev2_samples)
+
+    _, n_dev3_samples = dev3_voltages.shape
+    dev3_task = FiniteAnalogOutputTask("Dev3/ao0:7", dev3_voltages.T.flatten(),
+                                       n_dev3_samples)
+
+    dev2_timing_line_number = 31
+    dev3_timing_line_number = 27
+
+    digital_data += dev2_trigger_line*(2**dev2_timing_line_number)
+    digital_data += dev3_trigger_line*(2**dev3_timing_line_number)
+
+    digital_task = DigitalOutputTask("Dev1/port0/line8:31", digital_data)
+
+    return dev2_task, dev3_task, digital_task
+
+
 def p24_pulse_train(n_samples=100):
     """Sends a pulse train of on-off in Dev1/port0/line24.
 

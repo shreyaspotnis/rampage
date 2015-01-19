@@ -5,10 +5,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -18,10 +18,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -32,10 +32,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -46,10 +46,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -60,10 +60,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -73,10 +73,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -87,10 +87,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -101,10 +101,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -115,10 +115,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -129,10 +129,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -142,10 +142,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -156,10 +156,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -170,10 +170,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -183,10 +183,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
-                        "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                        "value": 2.0
+                    }
                 }
             },
             "type": "analog",
@@ -196,10 +196,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -209,16 +209,16 @@
             "comment": "analog channel",
             "keys": {
                 "kf4": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 },
                 "kf1": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": -1.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -228,22 +228,22 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 1.0
+                    }
+                },
+                "kf2": {
+                    "ramp_data": {
+                        "value": 0.5
                     },
                     "ramp_type": "jump"
                 },
-                "kf2": {
-                    "ramp_type": "jump",
-                    "ramp_data": {
-                        "value": 0.5
-                    }
-                },
                 "kf3": {
-                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 2.0
-                    }
+                    },
+                    "ramp_type": "jump"
                 }
             },
             "type": "analog",
@@ -253,22 +253,22 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 },
                 "kf2": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 },
                 "kf1": {
+                    "ramp_type": "linear",
                     "ramp_data": {
                         "value": -5.0
-                    },
-                    "ramp_type": "linear"
+                    }
                 }
             },
             "type": "analog",
@@ -279,10 +279,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -293,10 +293,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -307,10 +307,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -321,10 +321,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -335,10 +335,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -348,10 +348,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -362,10 +362,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -376,10 +376,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -390,10 +390,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -404,10 +404,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -418,10 +418,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -432,15 +432,15 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 },
                 "kf1": {
                     "state": true,
-                    "ramp_type": "jump",
-                    "ramp_data": {}
+                    "ramp_data": {},
+                    "ramp_type": "jump"
                 }
             },
             "type": "digital",
@@ -450,28 +450,28 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 },
                 "kf4": {
-                    "ramp_data": {
-                        "value": 5.0
-                    },
-                    "ramp_type": "jump"
-                },
-                "kf2": {
-                    "ramp_data": {
-                        "value": 0.0
-                    },
-                    "ramp_type": "jump"
-                },
-                "kf1": {
-                    "ramp_type": "linear",
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 5.0
                     }
+                },
+                "kf2": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "kf1": {
+                    "ramp_data": {
+                        "value": 5.0
+                    },
+                    "ramp_type": "linear"
                 }
             },
             "type": "analog",
@@ -481,10 +481,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -494,22 +494,22 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
-                    "ramp_data": {
-                        "value": 0.0
-                    },
-                    "ramp_type": "jump"
-                },
-                "kf4": {
                     "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
                     }
                 },
+                "kf4": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
                 "kf3": {
-                    "ramp_type": "linear",
                     "ramp_data": {
                         "value": 1.0
-                    }
+                    },
+                    "ramp_type": "linear"
                 }
             },
             "type": "analog",
@@ -519,10 +519,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -532,10 +532,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -546,47 +546,54 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line25"
+        },
+        "ODT-Z": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "analog",
+            "id": "Dev3/ao3"
+        },
+        "ODT-X": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
                     "ramp_data": {
                         "value": 0.0
                     },
                     "ramp_type": "jump"
                 }
             },
-            "type": "digital",
-            "id": "Dev1/port0/line25"
+            "type": "analog",
+            "id": "Dev3/ao6"
         },
         "Frame Grabber": {
             "comment": "analog channel",
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
             "id": "Dev1/port0/line15"
-        },
-        "ODT-X": {
-            "comment": "analog channel",
-            "keys": {},
-            "type": "analog",
-            "id": "Dev3/ao6"
-        },
-        "ODT-Z": {
-            "comment": "analog channel",
-            "keys": {
-                "start": {
-                    "ramp_data": {
-                        "value": 0.0
-                    },
-                    "ramp_type": "jump"
-                }
-            },
-            "type": "analog",
-            "id": "Dev3/ao3"
         }
     },
     "properties": {
@@ -595,12 +602,6 @@
         "jump_resolution": 0.004
     },
     "keyframes": {
-        "start": {
-            "comment": "start the ramp",
-            "__abs_time__": 0.0,
-            "parent": null,
-            "time": 0.0
-        },
         "kf4": {
             "comment": "comment",
             "__abs_time__": 4.0,
@@ -624,6 +625,18 @@
             "__abs_time__": 1.0,
             "parent": "start",
             "time": 1.0
+        },
+        "test_step": {
+            "comment": "comment",
+            "__abs_time__": 1.004,
+            "parent": "kf1",
+            "time": 0.004
+        },
+        "start": {
+            "comment": "start the ramp",
+            "__abs_time__": 0.0,
+            "parent": null,
+            "time": 0.0
         }
     }
 }

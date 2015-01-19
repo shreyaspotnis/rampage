@@ -5,9 +5,11 @@ import json
 import os
 import numpy as np
 
-import matplotlib.pyplot as plt
-
 from rampage import ramps
+
+__usedaq__ = False
+if __usedaq__:
+    import rampage.daq
 
 
 main_package_dir = os.path.dirname(__file__)
@@ -110,7 +112,14 @@ class BECServer(RequestProcessor):
         self.ramps_queue = []
 
     def start(self, mesg):
-        reply = {'status': 'ok'}
+        if len(self.ramps_queue) == 0:
+            reply = {'status': 'empty queue'}
+        else:
+            ramp_json_data = self.ramps_queue[0]
+            out = make_ramps(ramp_json_data)
+            if __usedaq__:
+                dev2_task, dev3_task, digital_task = daq.daq.create_all_tasks(*out)
+            reply = {'status': 'ok'}
         return reply
 
     def queue_ramp(self, mesg):
@@ -154,10 +163,16 @@ def digital_channel_ids():
     return line_ids
 
 
-def dev2_analog_ids():
-    line_fmt = 'Dev2/ao{0:1d}'
+def get_analog_ids(dev_name="Dev2"):
+    line_fmt = dev_name + "/ao{0:1d}"
     line_ids = [line_fmt.format(n) for n in range(8)]
     return line_ids
+
+def dev2_analog_ids():
+    return get_analog_ids("Dev2")
+
+def dev3_analog_ids():
+    return get_analog_ids("Dev3")
 
 
 def get_digital_channels(channel_list):
@@ -173,8 +188,8 @@ def get_digital_channels(channel_list):
     return dig_channels
 
 
-def get_dev2_analog_channels(channel_list):
-    an_ids = dev2_analog_ids()
+def get_analog_channels(channel_list, dev_name="Dev2"):
+    an_ids = get_analog_ids(dev_name)
     analog_channels = []
     for ln in an_ids:
         for ch in channel_list:
@@ -184,7 +199,7 @@ def get_dev2_analog_channels(channel_list):
     return analog_channels
 
 
-def make_dev2_analog_ramps(ramp_data):
+def make_analog_ramps(ramp_data, dev_name="Dev2"):
     keyframe_list = ramps.KeyFrameList(ramp_data['keyframes'])
     sorted_key_list = keyframe_list.sorted_key_list()
     channel_list = [ramps.Channel(ch_name, ramp_data['channels'][ch_name],
@@ -194,23 +209,31 @@ def make_dev2_analog_ramps(ramp_data):
     ramp_properties = ramp_data['properties']
     jump_resolution = ramp_properties['jump_resolution']
     ramp_resolution = ramp_properties['ramp_resolution']
-    dev2_channels = get_dev2_analog_channels(channel_list)
+    an_channels = get_analog_channels(channel_list, dev_name)
 
     ramp_regions = np.zeros(len(sorted_key_list) - 1)
-    for an_ch in dev2_channels:
+    voltage_array = []
+    for an_ch in an_channels:
         ramp_regions += an_ch.get_ramp_regions()
-    for an_ch in dev2_channels:
-        time_array1, voltages1 = an_ch.get_analog_ramp_data(ramp_regions,
-                                                            jump_resolution,
-                                                            ramp_resolution)
+    for an_ch in an_channels:
+        time_array, voltages = an_ch.get_analog_ramp_data(ramp_regions,
+                                                          jump_resolution,
+                                                          ramp_resolution)
         time_array2, voltages2 = an_ch.generate_ramp(jump_resolution)
-        plt.plot(time_array2, voltages2)
-        plt.plot(time_array1, voltages1, 'o')
-        plt.show()
+        # plt.plot(time_array2, voltages2)
+        # plt.plot(time_array, voltages, 'o')
+        # plt.show()
+        voltage_array.append(voltages)
+    voltage_array = np.array(voltage_array)
+    trigger_line = make_trigger_line(time_array, jump_resolution)
+    return trigger_line, voltage_array
 
 
-
-    print(ramp_regions)
+def make_trigger_line(time_array, jump_resolution):
+    positions = np.array(time_array/jump_resolution, dtype=int)
+    trigger_line = np.zeros(np.max(positions) + 1, dtype='uint32')
+    trigger_line[positions] = True
+    return trigger_line
 
 
 def make_digital_ramps(ramp_data):
@@ -280,19 +303,31 @@ def check_ramp_for_errors(ramp_data):
     return error_list
 
 
+def make_ramps(data):
+    digital_data = make_digital_ramps(data)
+    dev2_trigger_line, dev2_voltages = make_analog_ramps(data, dev_name="Dev2")
+    dev3_trigger_line, dev3_voltages = make_analog_ramps(data, dev_name="Dev3")
+
+    return (digital_data, dev2_trigger_line, dev2_voltages, dev3_trigger_line,
+            dev3_voltages)
+
+
 def main():
     s = BECServer(6023)
     s._run()
 
 
-def test_check_ramp_for_errors():
-    fname = os.path.join(main_package_dir, 'examples/dev2_test.json')
-    with open(fname, 'r') as f:
-        data = json.load(f)
-    check_ramp_for_errors(data)
-    make_digital_ramps(data)
-    make_dev2_analog_ramps(data)
+# def test_check_ramp_for_errors():
+#     fname = os.path.join(main_package_dir, 'examples/dev2_test.json')
+#     with open(fname, 'r') as f:
+#         data = json.load(f)
+#     check_ramp_for_errors(data)
+#     dig_data = make_digital_ramps(data)
+#     dev2_trigger_line, dev2_voltages = make_analog_ramps(data, dev_name="Dev2")
+#     dev3_trigger_line, dev3_voltages = make_analog_ramps(data, dev_name="Dev3")
+#     return dev2_trigger_line, dev2_voltages, dig_data
 
 if __name__ == '__main__':
     # main()
-    test_check_ramp_for_errors()
+    main()
+    # d2_trig, d2_volt, dig_data = test_check_ramp_for_errors()

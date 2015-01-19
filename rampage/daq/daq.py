@@ -9,7 +9,8 @@ class ExptSettings(object):
     external_clock_line = "/Dev1/PFI8"
     max_expected_rate = 1000000  # Hz
     analog_clock_line = "Dev1/port0/line31"
-    analog_clock_input_line = "/Dev1/PFI3"
+    dev2_clock_line = "/Dev1/PFI3"
+    dev3_clock_line = "/Dev1/PFI4"
     callback_resolution = 10e-3  # (ms)
     ext_clock_frequency = 250e3  # (Hz)
 
@@ -243,7 +244,7 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
 class ContinuousAnalogOutputTask(daq.Task):
     def __init__(self, analog_lines, analog_data, n_samples, sample_rate,
                  name_for_channel=None,
-                 clock_line=expt_settings.analog_clock_input_line):
+                 clock_line=expt_settings.dev2_clock_line):
         daq.Task.__init__(self)
         n_written = daq.int32()
 
@@ -255,7 +256,7 @@ class ContinuousAnalogOutputTask(daq.Task):
                               daq.DAQmx_Val_Rising,
                               daq.DAQmx_Val_ContSamps,
                               n_samples)
-        self.CfgDigEdgeStartTrig(expt_settings.analog_clock_input_line,
+        self.CfgDigEdgeStartTrig(expt_settings.dev2_clock_line,
                                  daq.DAQmx_Val_Rising)
         self.WriteAnalogF64(n_samples, False, -1,
                             daq.DAQmx_Val_GroupByScanNumber, analog_data,
@@ -290,7 +291,7 @@ class FiniteAnalogOutputTask(daq.Task):
 
     def __init__(self, analog_lines, analog_data, n_samples,
                  name_for_channel=None,
-                 clock_line=expt_settings.analog_clock_input_line):
+                 clock_line=expt_settings.dev2_clock_line):
         daq.Task.__init__(self)
 
         n_written = daq.int32()
@@ -315,11 +316,13 @@ def create_all_tasks(digital_data, dev2_trigger_line, dev2_voltages,
     # create Dev2 Task
     _, n_dev2_samples = dev2_voltages.shape
     dev2_task = FiniteAnalogOutputTask("Dev2/ao0:7", dev2_voltages.T.flatten(),
-                                       n_dev2_samples)
+                                       n_dev2_samples,
+                                       clock_line=expt_settings.dev2_clock_line)
 
     _, n_dev3_samples = dev3_voltages.shape
     dev3_task = FiniteAnalogOutputTask("Dev3/ao0:7", dev3_voltages.T.flatten(),
-                                       n_dev3_samples)
+                                       n_dev3_samples,
+                                       clock_line=expt_settings.dev3_clock_line)
 
     dev2_timing_line_number = 31
     dev3_timing_line_number = 27

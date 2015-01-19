@@ -7,9 +7,9 @@ import numpy as np
 
 from rampage import ramps
 
-__usedaq__ = False
+__usedaq__ = True
 if __usedaq__:
-    import rampage.daq
+    from rampage.daq import daq
 
 
 main_package_dir = os.path.dirname(__file__)
@@ -110,6 +110,7 @@ class BECServer(RequestProcessor):
     def __init__(self, bind_port):
         RequestProcessor.__init__(self, bind_port)
         self.ramps_queue = []
+        self.digital_task = None
 
     def start(self, mesg):
         if len(self.ramps_queue) == 0:
@@ -118,8 +119,26 @@ class BECServer(RequestProcessor):
             ramp_json_data = self.ramps_queue[0]
             out = make_ramps(ramp_json_data)
             if __usedaq__:
-                dev2_task, dev3_task, digital_task = daq.daq.create_all_tasks(*out)
+                if self.digital_task is not None:
+                    done = self.digital_task.isDone()
+                    if not done:
+                        reply = {'status': 'previous task still running.'}
+                        return reply
+                    else:
+                        self.dev2_task.ClearTask()
+                        self.dev3_task.ClearTask()
+                        self.digital_task.ClearTask()
+                daq.reset_analog_sample_clock()
+                dev2_task, dev3_task, digital_task = daq.create_all_tasks(*out)
+                dev2_task.StartTask()
+                dev3_task.StartTask()
+                digital_task.StartTask()
+                self.dev2_task = dev2_task
+                self.dev3_task = dev3_task
+                self.digital_task = digital_task
+            self.ramps_queue.pop(0)
             reply = {'status': 'ok'}
+
         return reply
 
     def queue_ramp(self, mesg):
@@ -329,5 +348,23 @@ def main():
 
 if __name__ == '__main__':
     # main()
-    main()
+    #main()
     # d2_trig, d2_volt, dig_data = test_check_ramp_for_errors()
+    #     fname = os.path.join(main_package_dir, 'examples/dev2_test.json')
+
+
+    # fname = os.path.join(main_package_dir, 'examples/load_mot.json')
+    # with open(fname, 'r') as f:
+    #     data = json.load(f)
+    # ramp_json_data = data
+    # out = make_ramps(ramp_json_data)
+    # if __usedaq__:
+    #     dev2_task, dev3_task, digital_task = daq.create_all_tasks(*out)
+    #     dev2_task.StartTask()
+    #     dev3_task.StartTask()
+    #     digital_task.StartTask()
+    #     done = False
+    #     while not done:
+    #         done = digital_task.isDone()
+    #     digital_task.ClearTask()
+    main()

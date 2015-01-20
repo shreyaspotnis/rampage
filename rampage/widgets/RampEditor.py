@@ -85,6 +85,11 @@ class RampEditor(QtGui.QWidget):
         self.properties_button.clicked.connect(self.handleProperties)
         self.grid.addWidget(self.properties_button, 0, 0)
 
+    def handleKeyNameChanged(self, old_name, new_name):
+        for ch in self.channels:
+            ch.change_key_frame_name(old_name, new_name)
+        print(old_name, new_name)
+
     def handleEditChannelInfo(self, ch_name):
 
         out_tuple = QEditChannelInfoDialog(ch_name,

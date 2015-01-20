@@ -18,6 +18,7 @@ class MyDoubleSpinBox(QtGui.QDoubleSpinBox):
 
     def __init__(self, parent):
         super(MyDoubleSpinBox, self).__init__()
+        self.setDecimals(3)
 
     def focusInEvent(self, e):
         super(MyDoubleSpinBox, self).focusInEvent(e)

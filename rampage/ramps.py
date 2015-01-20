@@ -243,6 +243,11 @@ class Channel(object):
         for k in unused_keys:
             del self.dct['keys'][k]
 
+    def change_key_frame_name(self, old_name, new_name):
+        key_dict = self.dct['keys']
+        if old_name in key_dict:
+            key_dict[new_name] = key_dict.pop(old_name)
+
     def get_used_key_frames(self):
         """Returns a list of the keyframes used by this channel, sorted with
         time. Each element in the list is a tuple. The first element is the

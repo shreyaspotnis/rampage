@@ -427,7 +427,9 @@ class QKeyFrameList(KeyFrameList):
             if new_parent == 'None':
                 new_parent = None
             self.set_parent(key_name, new_parent)
-            self.set_name(key_name, new_key_name)
+            if key_name != new_key_name:
+                self.set_name(key_name, new_key_name)
+                self.parent_widget.handleKeyNameChanged(key_name, new_key_name)
             for kf in self.kf_list:
                 self.disconnectKeyFrame(kf)
             self.parent_widget.reDoUi()

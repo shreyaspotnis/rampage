@@ -5,10 +5,10 @@
             "keys": {
                 "start": {
                     "state": true,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -18,10 +18,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -32,10 +32,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -46,10 +46,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -60,10 +60,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -73,10 +73,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -87,10 +87,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -101,10 +101,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -115,9 +115,14 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
+                    }
+                },
+                "p24_trig": {
+                    "state": true,
+                    "ramp_data": {},
                     "ramp_type": "jump"
                 }
             },
@@ -129,35 +134,42 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
             "id": "Dev1/port0/line23"
         },
-        "Camera Shutter": {
-            "comment": "Camera Shutter",
+        "RF Analog": {
+            "comment": "analog channel",
             "keys": {
+                "sine_start": {
+                    "ramp_data": {
+                        "phase": 0.0,
+                        "amp": 0.5,
+                        "freq": 0.01,
+                        "value": 0.0
+                    },
+                    "ramp_type": "sine"
+                },
                 "start": {
-                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "end": {
                     "ramp_data": {
                         "value": 0.0
                     },
                     "ramp_type": "jump"
-                }
-            },
-            "type": "digital",
-            "id": "Dev1/port0/line10"
-        },
-        "RF Analog": {
-            "comment": "analog channel",
-            "keys": {
-                "start": {
+                },
+                "exp_start": {
                     "ramp_data": {
-                        "value": 0.0
+                        "value": 1.0
                     },
                     "ramp_type": "jump"
                 }
@@ -170,10 +182,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -184,10 +196,10 @@
             "keys": {
                 "start": {
                     "state": true,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -197,10 +209,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.5
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -210,51 +222,63 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
             "id": "Dev3/ao7"
         },
-        "BOP Relay": {
+        "Abs/OP Frequency": {
             "comment": "analog channel",
             "keys": {
                 "start": {
-                    "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
-                        "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                        "value": 0.22
+                    }
                 }
             },
-            "type": "digital",
-            "id": "Dev1/port0/line20"
+            "type": "analog",
+            "id": "Dev2/ao7"
         },
         "X-Bias": {
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
             "id": "Dev2/ao0"
+        },
+        "Trapping Frequency": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.04
+                    }
+                }
+            },
+            "type": "analog",
+            "id": "Dev2/ao3"
         },
         "Dalsa Trigger": {
             "comment": "Dalsa Trigger",
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -265,50 +289,52 @@
             "keys": {
                 "start": {
                     "state": true,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
             "id": "Dev1/port0/line26"
         },
-        "Abs/OP Frequency": {
-            "comment": "analog channel",
+        "Camera Shutter": {
+            "comment": "Camera Shutter",
             "keys": {
                 "start": {
+                    "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
-                        "value": 0.22
-                    },
-                    "ramp_type": "jump"
+                        "value": 0.0
+                    }
                 }
             },
-            "type": "analog",
-            "id": "Dev2/ao7"
+            "type": "digital",
+            "id": "Dev1/port0/line10"
         },
-        "Trapping Frequency": {
+        "BOP Relay": {
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
-                        "value": 0.04
-                    },
-                    "ramp_type": "jump"
+                        "value": 0.0
+                    }
                 }
             },
-            "type": "analog",
-            "id": "Dev2/ao3"
+            "type": "digital",
+            "id": "Dev1/port0/line20"
         },
         "10kHz Strobe": {
             "comment": "Probably will be used for Dev3 triggering in the future",
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -318,10 +344,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": -3.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -332,10 +358,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -346,10 +372,10 @@
             "keys": {
                 "start": {
                     "state": true,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -360,10 +386,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -374,10 +400,10 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -388,10 +414,10 @@
             "keys": {
                 "start": {
                     "state": true,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
@@ -402,15 +428,15 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 },
                 "FET On": {
                     "state": true,
-                    "ramp_type": "jump",
-                    "ramp_data": {}
+                    "ramp_data": {},
+                    "ramp_type": "jump"
                 }
             },
             "type": "digital",
@@ -420,10 +446,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 1.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -433,10 +459,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.6
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -446,10 +472,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.1
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -459,10 +485,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -472,10 +498,10 @@
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.168
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "analog",
@@ -486,54 +512,54 @@
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
             "id": "Dev1/port0/line25"
+        },
+        "ODT-Z": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.05
+                    }
+                }
+            },
+            "type": "analog",
+            "id": "Dev3/ao3"
+        },
+        "ODT-X": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "analog",
+            "id": "Dev3/ao6"
         },
         "Frame Grabber": {
             "comment": "analog channel",
             "keys": {
                 "start": {
                     "state": false,
+                    "ramp_type": "jump",
                     "ramp_data": {
                         "value": 0.0
-                    },
-                    "ramp_type": "jump"
+                    }
                 }
             },
             "type": "digital",
             "id": "Dev1/port0/line15"
-        },
-        "ODT-X": {
-            "comment": "analog channel",
-            "keys": {
-                "start": {
-                    "ramp_data": {
-                        "value": 0.0
-                    },
-                    "ramp_type": "jump"
-                }
-            },
-            "type": "analog",
-            "id": "Dev3/ao6"
-        },
-        "ODT-Z": {
-            "comment": "analog channel",
-            "keys": {
-                "start": {
-                    "ramp_data": {
-                        "value": 0.05
-                    },
-                    "ramp_type": "jump"
-                }
-            },
-            "type": "analog",
-            "id": "Dev3/ao3"
         }
     },
     "properties": {
@@ -542,17 +568,41 @@
         "jump_resolution": 0.004
     },
     "keyframes": {
-        "start": {
-            "comment": "start the ramp",
-            "__abs_time__": 0.1,
-            "parent": null,
-            "time": 0.1
+        "end": {
+            "comment": "comment",
+            "__abs_time__": 1202.1,
+            "parent": "p24_trig",
+            "time": 1.0
+        },
+        "sine_start": {
+            "comment": "comment",
+            "__abs_time__": 1100.1,
+            "parent": "FET On",
+            "time": 100.0
         },
         "FET On": {
             "comment": "comment",
             "__abs_time__": 1000.1,
             "parent": "start",
             "time": 1000.0
+        },
+        "start": {
+            "comment": "start the ramp",
+            "__abs_time__": 0.1,
+            "parent": null,
+            "time": 0.1
+        },
+        "p24_trig": {
+            "comment": "comment",
+            "__abs_time__": 1201.1,
+            "parent": "exp_start",
+            "time": 1.0
+        },
+        "exp_start": {
+            "comment": "comment",
+            "__abs_time__": 1200.1,
+            "parent": "sine_start",
+            "time": 100.0
         }
     }
 }

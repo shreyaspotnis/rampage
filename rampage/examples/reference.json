@@ -3,7 +3,7 @@
         "LMOT Shutter": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": true,
                     "ramp_data": {
                         "value": 0.0
@@ -17,7 +17,7 @@
         "Z-Bias-01": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "ramp_data": {
                         "value": 0.0
                     },
@@ -30,7 +30,7 @@
         "RF trigger s/w": {
             "comment": "Probably will not be used later on",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
@@ -44,7 +44,7 @@
         "Dev1/port0/line12": {
             "comment": "Not connected",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
@@ -58,7 +58,7 @@
         "Dev1/port0/line11": {
             "comment": "Not connected",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
@@ -72,7 +72,7 @@
         "Dev3/ao5 (faulty?)": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "ramp_data": {
                         "value": 0.0
                     },
@@ -85,7 +85,7 @@
         "Dev1/port0/line17": {
             "comment": "Not connected",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
@@ -99,7 +99,7 @@
         "Dev1/port0/line14": {
             "comment": "Not connected",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
@@ -113,7 +113,7 @@
         "P24 Scope Trigger": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
@@ -127,7 +127,7 @@
         "Barrier Shutter": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
@@ -138,24 +138,10 @@
             "type": "digital",
             "id": "Dev1/port0/line23"
         },
-        "Camera Shutter": {
-            "comment": "Camera Shutter",
-            "keys": {
-                "start": {
-                    "state": false,
-                    "ramp_data": {
-                        "value": 0.0
-                    },
-                    "ramp_type": "jump"
-                }
-            },
-            "type": "digital",
-            "id": "Dev1/port0/line10"
-        },
         "RF Analog": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "ramp_data": {
                         "value": 0.0
                     },
@@ -168,7 +154,7 @@
         "Relay 2 Main coils": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
@@ -182,7 +168,7 @@
         "UMOT Shutter": {
             "comment": "UMOT Shutter",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": true,
                     "ramp_data": {
                         "value": 0.0
@@ -193,10 +179,41 @@
             "type": "digital",
             "id": "Dev1/port0/line09"
         },
+        "Trapping Seed Power": {
+            "comment": "analog channel",
+            "keys": {
+                "Molasses2": {
+                    "ramp_data": {
+                        "value": 0.8
+                    },
+                    "ramp_type": "jump"
+                },
+                "Close gate valve": {
+                    "ramp_data": {
+                        "value": 1.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev2/ao2"
+        },
         "Repump Seed Power": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Molasses2": {
+                    "ramp_data": {
+                        "value": 0.5
+                    },
+                    "ramp_type": "jump"
+                },
+                "Compress MOT": {
+                    "ramp_data": {
+                        "value": 1.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Close gate valve": {
                     "ramp_data": {
                         "value": 0.5
                     },
@@ -206,23 +223,10 @@
             "type": "analog",
             "id": "Dev2/ao4"
         },
-        "Dev3/ao7 (faulty?)": {
-            "comment": "analog channel",
-            "keys": {
-                "start": {
-                    "ramp_data": {
-                        "value": 0.0
-                    },
-                    "ramp_type": "jump"
-                }
-            },
-            "type": "analog",
-            "id": "Dev3/ao7"
-        },
         "BOP Relay": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
@@ -233,10 +237,23 @@
             "type": "digital",
             "id": "Dev1/port0/line20"
         },
+        "Dev3/ao7 (faulty?)": {
+            "comment": "analog channel",
+            "keys": {
+                "Close gate valve": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev3/ao7"
+        },
         "X-Bias": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "ramp_data": {
                         "value": 0.0
                     },
@@ -249,7 +266,7 @@
         "Dalsa Trigger": {
             "comment": "Dalsa Trigger",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
@@ -263,7 +280,7 @@
         "Relay 1 Main coils": {
             "comment": "If this is on and Main coils relay 2 is off, then coils are in anti-helmholtz",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": true,
                     "ramp_data": {
                         "value": 0.0
@@ -277,7 +294,7 @@
         "Abs/OP Frequency": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "ramp_data": {
                         "value": 0.22
                     },
@@ -290,7 +307,19 @@
         "Trapping Frequency": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Molasses2": {
+                    "ramp_data": {
+                        "value": 0.2
+                    },
+                    "ramp_type": "jump"
+                },
+                "Compress MOT": {
+                    "ramp_data": {
+                        "value": 0.1
+                    },
+                    "ramp_type": "jump"
+                },
+                "Close gate valve": {
                     "ramp_data": {
                         "value": 0.04
                     },
@@ -303,7 +332,7 @@
         "10kHz Strobe": {
             "comment": "Probably will be used for Dev3 triggering in the future",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
@@ -317,7 +346,7 @@
         "Barrier Laser Diode": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "ramp_data": {
                         "value": -3.0
                     },
@@ -330,7 +359,7 @@
         "RF attenuator": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
@@ -344,7 +373,7 @@
         "Abs/OP Switch": {
             "comment": "ON - light goes to Optical pumping, OFF - goes to aborption probe",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": true,
                     "ramp_data": {
                         "value": 0.0
@@ -358,7 +387,7 @@
         "Useful RF": {
             "comment": "Probably will not be used",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
@@ -372,7 +401,7 @@
         "Abs Probe Shutter": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
@@ -386,8 +415,8 @@
         "Gate Valve (internal)": {
             "comment": "Gate Valve (internal)",
             "keys": {
-                "start": {
-                    "state": true,
+                "Close gate valve": {
+                    "state": false,
                     "ramp_data": {
                         "value": 0.0
                     },
@@ -400,39 +429,52 @@
         "FET Main Coils": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Molasses1": {
                     "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Close gate valve": {
+                    "state": true,
                     "ramp_data": {
                         "value": 0.0
                     },
                     "ramp_type": "jump"
-                },
-                "FET On": {
-                    "state": true,
-                    "ramp_type": "jump",
-                    "ramp_data": {}
                 }
             },
             "type": "digital",
             "id": "Dev1/port0/line30"
         },
-        "Trapping Seed Power": {
-            "comment": "analog channel",
+        "Camera Shutter": {
+            "comment": "Camera Shutter",
             "keys": {
-                "start": {
+                "Close gate valve": {
+                    "state": false,
                     "ramp_data": {
-                        "value": 1.0
+                        "value": 0.0
                     },
                     "ramp_type": "jump"
                 }
             },
-            "type": "analog",
-            "id": "Dev2/ao2"
+            "type": "digital",
+            "id": "Dev1/port0/line10"
         },
         "LMOT Agilent": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Molasses1": {
+                    "ramp_data": {
+                        "value": 8.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Compress MOT": {
+                    "ramp_data": {
+                        "value": 4.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Close gate valve": {
                     "ramp_data": {
                         "value": 0.6
                     },
@@ -445,7 +487,13 @@
         "UMOT ATE": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Compress MOT": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Close gate valve": {
                     "ramp_data": {
                         "value": 0.1
                     },
@@ -458,7 +506,7 @@
         "Abs/OP Power": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "ramp_data": {
                         "value": 0.0
                     },
@@ -471,7 +519,7 @@
         "V-Bias": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "ramp_data": {
                         "value": 0.168
                     },
@@ -484,7 +532,7 @@
         "RF Trigger h/w": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
@@ -498,7 +546,7 @@
         "Frame Grabber": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
@@ -512,7 +560,7 @@
         "ODT-X": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "ramp_data": {
                         "value": 0.0
                     },
@@ -525,7 +573,7 @@
         "ODT-Z": {
             "comment": "analog channel",
             "keys": {
-                "start": {
+                "Close gate valve": {
                     "ramp_data": {
                         "value": 0.05
                     },
@@ -537,22 +585,100 @@
         }
     },
     "properties": {
-        "comment": "Loads default values for loading a MOT",
+        "comment": "Ramp used to get  a BEC.",
         "ramp_resolution": 0.1,
         "jump_resolution": 0.004
     },
     "keyframes": {
-        "start": {
-            "comment": "start the ramp",
-            "__abs_time__": 0.1,
-            "parent": null,
+        "ODT Evap 1": {
+            "comment": "comment",
+            "__abs_time__": 13013.5,
+            "parent": "ODT Transfer 2",
+            "time": 1000.0
+        },
+        "ODT Evap 3": {
+            "comment": "comment",
+            "__abs_time__": 15013.5,
+            "parent": "ODT Evap 2",
+            "time": 1000.0
+        },
+        "ODT Transfer 1": {
+            "comment": "comment",
+            "__abs_time__": 11013.5,
+            "parent": "Quad Evap 1",
+            "time": 9600.0
+        },
+        "Compress MOT": {
+            "comment": "Turn up the current in the lower MOT coils to compress the MOT",
+            "__abs_time__": 500.0,
+            "parent": "Close gate valve",
+            "time": 500.0
+        },
+        "OP1": {
+            "comment": "comment",
+            "__abs_time__": 512.2,
+            "parent": "Molasses3",
+            "time": 6.0
+        },
+        "OP2": {
+            "comment": "comment",
+            "__abs_time__": 512.3000000000001,
+            "parent": "OP1",
             "time": 0.1
         },
-        "FET On": {
+        "Close gate valve": {
+            "comment": "Isolates the lower chamber for the upper",
+            "__abs_time__": 0.0,
+            "parent": null,
+            "time": 0.0
+        },
+        "ODT Transfer 2": {
             "comment": "comment",
-            "__abs_time__": 1000.1,
-            "parent": "start",
+            "__abs_time__": 12013.5,
+            "parent": "ODT Transfer 1",
             "time": 1000.0
+        },
+        "Molasses1": {
+            "comment": "comment",
+            "__abs_time__": 506.0,
+            "parent": "Compress MOT",
+            "time": 6.0
+        },
+        "Molasses2": {
+            "comment": "comment",
+            "__abs_time__": 506.1,
+            "parent": "Molasses1",
+            "time": 0.1
+        },
+        "Molasses3": {
+            "comment": "comment",
+            "__abs_time__": 506.20000000000005,
+            "parent": "Molasses2",
+            "time": 0.1
+        },
+        "ODT Evap 2": {
+            "comment": "comment",
+            "__abs_time__": 14013.5,
+            "parent": "ODT Evap 1",
+            "time": 1000.0
+        },
+        "Quad Capture": {
+            "comment": "comment",
+            "__abs_time__": 513.5000000000001,
+            "parent": "OP2",
+            "time": 1.2
+        },
+        "Quad Evap 1": {
+            "comment": "comment",
+            "__abs_time__": 1413.5,
+            "parent": "VBias Rampdown",
+            "time": 400.0
+        },
+        "VBias Rampdown": {
+            "comment": "comment",
+            "__abs_time__": 1013.5000000000001,
+            "parent": "Quad Capture",
+            "time": 500.0
         }
     }
 }

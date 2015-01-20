@@ -340,12 +340,7 @@ class Channel(object):
             start_time = time_subarray[0]
             end_time = time_array[end_pos]
 
-            print('start end')
-            print(start_pos, end_pos)
-
-
             value_final = self.dct['keys'][used_key_frame_list[i+1]]['ramp_data']['value']
-            print('value final:', value_final)
             ramp_type = self.dct['keys'][used_key_frame_list[i]]['ramp_type']
             ramp_data = self.dct['keys'][used_key_frame_list[i]]['ramp_data']
 
@@ -356,10 +351,6 @@ class Channel(object):
             voltage_sub = ramp_function(*parms_tuple)
             voltages[start_pos:end_pos] = voltage_sub
 
-        print('time array')
-        print time_array
-        print('voltages')
-        print voltages
         return time_array, voltages
 
     def generate_ramp(self, time_div=4e-3):

@@ -138,6 +138,7 @@
             "type": "digital",
             "id": "Dev1/port0/line23"
         },
+<<<<<<< HEAD
         "Camera Shutter": {
             "comment": "Camera Shutter",
             "keys": {
@@ -152,6 +153,8 @@
             "type": "digital",
             "id": "Dev1/port0/line10"
         },
+=======
+>>>>>>> origin/master
         "RF Analog": {
             "comment": "analog channel",
             "keys": {
@@ -219,19 +222,24 @@
             "type": "analog",
             "id": "Dev3/ao7"
         },
-        "BOP Relay": {
+        "Abs/OP Frequency": {
             "comment": "analog channel",
             "keys": {
                 "start": {
+<<<<<<< HEAD
                     "state": false,
                     "ramp_data": {
                         "value": 0.0
+=======
+                    "ramp_data": {
+                        "value": 0.22
+>>>>>>> origin/master
                     },
                     "ramp_type": "jump"
                 }
             },
-            "type": "digital",
-            "id": "Dev1/port0/line20"
+            "type": "analog",
+            "id": "Dev2/ao7"
         },
         "X-Bias": {
             "comment": "analog channel",
@@ -274,18 +282,24 @@
             "type": "digital",
             "id": "Dev1/port0/line26"
         },
-        "Abs/OP Frequency": {
-            "comment": "analog channel",
+        "Camera Shutter": {
+            "comment": "Camera Shutter",
             "keys": {
                 "start": {
+<<<<<<< HEAD
                     "ramp_data": {
                         "value": 0.22
+=======
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+>>>>>>> origin/master
                     },
                     "ramp_type": "jump"
                 }
             },
-            "type": "analog",
-            "id": "Dev2/ao7"
+            "type": "digital",
+            "id": "Dev1/port0/line10"
         },
         "Trapping Frequency": {
             "comment": "analog channel",
@@ -416,6 +430,20 @@
             "type": "digital",
             "id": "Dev1/port0/line30"
         },
+        "BOP Relay": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line20"
+        },
         "Trapping Seed Power": {
             "comment": "analog channel",
             "keys": {
@@ -434,7 +462,11 @@
             "keys": {
                 "start": {
                     "ramp_data": {
+<<<<<<< HEAD
                         "value": 0.6
+=======
+                        "value": 0.287
+>>>>>>> origin/master
                     },
                     "ramp_type": "jump"
                 }

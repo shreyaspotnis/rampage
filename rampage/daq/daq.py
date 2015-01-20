@@ -306,10 +306,8 @@ class FiniteAnalogOutputTask(pydaq.Task):
 
         n_written = pydaq.int32()
 
-        print('analog lines')
         self.CreateAOVoltageChan(analog_lines, None, -10.0, 10.0,
                                  pydaq.DAQmx_Val_Volts, None)
-        print('analog lines2')
         self.CfgSampClkTiming(clock_line, expt_settings.max_expected_rate,
                               pydaq.DAQmx_Val_Rising,
                               pydaq.DAQmx_Val_FiniteSamps,

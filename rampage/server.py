@@ -249,7 +249,8 @@ def make_analog_ramps(ramp_data, dev_name="Dev2"):
 
 
 def make_trigger_line(time_array, jump_resolution):
-    positions = np.array(time_array/jump_resolution, dtype=int)
+    positions = np.rint(time_array/jump_resolution).astype(int)
+    print('max position', np.max(positions))
     trigger_line = np.zeros(np.max(positions) + 1, dtype='uint32')
     trigger_line[positions] = True
     return trigger_line
@@ -353,11 +354,13 @@ if __name__ == '__main__':
     #     fname = os.path.join(main_package_dir, 'examples/dev2_test.json')
 
 
-    # fname = os.path.join(main_package_dir, 'examples/load_mot.json')
+    # fname = os.path.join(main_package_dir, 'examples/ramp_does_not_work.json')
     # with open(fname, 'r') as f:
     #     data = json.load(f)
     # ramp_json_data = data
     # out = make_ramps(ramp_json_data)
+    # (digital_data, dev2_trigger_line, dev2_voltages, dev3_trigger_line,
+    #  dev3_voltages) = out
     # if __usedaq__:
     #     dev2_task, dev3_task, digital_task = daq.create_all_tasks(*out)
     #     dev2_task.StartTask()

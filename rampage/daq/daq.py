@@ -1,5 +1,5 @@
 import PyDAQmx.DAQmxTypes as daqtypes
-import PyDAQmx as daq
+import PyDAQmx as pydaq
 import ctypes
 import numpy as np
 import datetime
@@ -8,9 +8,12 @@ import datetime
 class ExptSettings(object):
     external_clock_line = "/Dev1/PFI8"
     max_expected_rate = 1000000  # Hz
-    analog_clock_line = "Dev1/port0/line31"
     dev2_clock_line = "/Dev1/PFI3"
     dev3_clock_line = "/Dev1/PFI4"
+    dev2_clock_out = 31
+    dev2_clock_out_name = "Dev1/port0/line31"
+    dev3_clock_out = 27
+    dev3_clock_out_name = "Dev1/port0/line27"
     callback_resolution = 10e-3  # (ms)
     ext_clock_frequency = 250e3  # (Hz)
 
@@ -24,11 +27,11 @@ def print_device_info(dev_name):
     print_device_info("Dev1")
     """
     string_buffer = ctypes.create_string_buffer(1024)
-    attributes = [daq.DAQmx_Dev_ProductType, daq.DAQmx_Dev_SerialNum,
-                  daq.DAQmx_Dev_AO_PhysicalChans,
-                  daq.DAQmx_Dev_CI_PhysicalChans,
-                  daq.DAQmx_Dev_CO_PhysicalChans,
-                  daq.DAQmx_Dev_DO_Lines]
+    attributes = [pydaq.DAQmx_Dev_ProductType, pydaq.DAQmx_Dev_SerialNum,
+                  pydaq.DAQmx_Dev_AO_PhysicalChans,
+                  pydaq.DAQmx_Dev_CI_PhysicalChans,
+                  pydaq.DAQmx_Dev_CO_PhysicalChans,
+                  pydaq.DAQmx_Dev_DO_Lines]
     attribute_names = ['DAQmx_Dev_ProductType',
                        'DAQmx_Dev_SerialNum',
                        'DAQmx_Dev_AO_PhysicalChans',
@@ -37,7 +40,7 @@ def print_device_info(dev_name):
                        'DAQmx_Dev_DO_Lines']
     ret_values = []
     for a in attributes:
-        daq.DAQmxGetDeviceAttribute(dev_name, a, string_buffer)
+        pydaq.DAQmxGetDeviceAttribute(dev_name, a, string_buffer)
         ret_values.append(str(string_buffer.value))
 
     print('Device Name:\t' + dev_name)
@@ -48,7 +51,7 @@ def print_device_info(dev_name):
 def get_device_name_list():
     """Returns a list of device names installed."""
     dev_names = ctypes.create_string_buffer(1024)
-    daq.DAQmxGetSysDevNames(dev_names, len(dev_names))
+    pydaq.DAQmxGetSysDevNames(dev_names, len(dev_names))
     return dev_names.value.split(', ')
 
 
@@ -63,7 +66,8 @@ def reset_analog_sample_clock(state=False):
 
     Use this just before starting a run to avoid timing issues.
     """
-    set_digital_line_state(expt_settings.analog_clock_line, state)
+    set_digital_line_state(expt_settings.dev2_clock_out_name, state)
+    set_digital_line_state(expt_settings.dev3_clock_out_name, state)
 
 
 def set_digital_line_state(line_name, state):
@@ -91,7 +95,7 @@ def set_digital_line_state(line_name, state):
     # create_digital_output_task(line_name, dig_data)
 
 
-class DigitalOutputTask(daq.Task):
+class DigitalOutputTask(pydaq.Task):
     """A digital output task.
 
     Arguments
@@ -126,7 +130,7 @@ class DigitalOutputTask(daq.Task):
     def __init__(self, lines, digital_data, name_for_lines=None,
                  ext_clock_line=expt_settings.external_clock_line,
                  auto_configure=True):
-        daq.Task.__init__(self)
+        pydaq.Task.__init__(self)
         self.digital_data = digital_data
         self.lines = lines
         self.name_for_lines = name_for_lines
@@ -136,16 +140,16 @@ class DigitalOutputTask(daq.Task):
             self.ConfigureTask()
 
     def ConfigureTask(self):
-        n_written = daq.int32()
+        n_written = pydaq.int32()
         n_dig_samples = len(self.digital_data)
         self.CreateDOChan(self.lines, self.name_for_lines,
-                          daq.DAQmx_Val_ChanForAllLines)
+                          pydaq.DAQmx_Val_ChanForAllLines)
         self.CfgSampClkTiming(self.ext_clock_line,
                               expt_settings.max_expected_rate,
-                              daq.DAQmx_Val_Rising,
-                              daq.DAQmx_Val_FiniteSamps, n_dig_samples)
+                              pydaq.DAQmx_Val_Rising,
+                              pydaq.DAQmx_Val_FiniteSamps, n_dig_samples)
         self.WriteDigitalU32(n_dig_samples, False, -1,
-                             daq.DAQmx_Val_GroupByChannel,
+                             pydaq.DAQmx_Val_GroupByChannel,
                              self.digital_data, ctypes.byref(n_written),
                              None)
         print('Digital n_written', n_written.value)
@@ -153,8 +157,14 @@ class DigitalOutputTask(daq.Task):
     def StartAndWait(self):
         """Starts the task and waits until it is done."""
         self.StartTask()
-        self.WaitUntilTaskDone(daq.DAQmx_Val_WaitInfinitely)
+        self.WaitUntilTaskDone(pydaq.DAQmx_Val_WaitInfinitely)
         self.ClearTask()
+
+    def isDone(self):
+        """Returns true if task is done."""
+        done = pydaq.bool32()
+        self.IsTaskDone(ctypes.byref(done))
+        return done.value
 
 
 class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
@@ -211,7 +221,7 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
         self.RegisterCallbacks()
 
     def RegisterCallbacks(self):
-        self.AutoRegisterEveryNSamplesEvent(daq.DAQmx_Val_Transferred_From_Buffer,
+        self.AutoRegisterEveryNSamplesEvent(pydaq.DAQmx_Val_Transferred_From_Buffer,
                                             self.n_wait, 0)
         self.AutoRegisterDoneEvent(0)
 
@@ -241,30 +251,30 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
         return 0  # The function should return an integer
 
 
-class ContinuousAnalogOutputTask(daq.Task):
+class ContinuousAnalogOutputTask(pydaq.Task):
     def __init__(self, analog_lines, analog_data, n_samples, sample_rate,
                  name_for_channel=None,
                  clock_line=expt_settings.dev2_clock_line):
-        daq.Task.__init__(self)
-        n_written = daq.int32()
+        pydaq.Task.__init__(self)
+        n_written = pydaq.int32()
 
         print('analog lines')
         self.CreateAOVoltageChan(analog_lines, None, -10.0, 10.0,
-                                 daq.DAQmx_Val_Volts, None)
+                                 pydaq.DAQmx_Val_Volts, None)
         print('analog lines2')
         self.CfgSampClkTiming(None, sample_rate,
-                              daq.DAQmx_Val_Rising,
-                              daq.DAQmx_Val_ContSamps,
+                              pydaq.DAQmx_Val_Rising,
+                              pydaq.DAQmx_Val_ContSamps,
                               n_samples)
         self.CfgDigEdgeStartTrig(expt_settings.dev2_clock_line,
-                                 daq.DAQmx_Val_Rising)
+                                 pydaq.DAQmx_Val_Rising)
         self.WriteAnalogF64(n_samples, False, -1,
-                            daq.DAQmx_Val_GroupByScanNumber, analog_data,
+                            pydaq.DAQmx_Val_GroupByScanNumber, analog_data,
                             ctypes.byref(n_written), None)
         print('Analog n_written', n_written.value)
 
 
-class FiniteAnalogOutputTask(daq.Task):
+class FiniteAnalogOutputTask(pydaq.Task):
     """An analog output task for outputting finite samples.
     This task uses a sample clock and changes the voltage at the analog outputs
     whenever there is a rising edge at the clock.
@@ -292,20 +302,20 @@ class FiniteAnalogOutputTask(daq.Task):
     def __init__(self, analog_lines, analog_data, n_samples,
                  name_for_channel=None,
                  clock_line=expt_settings.dev2_clock_line):
-        daq.Task.__init__(self)
+        pydaq.Task.__init__(self)
 
-        n_written = daq.int32()
+        n_written = pydaq.int32()
 
         print('analog lines')
         self.CreateAOVoltageChan(analog_lines, None, -10.0, 10.0,
-                                 daq.DAQmx_Val_Volts, None)
+                                 pydaq.DAQmx_Val_Volts, None)
         print('analog lines2')
         self.CfgSampClkTiming(clock_line, expt_settings.max_expected_rate,
-                              daq.DAQmx_Val_Rising,
-                              daq.DAQmx_Val_FiniteSamps,
+                              pydaq.DAQmx_Val_Rising,
+                              pydaq.DAQmx_Val_FiniteSamps,
                               n_samples)
         self.WriteAnalogF64(n_samples, False, -1,
-                            daq.DAQmx_Val_GroupByScanNumber, analog_data,
+                            pydaq.DAQmx_Val_GroupByScanNumber, analog_data,
                             ctypes.byref(n_written), None)
         print('Analog n_written', n_written.value)
 
@@ -324,11 +334,8 @@ def create_all_tasks(digital_data, dev2_trigger_line, dev2_voltages,
                                        n_dev3_samples,
                                        clock_line=expt_settings.dev3_clock_line)
 
-    dev2_timing_line_number = 31
-    dev3_timing_line_number = 27
-
-    digital_data += dev2_trigger_line*(2**dev2_timing_line_number)
-    digital_data += dev3_trigger_line*(2**dev3_timing_line_number)
+    digital_data += dev2_trigger_line*(2**expt_settings.dev2_clock_out)
+    digital_data += dev3_trigger_line*(2**expt_settings.dev3_clock_out)
 
     digital_task = DigitalOutputTask("Dev1/port0/line8:31", digital_data)
 

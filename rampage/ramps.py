@@ -183,6 +183,19 @@ class KeyFrameList(object):
         else:
             return kf['hooks'].iterkeys()
 
+    def get_hooks_list(self):
+        skl = self.sorted_key_list()
+        hooks_list = []
+        for key in skl:
+            kf = self.dct[key]
+            if 'hooks' in kf:
+                hooks_dict = kf['hooks']
+                hooks_list.append((self.get_absolute_time(key),
+                                  hooks_dict.iteritems()))
+        return hooks_list
+
+
+
 
 class Channel(object):
 
@@ -285,7 +298,6 @@ class Channel(object):
                 if ramp_type != "jump":
                     # this means that a ramp starts in this region. Figure
                     # out where it ends
-                    print('Used keyframes', used_key_frames)
                     curr_key_num = used_key_frames.index(start_key)
                     end_key_number = curr_key_num + 1
                     # figure out if the current key was the last key
@@ -298,7 +310,6 @@ class Channel(object):
 
     def get_analog_ramp_data(self, ramp_regions, jump_resolution,
                              ramp_resolution):
-        print('generating ramp')
         skl = self.key_frame_list.sorted_key_list()
         used_key_frame_list = self.get_used_key_frame_list()
         all_kf_times = np.array([self.key_frame_list.get_absolute_time(kf)
@@ -369,7 +380,9 @@ class Channel(object):
         used_key_frames = self.get_used_key_frames()
         max_time = self.key_frame_list.get_absolute_time(skl[-1]) + time_div
 
-        time = np.arange(0.0, max_time, time_div)
+        num_points = int(round(max_time/time_div))
+        time = np.arange(num_points) * time_div
+        # time = np.arange(0.0, max_time, time_div)
         if is_analog:
             voltage = np.zeros(time.shape, dtype=float)
         else:

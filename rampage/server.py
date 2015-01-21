@@ -26,16 +26,26 @@ class Hooks(object):
 
     def agilent_turn_fm_on(self, mesg_dict):
         # add code to do the gpib stuff
-        pass
+        print('agilent_turn_fm_on', mesg_dict)
 
     def agilent_output_off(self, mesg_dict):
-        pass
+        print('agilent_output_off', mesg_dict)
 
     def translation_stage_move_x(self, mesg_dict):
+        print('translation_stage_move_x', mesg_dict)
         pass
 
     def translation_stage_move_y(self, mesg_dict):
+        print('translation_stage_move_y', mesg_dict)
         pass
+
+
+global_hooks_object = Hooks()
+global_hooks_object.function_dict = {}
+members = inspect.getmembers(global_hooks_object,
+                             predicate=inspect.ismethod)
+for func_name, func in members:
+    global_hooks_object.function_dict[func_name] = func
 
 
 class RequestProcessor():
@@ -217,6 +227,22 @@ def get_analog_channels(channel_list, dev_name="Dev2"):
                 break
     return analog_channels
 
+def make_callback_list(ramp_data):
+    keyframe_list = ramps.KeyFrameList(ramp_data['keyframes'])
+    callback_list = []
+    for hook_item in keyframe_list.get_hooks_list():
+        time = hook_item[0]*1e-3  # ramps have time in ms, convert to s
+        funcs_list = []
+        for func_name, func_dict in hook_item[1]:
+            func = global_hooks_object.function_dict[func_name]
+            print('adding func:', func_name, func_dict)
+            funcs_list.append((func, func_dict))
+        callback_list.append((time, funcs_list))
+    return callback_list
+
+            
+
+
 
 def make_analog_ramps(ramp_data, dev_name="Dev2"):
     keyframe_list = ramps.KeyFrameList(ramp_data['keyframes'])
@@ -250,7 +276,6 @@ def make_analog_ramps(ramp_data, dev_name="Dev2"):
 
 def make_trigger_line(time_array, jump_resolution):
     positions = np.rint(time_array/jump_resolution).astype(int)
-    print('max position', np.max(positions))
     trigger_line = np.zeros(np.max(positions) + 1, dtype='uint32')
     trigger_line[positions] = True
     return trigger_line
@@ -327,9 +352,9 @@ def make_ramps(data):
     digital_data = make_digital_ramps(data)
     dev2_trigger_line, dev2_voltages = make_analog_ramps(data, dev_name="Dev2")
     dev3_trigger_line, dev3_voltages = make_analog_ramps(data, dev_name="Dev3")
-
+    callback_list = make_callback_list(data)
     return (digital_data, dev2_trigger_line, dev2_voltages, dev3_trigger_line,
-            dev3_voltages)
+            dev3_voltages, callback_list)
 
 
 def main():
@@ -354,13 +379,17 @@ if __name__ == '__main__':
     #     fname = os.path.join(main_package_dir, 'examples/dev2_test.json')
 
 
-    # fname = os.path.join(main_package_dir, 'examples/ramp_does_not_work.json')
+    # fname = os.path.join(main_package_dir, 'examples/test_ramps.json')
     # with open(fname, 'r') as f:
     #     data = json.load(f)
     # ramp_json_data = data
     # out = make_ramps(ramp_json_data)
     # (digital_data, dev2_trigger_line, dev2_voltages, dev3_trigger_line,
-    #  dev3_voltages) = out
+    #  dev3_voltages, callback_list) = out
+    # for time, func_list in callback_list:
+    #     print('Time ', time)
+    #     for func, func_dict in func_list:
+    #         func(func_dict)
     # if __usedaq__:
     #     dev2_task, dev3_task, digital_task = daq.create_all_tasks(*out)
     #     dev2_task.StartTask()

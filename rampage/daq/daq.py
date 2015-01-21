@@ -199,7 +199,8 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
 
     """
 
-    def __init__(self, lines, digital_data, name_for_lines=None,
+    def __init__(self, lines, digital_data, callback_function_list=None,
+                 name_for_lines=None,
                  ext_clock_line=expt_settings.external_clock_line):
         DigitalOutputTask.__init__(self, lines, digital_data, name_for_lines,
                                    ext_clock_line, auto_configure=False)
@@ -219,6 +220,22 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
 
         self.ConfigureTask()
         self.RegisterCallbacks()
+
+        # configure callbacks
+        if callback_function_list is None:
+            self.do_callbacks = False
+        else:
+            self.do_callbacks = True
+
+            self.latest_callback_index = 0
+            
+            out = callback_function_list[self.latest_callback_index]
+            callback_time = out[0]
+            self.callback_step = callback_time/expt_settings.callback_resolution
+            self.callback_funcs = out[1]
+
+            self.callback_function_list = callback_function_list
+
 
     def RegisterCallbacks(self):
         self.AutoRegisterEveryNSamplesEvent(pydaq.DAQmx_Val_Transferred_From_Buffer,
@@ -241,8 +258,26 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
 
     def EveryNCallback(self):
         """Called by PyDAQmx whenever a callback event occurs."""
+        print('ncall ', self.n_callbacks)
+        if self.do_callbacks:
+            if self.n_callbacks >= self.callback_step:
+                print('n_callbacks', self.n_callbacks)
+                for func, func_dict in self.callback_funcs:
+                    func(func_dict)
+
+                self.latest_callback_index +=1
+                if self.latest_callback_index >= len(self.callback_function_list):
+                    print('done with callbacks')
+                    self.do_callbacks = False
+                else:
+                    out = self.callback_function_list[self.latest_callback_index]
+                    callback_time = out[0]
+                    self.callback_step = int(callback_time/expt_settings.callback_resolution)
+                    print('updatin callback step', self.callback_step)
+                    self.callback_func = out[1]
+
         self.n_callbacks += 1
-        print('n_callbacks', self.n_callbacks)
+        #print('n_callbacks', self.n_callbacks)
         return 0  # The function should return an integer
 
     def DoneCallback(self, status):
@@ -319,7 +354,7 @@ class FiniteAnalogOutputTask(pydaq.Task):
 
 
 def create_all_tasks(digital_data, dev2_trigger_line, dev2_voltages,
-                     dev3_trigger_line, dev3_voltages):
+                     dev3_trigger_line, dev3_voltages, callback_list):
 
     # create Dev2 Task
     _, n_dev2_samples = dev2_voltages.shape
@@ -335,7 +370,9 @@ def create_all_tasks(digital_data, dev2_trigger_line, dev2_voltages,
     digital_data += dev2_trigger_line*(2**expt_settings.dev2_clock_out)
     digital_data += dev3_trigger_line*(2**expt_settings.dev3_clock_out)
 
-    digital_task = DigitalOutputTask("Dev1/port0/line8:31", digital_data)
+    # digital_task = DigitalOutputTask("Dev1/port0/line8:31", digital_data)
+    digital_task = DigitalOutputTaskWithCallbacks("Dev1/port0/line8:31",
+                                                  digital_data, callback_list)
 
     return dev2_task, dev3_task, digital_task
 

@@ -184,6 +184,10 @@ class BECServer(RequestProcessor):
         reply = {'status': 'ok'}
         return reply
 
+    def run_immediately(self, mesg):
+        reply = {'status': 'ok'}
+        return reply
+
 
 def digital_channel_ids():
     """Returns list of digital channels used in the experiment."""

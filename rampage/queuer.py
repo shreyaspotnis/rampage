@@ -10,6 +10,18 @@ import numpy as np
 from rampage import server
 
 
+# utility functions
+def run_ramp_immediately(path_to_ramp_file, settings=None):
+    with open(path_to_ramp_file, 'r') as f:
+        data = json.load(f)
+    settings.beginGroup('rampqueuer')
+    text = settings.value('server_ip_and_port',
+                          'tcp://localhost:6023').toString()
+    settings.endGroup()
+    client = server.ClientForServer(server.BECServer, str(text))
+    client.run_immediately(data)
+
+
 def flatten_dict(dct, separator='-->', allowed_types=[int, float, bool]):
     """Returns a list of string identifiers for each element in dct.
 
@@ -199,7 +211,7 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
                                      'examples/test_scene.json').toString())
 
         check_state, _ = self.settings.value('check_prepend_ramp', 0).toInt()
-        text = self.settings.value('server_ip_and_port', 'tcp://localhost:6024').toString()
+        text = self.settings.value('server_ip_and_port', 'tcp://localhost:6023').toString()
         self.serverIPAndPort.setText(text)
         print(check_state)
         self.checkPrependRamp.setChecked(bool(check_state))

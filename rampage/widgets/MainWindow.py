@@ -4,6 +4,7 @@ from PyQt4 import QtGui, QtCore
 import os
 
 from RampEditor import RampEditor
+from rampage import queuer
 
 main_package_dir = os.path.join(os.path.dirname(__file__), os.pardir)
 ui_filename = os.path.join(main_package_dir, "ui/MainWindow.ui")
@@ -148,6 +149,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ramp_editor.openNewFile(self.path_to_ramp_file)
             self.setWindowTitle(self.path_to_ramp_file)
             self.is_saved = True
+
+    def handleRunCurrent(self):
+        print('running current')
+        if not self.is_saved:
+            msg_str = ("Do you want to save changes? Unsaved changes won't be uploaded. File:"
+                       + self.path_to_ramp_file+"?")
+            reply = QtGui.QMessageBox.warning(self, 'Unsaved Scene',
+                                              msg_str,
+                                              (QtGui.QMessageBox.Yes |
+                                               QtGui.QMessageBox.No |
+                                               QtGui.QMessageBox.Cancel),
+                                              QtGui.QMessageBox.Yes)
+            if reply == QtGui.QMessageBox.No:
+                pass
+            elif reply == QtGui.QMessageBox.Cancel:
+                return
+            else:
+                self.handleSave()
+        queuer.run_ramp_immediately(self.path_to_ramp_file, self.settings)
+
+
+
+
 
 
 class Overlay(QtGui.QWidget):

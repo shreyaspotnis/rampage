@@ -215,6 +215,13 @@
        </property>
       </widget>
      </item>
+     <item row="4" column="1">
+      <widget class="QPushButton" name="pushClearLocalQueue">
+       <property name="text">
+        <string>Clear Local Queue</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
@@ -381,6 +388,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushClearLocalQueue</sender>
+   <signal>clicked()</signal>
+   <receiver>RampQueuer</receiver>
+   <slot>handleClearLocalQueue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>291</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>412</x>
+     <y>143</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>handleChangePrependRamp()</slot>
@@ -393,5 +416,6 @@
   <slot>handleClearServerQueue()</slot>
   <slot>handleAbortCurrentRun()</slot>
   <slot>handlePushStart()</slot>
+  <slot>handleClearLocalQueue()</slot>
  </slots>
 </ui>

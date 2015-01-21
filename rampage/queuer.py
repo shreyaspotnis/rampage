@@ -312,6 +312,11 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
         self.textServerMesg.append('Reply: '+str(reply))
         self.handleUpdateServerQueuePressed()
 
+    def handleClearLocalQueue(self):
+        print('clearing local queue')
+        self.ramps_to_queue = []
+        self.listToQueue.clear()
+
     def handleAbortCurrentRun(self):
         print('abort current run')
         reply = self.get_client().abort_current_run({})

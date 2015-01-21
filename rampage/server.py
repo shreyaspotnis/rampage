@@ -7,10 +7,11 @@ import numpy as np
 
 from rampage import ramps
 
-__usedaq__ = True
-if __usedaq__:
+if __name__ == '__main__':
+    # import daq only if server is running
+    # not if some other module is importing functions from
+    # this module
     from rampage.daq import daq
-
 
 main_package_dir = os.path.dirname(__file__)
 ui_filename = os.path.join(main_package_dir, "ui/MainWindow.ui")
@@ -128,24 +129,23 @@ class BECServer(RequestProcessor):
         else:
             ramp_json_data = self.ramps_queue[0]
             out = make_ramps(ramp_json_data)
-            if __usedaq__:
-                if self.digital_task is not None:
-                    done = self.digital_task.isDone()
-                    if not done:
-                        reply = {'status': 'previous task still running.'}
-                        return reply
-                    else:
-                        self.dev2_task.ClearTask()
-                        self.dev3_task.ClearTask()
-                        self.digital_task.ClearTask()
-                daq.reset_analog_sample_clock()
-                dev2_task, dev3_task, digital_task = daq.create_all_tasks(*out)
-                dev2_task.StartTask()
-                dev3_task.StartTask()
-                digital_task.StartTask()
-                self.dev2_task = dev2_task
-                self.dev3_task = dev3_task
-                self.digital_task = digital_task
+            if self.digital_task is not None:
+                done = self.digital_task.isDone()
+                if not done:
+                    reply = {'status': 'previous task still running.'}
+                    return reply
+                else:
+                    self.dev2_task.ClearTask()
+                    self.dev3_task.ClearTask()
+                    self.digital_task.ClearTask()
+            daq.reset_analog_sample_clock()
+            dev2_task, dev3_task, digital_task = daq.create_all_tasks(*out)
+            dev2_task.StartTask()
+            dev3_task.StartTask()
+            digital_task.StartTask()
+            self.dev2_task = dev2_task
+            self.dev3_task = dev3_task
+            self.digital_task = digital_task
             self.ramps_queue.pop(0)
             reply = {'status': 'ok'}
 
@@ -240,7 +240,7 @@ def make_callback_list(ramp_data):
         callback_list.append((time, funcs_list))
     return callback_list
 
-            
+
 
 
 

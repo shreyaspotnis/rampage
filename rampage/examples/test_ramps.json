@@ -219,19 +219,6 @@
             "type": "digital",
             "id": "Dev1/port0/line09"
         },
-        "Trapping Seed Power": {
-            "comment": "analog channel",
-            "keys": {
-                "start": {
-                    "ramp_data": {
-                        "value": 1.0
-                    },
-                    "ramp_type": "jump"
-                }
-            },
-            "type": "analog",
-            "id": "Dev2/ao2"
-        },
         "Repump Seed Power": {
             "comment": "analog channel",
             "keys": {
@@ -244,20 +231,6 @@
             },
             "type": "analog",
             "id": "Dev2/ao4"
-        },
-        "BOP Relay": {
-            "comment": "analog channel",
-            "keys": {
-                "start": {
-                    "state": false,
-                    "ramp_data": {
-                        "value": 0.0
-                    },
-                    "ramp_type": "jump"
-                }
-            },
-            "type": "digital",
-            "id": "Dev1/port0/line20"
         },
         "Dev3/ao7 (faulty?)": {
             "comment": "analog channel",
@@ -272,6 +245,19 @@
             "type": "analog",
             "id": "Dev3/ao7"
         },
+        "Abs/OP Frequency": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.22
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev2/ao7"
+        },
         "X-Bias": {
             "comment": "analog channel",
             "keys": {
@@ -284,6 +270,19 @@
             },
             "type": "analog",
             "id": "Dev2/ao0"
+        },
+        "Trapping Frequency": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_data": {
+                        "value": 0.04
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "analog",
+            "id": "Dev2/ao3"
         },
         "Dalsa Trigger": {
             "comment": "Dalsa Trigger",
@@ -313,31 +312,33 @@
             "type": "digital",
             "id": "Dev1/port0/line26"
         },
-        "Abs/OP Frequency": {
-            "comment": "analog channel",
+        "Camera Shutter": {
+            "comment": "Camera Shutter",
             "keys": {
                 "start": {
+                    "state": false,
                     "ramp_data": {
-                        "value": 0.22
+                        "value": 0.0
                     },
                     "ramp_type": "jump"
                 }
             },
-            "type": "analog",
-            "id": "Dev2/ao7"
+            "type": "digital",
+            "id": "Dev1/port0/line10"
         },
-        "Trapping Frequency": {
+        "BOP Relay": {
             "comment": "analog channel",
             "keys": {
                 "start": {
+                    "state": false,
                     "ramp_data": {
-                        "value": 0.04
+                        "value": 0.0
                     },
                     "ramp_type": "jump"
                 }
             },
-            "type": "analog",
-            "id": "Dev2/ao3"
+            "type": "digital",
+            "id": "Dev1/port0/line20"
         },
         "10kHz Strobe": {
             "comment": "Probably will be used for Dev3 triggering in the future",
@@ -455,19 +456,18 @@
             "type": "digital",
             "id": "Dev1/port0/line30"
         },
-        "Camera Shutter": {
-            "comment": "Camera Shutter",
+        "Trapping Seed Power": {
+            "comment": "analog channel",
             "keys": {
                 "start": {
-                    "state": false,
                     "ramp_data": {
-                        "value": 0.0
+                        "value": 1.0
                     },
                     "ramp_type": "jump"
                 }
             },
-            "type": "digital",
-            "id": "Dev1/port0/line10"
+            "type": "analog",
+            "id": "Dev2/ao2"
         },
         "LMOT Agilent": {
             "comment": "analog channel",
@@ -590,31 +590,52 @@
         },
         "jump_start": {
             "comment": "comment",
-            "__abs_time__": 11.1,
+            "__abs_time__": 1001.1,
             "parent": "end_linear",
             "time": 0.1
         },
         "end": {
             "comment": "comment",
-            "__abs_time__": 11.115999999999998,
+            "__abs_time__": 1001.1160000000001,
             "parent": "p24_trig and jump end",
             "time": 0.008
         },
         "end_linear": {
             "comment": "comment",
-            "__abs_time__": 11.0,
+            "__abs_time__": 1001.0,
+            "hooks": {
+                "agilent_output_off": {},
+                "translation_stage_move_x": {
+                    "pos": 0.0
+                },
+                "translation_stage_move_y": {
+                    "pos": 1.0
+                },
+                "agilent_turn_fm_on": {
+                    "start_freq": 40000000.0
+                }
+            },
             "parent": "long_linear",
-            "time": 10.0
+            "time": 1000.0
         },
         "start": {
             "comment": "start the ramp",
             "__abs_time__": 0.0,
+            "time": 0.0,
             "parent": null,
-            "time": 0.0
+            "hooks": {
+                "agilent_output_off": {},
+                "translation_stage_move_x": {
+                    "pos": 300.0
+                },
+                "agilent_turn_fm_on": {
+                    "start_freq": 40000000.0
+                }
+            }
         },
         "p24_trig and jump end": {
             "comment": "comment",
-            "__abs_time__": 11.107999999999999,
+            "__abs_time__": 1001.1080000000001,
             "parent": "jump_start",
             "time": 0.008
         }

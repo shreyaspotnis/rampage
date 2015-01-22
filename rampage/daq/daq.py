@@ -152,7 +152,7 @@ class DigitalOutputTask(pydaq.Task):
                              pydaq.DAQmx_Val_GroupByChannel,
                              self.digital_data, ctypes.byref(n_written),
                              None)
-        print('Digital n_written', n_written.value)
+        # print('Digital n_written', n_written.value)
 
     def StartAndWait(self):
         """Starts the task and waits until it is done."""
@@ -226,6 +226,8 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
         # configure callbacks
         if callback_function_list is None:
             self.do_callbacks = False
+        elif len(callback_function_list) == 0:
+            self.do_callbacks = False
         else:
             self.do_callbacks = True
 
@@ -260,22 +262,22 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
 
     def EveryNCallback(self):
         """Called by PyDAQmx whenever a callback event occurs."""
-        print('ncall ', self.n_callbacks)
+        # print('ncall ', self.n_callbacks)
         if self.do_callbacks:
             if self.n_callbacks >= self.callback_step:
-                print('n_callbacks', self.n_callbacks)
+                # print('n_callbacks', self.n_callbacks)
                 for func, func_dict in self.callback_funcs:
                     func(func_dict)
 
                 self.latest_callback_index +=1
                 if self.latest_callback_index >= len(self.callback_function_list):
-                    print('done with callbacks')
+                    # print('done with callbacks')
                     self.do_callbacks = False
                 else:
                     out = self.callback_function_list[self.latest_callback_index]
                     callback_time = out[0]
                     self.callback_step = int(callback_time/expt_settings.callback_resolution)
-                    print('updatin callback step', self.callback_step)
+                    # print('updatin callback step', self.callback_step)
                     self.callback_func = out[1]
 
         self.n_callbacks += 1
@@ -296,10 +298,10 @@ class ContinuousAnalogOutputTask(pydaq.Task):
         pydaq.Task.__init__(self)
         n_written = pydaq.int32()
 
-        print('analog lines')
+        # print('analog lines')
         self.CreateAOVoltageChan(analog_lines, None, -10.0, 10.0,
                                  pydaq.DAQmx_Val_Volts, None)
-        print('analog lines2')
+        # print('analog lines2')
         self.CfgSampClkTiming(None, sample_rate,
                               pydaq.DAQmx_Val_Rising,
                               pydaq.DAQmx_Val_ContSamps,
@@ -309,7 +311,7 @@ class ContinuousAnalogOutputTask(pydaq.Task):
         self.WriteAnalogF64(n_samples, False, -1,
                             pydaq.DAQmx_Val_GroupByScanNumber, analog_data,
                             ctypes.byref(n_written), None)
-        print('Analog n_written', n_written.value)
+        # print('Analog n_written', n_written.value)
 
 
 class FiniteAnalogOutputTask(pydaq.Task):
@@ -353,7 +355,7 @@ class FiniteAnalogOutputTask(pydaq.Task):
         self.WriteAnalogF64(n_samples, False, -1,
                             pydaq.DAQmx_Val_GroupByScanNumber, analog_data,
                             ctypes.byref(n_written), None)
-        print('Analog n_written', n_written.value)
+        # print('Analog n_written', n_written.value)
 
 
 def create_all_tasks(digital_data, dev2_trigger_line, dev2_voltages,
@@ -416,7 +418,7 @@ def write_analog_channel(time_array, voltage_array, analog_lines="Dev2/ao0",
 
     sample_rate = 10000
     n_cont_samples = int((n_dig_samples - 2)*time_base*sample_rate/1000)
-    print('n_cont_samples', n_cont_samples)
+    # print('n_cont_samples', n_cont_samples)
     test_cont_samples = np.arange(n_cont_samples*1.0)
     test_cont_samples /= test_cont_samples[-1]
     test_cont_samples[-1] = 0.0

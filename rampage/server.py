@@ -29,17 +29,17 @@ class Hooks(object):
 
     def agilent_turn_fm_on(self, mesg_dict):
         # add code to do the gpib stuff
-        print('agilent_turn_fm_on', mesg_dict)
-
+        # print('agilent_turn_fm_on', mesg_dict)
+        pass
     def agilent_output_off(self, mesg_dict):
-        print('agilent_output_off', mesg_dict)
-
+        # print('agilent_output_off', mesg_dict)
+        pass
     def translation_stage_move_x(self, mesg_dict):
-        print('translation_stage_move_x', mesg_dict)
+        # print('translation_stage_move_x', mesg_dict)
         pass
 
     def translation_stage_move_y(self, mesg_dict):
-        print('translation_stage_move_y', mesg_dict)
+        # print('translation_stage_move_y', mesg_dict)
         pass
 
 
@@ -73,7 +73,7 @@ class RequestProcessor():
         while not done:
             try:
                 recv_string = self._server_sock.recv()
-                print('Message Received:\t' + recv_string)
+                # print('Message Received:\t' + recv_string)
                 request = json.loads(recv_string)
                 if request['name'] not in self._messages_dict:
                     reply = {'error': 'Request name not valid.'}
@@ -82,7 +82,7 @@ class RequestProcessor():
                     reply = func(request['mesg'])
 
                 send_string = json.dumps(reply)
-                print('Sending:\t' + send_string)
+                # print('Sending:\t' + send_string)
                 self._server_sock.send(send_string)
             except KeyboardInterrupt:
                 done = True
@@ -143,31 +143,40 @@ class DaqThread(threading.Thread):
         # even if there's nothing in the queue.
         while not self.stoprequest.isSet():
             self.running.wait()
-            try:
-                if not self.task_pending:
+            # print('task_running', self.task_running)
+            # print('task_pending', self.task_pending)
+            # print('ramp_generated', self.ramp_generated)
+            
+            if not self.task_pending:
+                try:
                     self.current_data = self.data_q.get(True, 0.05)
+                except Queue.Empty:
+                    pass
+                else:
+                    print('I Have a new task')
                     # there is data in the queue, which means there is a task
                     # pending to be done
                     self.task_pending = True
 
-                if self.task_pending and not self.ramp_generated:
-                    self.ramp_out = make_ramps(self.current_data)
-                    self.ramp_generated = True
-                    self.task_pending = False
+            if self.task_pending and not self.ramp_generated:
+                print('Making ramps')
+                self.ramp_out = make_ramps(self.current_data)
+                self.ramp_generated = True
+                self.task_pending = False
 
-                if self.task_running:
-                    # check if task is done
-                    if self.digital_task.is_task_done:
-                        self.task_running = False
-                elif (self.ramp_generated):
-                    # if not, and if we have a generated ramp, upload it and run
-                    self.clear_tasks()
-                    self.upload_and_start_tasks()
-                    self.task_running = True
-                    self.ramp_generated = False
+            if self.task_running:
+                # check if task is done
+                if self.digital_task.is_task_done:
+                    self.task_running = False
+                    print('Task ended')
+            elif (self.ramp_generated):
+                print('Running ramps\n\n')
+                # if not, and if we have a generated ramp, upload it and run
+                self.clear_tasks()
+                self.upload_and_start_tasks()
+                self.task_running = True
+                self.ramp_generated = False
 
-            except Queue.Empty:
-                continue
 
     def clear_tasks(self):
         if self.digital_task is not None:
@@ -209,7 +218,7 @@ class BECServer(RequestProcessor):
         return reply
 
     def queue_ramp(self, mesg):
-        print('Queueing ramp')
+        # print('Queueing ramp')
         self.ramps_queue.put(mesg)
         reply = {'status': 'ok'}
         return reply
@@ -229,7 +238,7 @@ class BECServer(RequestProcessor):
         return reply
 
     def get_queue_comments(self, mesg):
-        print('Get Queue Comments')
+        # print('Get Queue Comments')
         # comments = [a['properties']['comment'] for a in self.ramps_queue]
         # reply = {'comment_list': comments}
         reply = {'comment_list': ['bla']}
@@ -295,7 +304,7 @@ def make_callback_list(ramp_data):
         funcs_list = []
         for func_name, func_dict in hook_item[1]:
             func = global_hooks_object.function_dict[func_name]
-            print('adding func:', func_name, func_dict)
+            # print('adding func:', func_name, func_dict)
             funcs_list.append((func, func_dict))
         callback_list.append((time, funcs_list))
     return callback_list

@@ -4,6 +4,8 @@ import zmq
 import json
 import os
 import numpy as np
+import threading
+import Queue
 
 from rampage import ramps
 
@@ -117,70 +119,124 @@ class ClientForServer(object):
         return reply_dict
 
 
+class DaqThread(threading.Thread):
+    def __init__(self, data_q):
+        super(DaqThread, self).__init__()
+        self.data_q = data_q
+        self.stoprequest = threading.Event()
+        self.running = threading.Event()
+        self.running.clear()
+        self.abort = threading.Event()
+
+        self.digital_task = None
+
+        self.task_running = False
+        self.task_pending = False
+        self.ramp_generated = False
+        self.current_data = None
+
+    def run(self):
+        # As long as we weren't asked to stop, try to take new tasks from the
+        # queue. The tasks are taken with a blocking 'get', so no CPU
+        # cycles are wasted while waiting.
+        # Also, 'get' is given a timeout, so stoprequest is always checked,
+        # even if there's nothing in the queue.
+        while not self.stoprequest.isSet():
+            self.running.wait()
+            try:
+                if not self.task_pending:
+                    self.current_data = self.data_q.get(True, 0.05)
+                    # there is data in the queue, which means there is a task
+                    # pending to be done
+                    self.task_pending = True
+
+                if self.task_pending and not self.ramp_generated:
+                    self.ramp_out = make_ramps(self.current_data)
+                    self.ramp_generated = True
+                    self.task_pending = False
+
+                if self.task_running:
+                    # check if task is done
+                    if self.digital_task.is_task_done:
+                        self.task_running = False
+                elif (self.ramp_generated):
+                    # if not, and if we have a generated ramp, upload it and run
+                    self.clear_tasks()
+                    self.upload_and_start_tasks()
+                    self.task_running = True
+                    self.ramp_generated = False
+
+            except Queue.Empty:
+                continue
+
+    def clear_tasks(self):
+        if self.digital_task is not None:
+            self.dev2_task.ClearTask()
+            self.dev3_task.ClearTask()
+            self.digital_task.ClearTask()
+
+    def upload_and_start_tasks(self):
+        daq.reset_analog_sample_clock()
+        out = self.ramp_out
+        dev2_task, dev3_task, digital_task = daq.create_all_tasks(*out)
+        dev2_task.StartTask()
+        dev3_task.StartTask()
+        digital_task.StartTask()
+        self.dev2_task = dev2_task
+        self.dev3_task = dev3_task
+        self.digital_task = digital_task
+
+    def join(self, timeout=None):
+        self.stoprequest.set()
+        super(DaqThread, self).join(timeout)
+
+
 class BECServer(RequestProcessor):
     def __init__(self, bind_port):
         RequestProcessor.__init__(self, bind_port)
-        self.ramps_queue = []
-        self.digital_task = None
+        self.ramps_queue = Queue.Queue()
+        self.daq_thread = DaqThread(self.ramps_queue)
+        self.daq_thread.start()
 
     def start(self, mesg):
-        if len(self.ramps_queue) == 0:
-            reply = {'status': 'empty queue'}
-        else:
-            ramp_json_data = self.ramps_queue[0]
-            out = make_ramps(ramp_json_data)
-            if self.digital_task is not None:
-                done = self.digital_task.isDone()
-                if not done:
-                    reply = {'status': 'previous task still running.'}
-                    return reply
-                else:
-                    self.dev2_task.ClearTask()
-                    self.dev3_task.ClearTask()
-                    self.digital_task.ClearTask()
-            daq.reset_analog_sample_clock()
-            dev2_task, dev3_task, digital_task = daq.create_all_tasks(*out)
-            dev2_task.StartTask()
-            dev3_task.StartTask()
-            digital_task.StartTask()
-            self.dev2_task = dev2_task
-            self.dev3_task = dev3_task
-            self.digital_task = digital_task
-            self.ramps_queue.pop(0)
-            reply = {'status': 'ok'}
+        self.daq_thread.running.set()
+        reply = {'status': 'ok'}
+        return reply
 
+    def pause_after_current_ramp(self, mesg):
+        self.daq_thread.running.clear()
+        reply = {'status': 'ok'}
         return reply
 
     def queue_ramp(self, mesg):
         print('Queueing ramp')
-        self.ramps_queue.append(mesg)
+        self.ramps_queue.put(mesg)
         reply = {'status': 'ok'}
         return reply
 
     def clear_queue(self, mesg):
         print('Clearing ramp')
-        self.ramps_queue = []
+        # self.ramps_queue = []
         reply = {'status': 'ok'}
         return reply
 
     def get_queue(self, mesg):
         print('Get Queue')
-        reply = {'queue_list': self.ramps_queue,
+        # reply = {'queue_list': self.ramps_queue,
+        #          'status': 'ok'}
+        reply = {'queue_list': ['bla'],
                  'status': 'ok'}
         return reply
 
     def get_queue_comments(self, mesg):
         print('Get Queue Comments')
-        comments = [a['properties']['comment'] for a in self.ramps_queue]
-        reply = {'comment_list': comments}
+        # comments = [a['properties']['comment'] for a in self.ramps_queue]
+        # reply = {'comment_list': comments}
+        reply = {'comment_list': ['bla']}
         return reply
 
     def abort_current_run(self, mesg):
         print(mesg)
-        reply = {'status': 'ok'}
-        return reply
-
-    def pause_after_current_ramp(self, mesg):
         reply = {'status': 'ok'}
         return reply
 

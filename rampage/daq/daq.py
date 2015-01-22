@@ -221,6 +221,8 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
         self.ConfigureTask()
         self.RegisterCallbacks()
 
+        self.is_task_done = False
+
         # configure callbacks
         if callback_function_list is None:
             self.do_callbacks = False
@@ -228,7 +230,7 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
             self.do_callbacks = True
 
             self.latest_callback_index = 0
-            
+
             out = callback_function_list[self.latest_callback_index]
             callback_time = out[0]
             self.callback_step = callback_time/expt_settings.callback_resolution
@@ -283,6 +285,7 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
     def DoneCallback(self, status):
         """Called whenever the task is done."""
         print "Status, done", status
+        self.is_task_done = True
         return 0  # The function should return an integer
 
 

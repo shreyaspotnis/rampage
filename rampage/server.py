@@ -6,6 +6,7 @@ import os
 import numpy as np
 import threading
 import Queue
+import datetime
 
 from rampage import ramps
 
@@ -133,6 +134,7 @@ class DaqThread(threading.Thread):
         self.task_running = False
         self.task_pending = False
         self.ramp_generated = False
+        self.waiting_after_running = False
         self.current_data = None
 
     def run(self):
@@ -146,7 +148,7 @@ class DaqThread(threading.Thread):
             # print('task_running', self.task_running)
             # print('task_pending', self.task_pending)
             # print('ramp_generated', self.ramp_generated)
-            
+
             if not self.task_pending:
                 try:
                     self.current_data = self.data_q.get(True, 0.05)
@@ -158,6 +160,12 @@ class DaqThread(threading.Thread):
                     # pending to be done
                     self.task_pending = True
 
+                    properties = self.current_data['properties']
+                    if 'wait_after_running' in properties:
+                        self.wait_time_after_running = properties['wait_after_running']
+                    else:
+                        self.wait_time_after_running = 0.0
+
             if self.task_pending and not self.ramp_generated:
                 print('Making ramps')
                 self.ramp_out = make_ramps(self.current_data)
@@ -168,15 +176,22 @@ class DaqThread(threading.Thread):
                 # check if task is done
                 if self.digital_task.is_task_done:
                     self.task_running = False
+                    self.task_end_time = datetime.datetime.now()
+                    self.waiting_after_running = True
                     print('Task ended')
+            elif self.waiting_after_running:
+                delta_t = datetime.datetime.now() - self.task_end_time
+                time_elapsed_after_task_end = delta_t.total_seconds()*1000
+                if time_elapsed_after_task_end > self.wait_time_after_running:
+                    self.waiting_after_running = False
             elif (self.ramp_generated):
                 print('Running ramps\n\n')
                 # if not, and if we have a generated ramp, upload it and run
                 self.clear_tasks()
                 self.upload_and_start_tasks()
+                self.task_start_time = datetime.datetime.now()
                 self.task_running = True
                 self.ramp_generated = False
-
 
     def clear_tasks(self):
         if self.digital_task is not None:

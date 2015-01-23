@@ -2,6 +2,47 @@ from PyQt4 import QtGui, QtCore
 import sys
 
 
+class BoolBox(QtGui.QPushButton):
+    myValueChanged = QtCore.pyqtSignal(bool)
+
+    def __init__(self, value, parent=None):
+        super(BoolBox, self).__init__(parent)
+        self.setCheckable(True)
+        self.state = value
+        self.setChecked(self.state)
+        if self.state:
+            text = 'ON'
+        else:
+            text = 'OFF'
+        self.setText(text)
+        self.clicked.connect(self.handleBoolButtonClicked)
+        stylesheet = ('QPushButton:checked { background-color:'
+                      'rgb(100,255,125); }'
+                      'QPushButton { background-color:'
+                      'rgb(255,125,100); }')
+        self.setStyleSheet(stylesheet)
+
+    def handleBoolButtonClicked(self, checked):
+        self.state = bool(checked)
+        if self.state:
+            text = 'ON'
+        else:
+            text = 'OFF'
+        self.setText(text)
+        self.myValueChanged.emit(self.state)
+
+    def mySetValue(self, val):
+        self.state = bool(val)
+        self.setChecked(self.state)
+        if self.state:
+            text = 'ON'
+        else:
+            text = 'OFF'
+        self.setText(text)
+
+
+
+
 class IntBox(QtGui.QSpinBox):
     myValueChanged = QtCore.pyqtSignal(int)
 
@@ -68,7 +109,7 @@ class ListBox(QtGui.QPlainTextEdit):
 
 
 widgets_for_type = {int: IntBox, float: FloatBox, str: StringBox,
-                    list: ListBox, unicode: StringBox}
+                    list: ListBox, unicode: StringBox, bool: BoolBox}
 
 
 class NamedEditor(QtGui.QWidget):

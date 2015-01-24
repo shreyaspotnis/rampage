@@ -41,8 +41,6 @@ class BoolBox(QtGui.QPushButton):
         self.setText(text)
 
 
-
-
 class IntBox(QtGui.QSpinBox):
     myValueChanged = QtCore.pyqtSignal(int)
 

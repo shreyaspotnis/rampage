@@ -243,6 +243,12 @@ class Channel(object):
         self.key_frame_list = key_frame_list
         self.del_unused_keyframes()
 
+        # conversion feature was added later. check if conversion field is
+        # present. If not, added a conversion which is the same as input
+        if self.dct['type'] == 'analog':
+            if 'conversion' not in self.dct:
+                self.dct['conversion'] = 'x'
+
     def set_name(self, new_ch_name):
         """Sets the name of the channel."""
         self.ch_name = new_ch_name
@@ -362,7 +368,7 @@ class Channel(object):
             voltage_sub = ramp_function(*parms_tuple)
             voltages[start_pos:end_pos] = voltage_sub
 
-        return time_array, voltages
+        return time_array, self.cornvert_voltage(voltages)
 
     def generate_ramp(self, time_div=4e-3):
         """Returns the generated ramp and a time array.
@@ -430,7 +436,15 @@ class Channel(object):
             voltage_sub = ramp_function(*parms_tuple)
             voltage[start_index:end_index] = voltage_sub
 
-        return time, voltage
+        # finally use the conversion and return the voltage
+        return time, self.convert_voltage(voltage)
+
+    def convert_voltage(self, voltage):
+        if self.dct['type'] == 'analog':
+            conversion_str = self.dct['conversion']
+            return eval(conversion_str, {'x': voltage})
+        else:
+            return voltage
 
 
 # Analog Ramp functions

@@ -95,7 +95,7 @@ class RampEditor(QtGui.QWidget):
         out_tuple = QEditChannelInfoDialog(ch_name,
                                            self.data['channels'][ch_name],
                                            self).exec_()
-        exec_return, new_key_name, new_comment, new_id = out_tuple
+        exec_return, new_key_name, new_comment, new_id, new_conversion = out_tuple
         if exec_return == QtGui.QDialog.Accepted:
             # Find out if there is a name conflict if channel name has changed
             if new_key_name != ch_name:
@@ -114,10 +114,11 @@ class RampEditor(QtGui.QWidget):
                     msg_str = 'Each channel should have a unique id.'
                     reply = QtGui.QMessageBox.critical(self, 'Duplicate Channel Id',
                                           msg_str)
-                    return
 
             self.data['channels'][ch_name]['comment'] = new_comment
             self.data['channels'][ch_name]['id'] = new_id
+            if self.data['channels'][ch_name]['type'] == 'analog':
+                self.data['channels'][ch_name]['conversion'] = new_conversion
             old_channel = self.data['channels'].pop(ch_name)
             self.data['channels'][new_key_name] = old_channel
 

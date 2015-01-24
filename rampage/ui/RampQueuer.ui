@@ -16,47 +16,6 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="1">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="2" rowspan="9">
-      <widget class="QListWidget" name="listToQueue"/>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_5">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Server</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QCheckBox" name="checkPrependRamp">
-         <property name="text">
-          <string>Prepend Ramp</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushChangeFile">
-         <property name="text">
-          <string>Change Prepend Ramp</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="7" column="1">
-      <widget class="QPushButton" name="pushUpdateServerQueue">
-       <property name="text">
-        <string>Update Server Queue</string>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="0">
       <widget class="QPushButton" name="pushChangeMainRamp">
        <property name="text">
@@ -64,22 +23,8 @@
        </property>
       </widget>
      </item>
-     <item row="8" column="1">
-      <widget class="QPushButton" name="pushPauseAfterCurrent">
-       <property name="text">
-        <string>Pause After Current</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0">
-      <widget class="QPushButton" name="pushStart">
-       <property name="text">
-        <string>Start</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="lineEditMainRamp"/>
+     <item row="1" column="2" rowspan="9">
+      <widget class="QListWidget" name="listToQueue"/>
      </item>
      <item row="8" column="0">
       <widget class="QPushButton" name="pushClearServerQueue">
@@ -87,16 +32,6 @@
         <string>Clear Server Queue</string>
        </property>
       </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Server IP:Port</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QLineEdit" name="serverIPAndPort"/>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_6">
@@ -131,12 +66,56 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="0">
-      <widget class="QPushButton" name="pushQueueToServer">
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
-        <string>Transfer queue to server</string>
+        <string>Server</string>
        </property>
       </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QPushButton" name="pushPauseAfterCurrent">
+       <property name="text">
+        <string>Pause After Current</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QCheckBox" name="checkPrependRamp">
+         <property name="text">
+          <string>Prepend Ramp</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushChangeFile">
+         <property name="text">
+          <string>Change Prepend Ramp</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="lineEditMainRamp"/>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Server IP:Port</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLineEdit" name="serverIPAndPort"/>
      </item>
      <item row="0" column="3">
       <widget class="QLabel" name="label_2">
@@ -145,10 +124,59 @@
        </property>
       </widget>
      </item>
+     <item row="7" column="0">
+      <widget class="QPushButton" name="pushQueueToServer">
+       <property name="text">
+        <string>Transfer queue to server</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="4">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Server Logs:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QPushButton" name="push1DScan">
+         <property name="text">
+          <string>Add 1D Scan</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="push2DScan">
+         <property name="text">
+          <string>Add 2D Scan</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="4" rowspan="9">
+      <widget class="QTextEdit" name="textServerMesg">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3" rowspan="9">
+      <widget class="QListWidget" name="listQueued"/>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="lineEditPrependRamp">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QPushButton" name="pushClearLocalQueue">
+       <property name="text">
+        <string>Clear Local Queue</string>
        </property>
       </widget>
      </item>
@@ -180,45 +208,17 @@
        </item>
       </layout>
      </item>
-     <item row="4" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QPushButton" name="push1DScan">
-         <property name="text">
-          <string>Add 1D Scan</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="push2DScan">
-         <property name="text">
-          <string>Add 2D Scan</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="lineEditPrependRamp">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3" rowspan="9">
-      <widget class="QListWidget" name="listQueued"/>
-     </item>
-     <item row="1" column="4" rowspan="9">
-      <widget class="QTextEdit" name="textServerMesg">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QPushButton" name="pushClearLocalQueue">
+     <item row="7" column="1">
+      <widget class="QPushButton" name="pushStart">
        <property name="text">
-        <string>Clear Local Queue</string>
+        <string>Start</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QPushButton" name="pushUpdateServerQueue">
+       <property name="text">
+        <string>Update Server Queue</string>
        </property>
       </widget>
      </item>

@@ -35,8 +35,14 @@ class QEditChannelInfoDialog(QtGui.QDialog):
         self.grid.addWidget(QtGui.QLabel('id'), 2, 0)
         self.grid.addWidget(self.text_id, 2, 1)
 
-        self.grid.addWidget(self.button_ok, 3, 0)
-        self.grid.addWidget(self.button_cancel, 3, 1)
+        if dct['type'] == 'analog':
+            print('yo la tengo ')
+            self.conversion = QtGui.QLineEdit(dct['conversion'], self)
+            self.grid.addWidget(QtGui.QLabel('conversion'), 3, 0)
+            self.grid.addWidget(self.conversion, 3, 1)
+
+        self.grid.addWidget(self.button_ok, 4, 0)
+        self.grid.addWidget(self.button_cancel, 4, 1)
         self.setLayout(self.grid)
 
         self.dct = dct
@@ -47,7 +53,12 @@ class QEditChannelInfoDialog(QtGui.QDialog):
         name = str(self.text_name.text())
         comment = str(self.text_comment.text())
         id_string = str(self.text_id.text())
-        return execReturn, name, comment, id_string
+
+        if self.dct['type'] == 'analog':
+            conversion_string = str(self.conversion.text())
+        else:
+            conversion_string = None
+        return execReturn, name, comment, id_string, conversion_string
 
 
 class QChannelInfoBox(QtGui.QWidget):
@@ -208,7 +219,6 @@ class QDigitalChannelSegment(QChannelSegment):
         self.vbox.addWidget(self.boolButton)
 
     def handleBoolButtonClicked(self, checked):
-        print('clicked')
         self.state = bool(checked)
         if self.state:
             text = 'ON'

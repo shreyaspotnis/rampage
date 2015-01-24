@@ -264,15 +264,13 @@ class BECServer(RequestProcessor):
     def clear_queue(self, mesg):
         print('Clearing ramp')
         # self.ramps_queue = []
+        done = False
+        while not done:
+            try:
+                self.current_data = self.data_q.get(False)
+            except Queue.Empty:
+                done = True
         reply = {'status': 'ok'}
-        return reply
-
-    def get_queue(self, mesg):
-        print('Get Queue')
-        # reply = {'queue_list': self.ramps_queue,
-        #          'status': 'ok'}
-        reply = {'queue_list': ['bla'],
-                 'status': 'ok'}
         return reply
 
     def get_queue_comments(self, mesg):
@@ -284,10 +282,6 @@ class BECServer(RequestProcessor):
 
     def abort_current_run(self, mesg):
         print(mesg)
-        reply = {'status': 'ok'}
-        return reply
-
-    def run_immediately(self, mesg):
         reply = {'status': 'ok'}
         return reply
 

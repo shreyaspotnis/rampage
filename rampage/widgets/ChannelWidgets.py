@@ -117,6 +117,8 @@ class QChannelInfoBox(QtGui.QWidget):
         tt = fmt.b(fmt.red(self.ch_name)) + '<br>'
         tt += fmt.i(self.dct['comment']) + '<br>\n'
         tt += fmt.b(self.dct['id']) + '<br>\n'
+        if self.dct['type'] == 'analog':
+            tt += 'Conversion: ' + fmt.b(self.dct['conversion']) + '<br>\n'
         tt += '<br><i>right-click label to edit...</i>'
         self.setToolTip(tt)
 

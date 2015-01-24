@@ -7,6 +7,7 @@ import numpy as np
 import threading
 import Queue
 import datetime
+import ConfigParser
 
 from rampage import ramps
 
@@ -17,7 +18,6 @@ if __name__ == '__main__':
     from rampage.daq import daq
 
 main_package_dir = os.path.dirname(__file__)
-ui_filename = os.path.join(main_package_dir, "ui/MainWindow.ui")
 
 
 class Hooks(object):
@@ -32,9 +32,11 @@ class Hooks(object):
         # add code to do the gpib stuff
         # print('agilent_turn_fm_on', mesg_dict)
         pass
+
     def agilent_output_off(self, mesg_dict):
         # print('agilent_output_off', mesg_dict)
         pass
+
     def translation_stage_move_x(self, mesg_dict):
         # print('translation_stage_move_x', mesg_dict)
         pass
@@ -137,6 +139,8 @@ class DaqThread(threading.Thread):
         self.waiting_after_running = False
         self.current_data = None
 
+        self.prev_data_list = []
+
     def run(self):
         # As long as we weren't asked to stop, try to take new tasks from the
         # queue. The tasks are taken with a blocking 'get', so no CPU
@@ -152,6 +156,7 @@ class DaqThread(threading.Thread):
             if not self.task_pending:
                 try:
                     self.current_data = self.data_q.get(True, 0.05)
+                    self.prev_data_list.append(self.current_data)
                 except Queue.Empty:
                     pass
                 else:
@@ -179,6 +184,8 @@ class DaqThread(threading.Thread):
                     self.task_end_time = datetime.datetime.now()
                     self.waiting_after_running = True
                     print('Task ended')
+                    self.log_ramps()
+
             elif self.waiting_after_running:
                 delta_t = datetime.datetime.now() - self.task_end_time
                 time_elapsed_after_task_end = delta_t.total_seconds()*1000
@@ -189,9 +196,24 @@ class DaqThread(threading.Thread):
                 # if not, and if we have a generated ramp, upload it and run
                 self.clear_tasks()
                 self.upload_and_start_tasks()
-                self.task_start_time = datetime.datetime.now()
                 self.task_running = True
                 self.ramp_generated = False
+
+    def log_ramps(self):
+        log_data = self.prev_data_list.pop(0)
+        if 'log_ramp_file' in log_data['properties']:
+            if not log_data['properties']['log_ramp_file']:
+                return
+
+        ls1 = 'Task started at: {0}'.format(self.task_start_time)
+        ls2 = 'Task ended at: {0}'.format(self.task_end_time)
+        log_string = '\n'.join(ls1, ls2)
+        log_data['properties']['run_details'] = log_string
+        fname = self.task_start_time.strftime('%H-%M-%S')
+        fname += '.json'
+        fname = os.path.join(get_log_dir(), fname)
+        with open(fname, 'w') as f:
+            json.dump(log_data, f)
 
     def clear_tasks(self):
         if self.digital_task is not None:
@@ -209,6 +231,7 @@ class DaqThread(threading.Thread):
         self.dev2_task = dev2_task
         self.dev3_task = dev3_task
         self.digital_task = digital_task
+        self.task_start_time = datetime.datetime.now()
 
     def join(self, timeout=None):
         self.stoprequest.set()
@@ -281,8 +304,10 @@ def get_analog_ids(dev_name="Dev2"):
     line_ids = [line_fmt.format(n) for n in range(8)]
     return line_ids
 
+
 def dev2_analog_ids():
     return get_analog_ids("Dev2")
+
 
 def dev3_analog_ids():
     return get_analog_ids("Dev3")
@@ -311,6 +336,7 @@ def get_analog_channels(channel_list, dev_name="Dev2"):
                 break
     return analog_channels
 
+
 def make_callback_list(ramp_data):
     keyframe_list = ramps.KeyFrameList(ramp_data['keyframes'])
     callback_list = []
@@ -323,9 +349,6 @@ def make_callback_list(ramp_data):
             funcs_list.append((func, func_dict))
         callback_list.append((time, funcs_list))
     return callback_list
-
-
-
 
 
 def make_analog_ramps(ramp_data, dev_name="Dev2"):
@@ -441,46 +464,34 @@ def make_ramps(data):
             dev3_voltages, callback_list)
 
 
+def get_log_dir():
+    settings_file = os.path.join(main_package_dir, 'settings.ini')
+    config = ConfigParser.RawConfigParser()
+    config.read(settings_file)
+    log_dir = config.get('server', 'log_dir')
+    return log_dir
+
+
+def make_folder_for_today(log_dir):
+    """Creates the folder log_dir/yyyy/mm/dd in log_dir if it doesn't exist
+    and returns the full path of the folder."""
+    now = datetime.datetime.now()
+    sub_folders_list = ['{0:04d}'.format(now.year),
+                        '{0:02d}'.format(now.month),
+                        '{0:02d}'.format(now.day)]
+    folder = log_dir
+    for sf in sub_folders_list:
+        folder = os.path.join(folder, sf)
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+    return folder
+
+
 def main():
     s = BECServer(6023)
     s._run()
 
 
-# def test_check_ramp_for_errors():
-#     fname = os.path.join(main_package_dir, 'examples/dev2_test.json')
-#     with open(fname, 'r') as f:
-#         data = json.load(f)
-#     check_ramp_for_errors(data)
-#     dig_data = make_digital_ramps(data)
-#     dev2_trigger_line, dev2_voltages = make_analog_ramps(data, dev_name="Dev2")
-#     dev3_trigger_line, dev3_voltages = make_analog_ramps(data, dev_name="Dev3")
-#     return dev2_trigger_line, dev2_voltages, dig_data
-
 if __name__ == '__main__':
-    # main()
-    #main()
-    # d2_trig, d2_volt, dig_data = test_check_ramp_for_errors()
-    #     fname = os.path.join(main_package_dir, 'examples/dev2_test.json')
 
-
-    # fname = os.path.join(main_package_dir, 'examples/test_ramps.json')
-    # with open(fname, 'r') as f:
-    #     data = json.load(f)
-    # ramp_json_data = data
-    # out = make_ramps(ramp_json_data)
-    # (digital_data, dev2_trigger_line, dev2_voltages, dev3_trigger_line,
-    #  dev3_voltages, callback_list) = out
-    # for time, func_list in callback_list:
-    #     print('Time ', time)
-    #     for func, func_dict in func_list:
-    #         func(func_dict)
-    # if __usedaq__:
-    #     dev2_task, dev3_task, digital_task = daq.create_all_tasks(*out)
-    #     dev2_task.StartTask()
-    #     dev3_task.StartTask()
-    #     digital_task.StartTask()
-    #     done = False
-    #     while not done:
-    #         done = digital_task.isDone()
-    #     digital_task.ClearTask()
     main()

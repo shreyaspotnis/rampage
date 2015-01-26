@@ -17,34 +17,27 @@ if __name__ == '__main__':
     # not if some other module is importing functions from
     # this module
     from rampage.daq import daq
+    from rampage.daq.gpib import agilent_33250a
 
 main_package_dir = os.path.dirname(__file__)
 
 
 class Hooks(object):
 
-    default_mesgs = {'agilent_turn_fm_on': {'start_freq': 40e6},
-                     'agilent_output_off': {},
-                     'translation_stage_move_x': {'pos': 0.0},
-                     'translation_stage_move_y': {'pos': 1.0}
+    default_mesgs = {'agilent_set_fm_ext': {'freq': 40e6,
+                                            'peak_freq_dev':40e6,
+                                            'amplitude': 0.7,
+                                            'output_state': True},
+                     'agilent_set_output': {'state': True},
                      }
 
-    def agilent_turn_fm_on(self, mesg_dict):
-        # add code to do the gpib stuff
-        # print('agilent_turn_fm_on', mesg_dict)
-        pass
+    def agilent_set_fm_ext(self, mesg_dict):
+        agilent_33250a.set_fm_ext(**mesg_dict)
+        print('Agilent: set to FM External modulation.')
 
-    def agilent_output_off(self, mesg_dict):
-        # print('agilent_output_off', mesg_dict)
-        pass
-
-    def translation_stage_move_x(self, mesg_dict):
-        # print('translation_stage_move_x', mesg_dict)
-        pass
-
-    def translation_stage_move_y(self, mesg_dict):
-        # print('translation_stage_move_y', mesg_dict)
-        pass
+    def agilent_set_output(self, mesg_dict):
+        agilent_33250a.set_output(**mesg_dict)
+        print('agilent_33250a: setting output')
 
 
 global_hooks_object = Hooks()
@@ -188,7 +181,7 @@ class DaqThread(threading.Thread):
                     self.waiting_after_running = True
                     self.log_ramps()
 
-                    print('Task ended at {0}\n\n'.format(self.task_end_time))
+                    print('Task ended at {0}'.format(self.task_end_time))
                     dt = self.task_end_time - self.task_start_time
                     print('Task running length {0}'.format(dt))
 
@@ -196,7 +189,7 @@ class DaqThread(threading.Thread):
                 delta_t = datetime.datetime.now() - self.task_end_time
                 time_elapsed_after_task_end = delta_t.total_seconds()*1000
                 if time_elapsed_after_task_end > self.wait_time_after_running:
-                    print('Waited for {0} ms'.format(time_elapsed_after_task_end))
+                    print('Waited for {0} ms\n'.format(time_elapsed_after_task_end))
                     self.waiting_after_running = False
             elif (self.ramp_generated):
                 # if not, and if we have a generated ramp, upload it and run
@@ -204,7 +197,7 @@ class DaqThread(threading.Thread):
                 self.upload_and_start_tasks()
 
                 self.task_start_time = datetime.datetime.now()
-                print('Task started at {0}\n\n'.format(self.task_start_time))
+                print('Task started at {0}'.format(self.task_start_time))
 
                 self.task_running = True
                 self.ramp_generated = False

@@ -1,0 +1,805 @@
+{
+    "channels": {
+        "LMOT Shutter": {
+            "comment": "analog channel",
+            "keys": {
+                "OP2 starts": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "state": true,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line21"
+        },
+        "Z-Bias-01": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao5"
+        },
+        "RF trigger s/w": {
+            "comment": "Probably will not be used later on",
+            "keys": {
+                "QUAD capture/ RF1": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line19"
+        },
+        "Dev1/port0/line12": {
+            "comment": "Not connected",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line12"
+        },
+        "Dev1/port0/line11": {
+            "comment": "Not connected",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line11"
+        },
+        "Dev3/ao5 (faulty?)": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao5"
+        },
+        "Dev1/port0/line17": {
+            "comment": "Not connected",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line17"
+        },
+        "Dev1/port0/line14": {
+            "comment": "Not connected",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line14"
+        },
+        "P24 Scope Trigger": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line24"
+        },
+        "Barrier Shutter": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line23"
+        },
+        "Camera Shutter": {
+            "comment": "Camera Shutter",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line10"
+        },
+        "RF Analog": {
+            "comment": "Units: MHz. Controls the frequency of the RF knife. Conversion is calibrated for this particular channel using start frequency of 40MHz and deviation of 40MHz",
+            "keys": {
+                "Shut gate valve": {
+                    "ramp_data": {
+                        "value": 40.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "5.1913-x*0.12931",
+            "type": "analog",
+            "id": "Dev3/ao0"
+        },
+        "Relay 2 Main coils": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line28"
+        },
+        "Repump Seed Power": {
+            "comment": "analog channel",
+            "keys": {
+                "Molasses 2 starts": {
+                    "ramp_data": {
+                        "value": 0.5
+                    },
+                    "ramp_type": "jump"
+                },
+                "RF2 starts": {
+                    "ramp_data": {
+                        "value": 0.5
+                    },
+                    "ramp_type": "jump"
+                },
+                "MOT compression": {
+                    "ramp_data": {
+                        "value": 1.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "ramp_data": {
+                        "value": 0.5
+                    },
+                    "ramp_type": "jump"
+                },
+                "OP starts": {
+                    "ramp_data": {
+                        "value": 0.9
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao4"
+        },
+        "Dev3/ao7 (faulty?)": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao7"
+        },
+        "BOP Relay": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line20"
+        },
+        "X-Bias": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao0"
+        },
+        "Dev1/port0/line09": {
+            "comment": "",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line09"
+        },
+        "Dalsa Trigger": {
+            "comment": "Dalsa Trigger",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line08"
+        },
+        "Relay 1 Main coils": {
+            "comment": "If this is on and Main coils relay 2 is off, then coils are in anti-helmholtz",
+            "keys": {
+                "Shut gate valve": {
+                    "state": true,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line26"
+        },
+        "Abs/OP Frequency": {
+            "comment": "analog channel",
+            "keys": {
+                "QUAD capture/ RF1": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "ramp_data": {
+                        "value": 0.22
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao7"
+        },
+        "Trapping Frequency": {
+            "comment": "analog channel",
+            "keys": {
+                "Molasses 2 starts": {
+                    "ramp_data": {
+                        "value": 0.2
+                    },
+                    "ramp_type": "jump"
+                },
+                "MOT compression": {
+                    "ramp_data": {
+                        "value": 0.1
+                    },
+                    "ramp_type": "jump"
+                },
+                "QUAD capture/ RF1": {
+                    "ramp_data": {
+                        "value": 0.04
+                    },
+                    "ramp_type": "linear"
+                },
+                "Shut gate valve": {
+                    "ramp_data": {
+                        "value": 0.04
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao3"
+        },
+        "10kHz Strobe": {
+            "comment": "Probably will be used for Dev3 triggering in the future",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line27"
+        },
+        "Barrier Laser Diode": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "ramp_data": {
+                        "value": -3.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao4"
+        },
+        "RF attenuator": {
+            "comment": "analog channel",
+            "keys": {
+                "QUAD capture/ RF1": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line16"
+        },
+        "Abs/OP Switch": {
+            "comment": "ON - light goes to Optical pumping, OFF - goes to aborption probe",
+            "keys": {
+                "QUAD capture/ RF1": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "state": true,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line18"
+        },
+        "Useful RF": {
+            "comment": "Probably will not be used",
+            "keys": {
+                "QUAD capture/ RF1": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line29"
+        },
+        "Abs Probe Shutter": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line22"
+        },
+        "Gate Valve (internal)": {
+            "comment": "Gate Valve (internal)",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line13"
+        },
+        "FET Main Coils": {
+            "comment": "analog channel",
+            "keys": {
+                "Molasses 1 starts": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "QUAD capture/ RF1": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "state": true,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line30"
+        },
+        "Trapping Seed Power": {
+            "comment": "analog channel",
+            "keys": {
+                "Molasses 2 starts": {
+                    "ramp_data": {
+                        "value": 0.8
+                    },
+                    "ramp_type": "jump"
+                },
+                "OP starts": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "ramp_data": {
+                        "value": 1.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao2"
+        },
+        "LMOT Agilent": {
+            "comment": "analog channel",
+            "keys": {
+                "QUAD capture/ RF1": {
+                    "ramp_data": {
+                        "value": 5.2
+                    },
+                    "ramp_type": "jump"
+                },
+                "Molasses 1 starts": {
+                    "ramp_data": {
+                        "value": 8.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "MOT compression": {
+                    "ramp_data": {
+                        "value": 4.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "ramp_data": {
+                        "value": 0.6
+                    },
+                    "ramp_type": "jump"
+                },
+                "ODT transfer starts": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 3.546
+                    }
+                },
+                "RF4/ODT on": {
+                    "ramp_type": "linear",
+                    "ramp_data": {
+                        "value": 5.2
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao1"
+        },
+        "UMOT ATE": {
+            "comment": "analog channel",
+            "keys": {
+                "MOT compression": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "ramp_data": {
+                        "value": 0.1
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao1"
+        },
+        "Abs/OP Power": {
+            "comment": "analog channel",
+            "keys": {
+                "OP starts": {
+                    "ramp_data": {
+                        "value": 0.9
+                    },
+                    "ramp_type": "jump"
+                },
+                "QUAD capture/ RF1": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao6"
+        },
+        "V-Bias": {
+            "comment": "analog channel",
+            "keys": {
+                "RF3 starts": {
+                    "ramp_data": {
+                        "value": 0.12
+                    },
+                    "ramp_type": "jump"
+                },
+                "RF2 starts": {
+                    "ramp_data": {
+                        "value": -1.0
+                    },
+                    "ramp_type": "linear"
+                },
+                "OP starts": {
+                    "ramp_data": {
+                        "value": -1.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "ramp_data": {
+                        "value": 0.168
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao2"
+        },
+        "RF Trigger h/w": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line25"
+        },
+        "Frame Grabber": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line15"
+        },
+        "ODT-X": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao6"
+        },
+        "ODT-Z": {
+            "comment": "analog channel",
+            "keys": {
+                "RF3 starts": {
+                    "ramp_data": {
+                        "value": 0.05
+                    },
+                    "ramp_type": "linear"
+                },
+                "Shut gate valve": {
+                    "ramp_data": {
+                        "value": 0.05
+                    },
+                    "ramp_type": "jump"
+                },
+                "RF4/ODT on": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": -1.4
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao3"
+        }
+    },
+    "properties": {
+        "comment": "Loads default values for loading a MOT",
+        "ramp_resolution": 0.1,
+        "wait_after_running": 10000,
+        "jump_resolution": 0.004,
+        "log_ramp_file": false
+    },
+    "keyframes": {
+        "OP2 starts": {
+            "comment": "comment",
+            "__abs_time__": 512.3000000000001,
+            "parent": "OP starts",
+            "time": 0.1
+        },
+        "QUAD capture/ RF1": {
+            "comment": "comment",
+            "__abs_time__": 513.5000000000001,
+            "parent": "OP2 starts",
+            "time": 1.2
+        },
+        "Molasses 1 starts": {
+            "comment": "comment",
+            "__abs_time__": 506.0,
+            "hooks": {},
+            "parent": "MOT compression",
+            "time": 6.0
+        },
+        "MOT compression": {
+            "comment": "comment",
+            "__abs_time__": 500.0,
+            "hooks": {},
+            "parent": "Shut gate valve",
+            "time": 500.0
+        },
+        "Shut gate valve": {
+            "comment": "start the ramp",
+            "__abs_time__": 0.0,
+            "hooks": {},
+            "parent": null,
+            "time": 0.0
+        },
+        "RF3 starts": {
+            "comment": "comment",
+            "__abs_time__": 1413.5,
+            "parent": "RF2 starts",
+            "time": 400.0
+        },
+        "RF2 starts": {
+            "comment": "comment",
+            "__abs_time__": 1013.5000000000001,
+            "parent": "QUAD capture/ RF1",
+            "time": 500.0
+        },
+        "OP starts": {
+            "comment": "comment",
+            "__abs_time__": 512.2,
+            "parent": "Molasses 3 starts",
+            "time": 6.0
+        },
+        "ODT transfer starts": {
+            "comment": "comment",
+            "__abs_time__": 12013.5,
+            "parent": "RF4/ODT on",
+            "time": 1000.0
+        },
+        "Molasses 2 starts": {
+            "comment": "comment",
+            "__abs_time__": 506.1,
+            "parent": "Molasses 1 starts",
+            "time": 0.1
+        },
+        "Molasses 3 starts": {
+            "comment": "comment",
+            "__abs_time__": 506.20000000000005,
+            "parent": "Molasses 2 starts",
+            "time": 0.1
+        },
+        "RF4/ODT on": {
+            "comment": "comment",
+            "__abs_time__": 11013.5,
+            "parent": "RF3 starts",
+            "time": 9600.0
+        }
+    }
+}

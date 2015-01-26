@@ -20,8 +20,9 @@ def run_ramp_immediately(path_to_ramp_file, settings=None):
     settings.endGroup()
     client = server.ClientForServer(server.BECServer, str(text))
     # since we are just testing it out, do not wait for the extra time
-    data['properties']['wait_after_ramp'] = 0.
+    data['properties']['wait_after_running'] = 0.
     client.queue_ramp(data)
+    client.start({})
 
 
 def flatten_dict(dct, separator='-->', allowed_types=[int, float, bool]):

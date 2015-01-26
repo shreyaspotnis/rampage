@@ -33,11 +33,12 @@ class Hooks(object):
 
     def agilent_set_fm_ext(self, mesg_dict):
         agilent_33250a.set_fm_ext(**mesg_dict)
-        print('Agilent: set to FM External modulation.')
+        print('agilent_33250a: set to FM External modulation.')
 
     def agilent_set_output(self, mesg_dict):
         agilent_33250a.set_output(**mesg_dict)
-        print('agilent_33250a: setting output')
+        print('agilent_33250a: setting output: ' +
+              str(mesg_dict['state']))
 
 
 global_hooks_object = Hooks()

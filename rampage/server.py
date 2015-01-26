@@ -8,6 +8,7 @@ import threading
 import Queue
 import datetime
 import ConfigParser
+import stat
 
 from rampage import ramps
 
@@ -224,6 +225,8 @@ class DaqThread(threading.Thread):
         fname = os.path.join(folder_name, fname)
         with open(fname, 'w') as f:
             json.dump(log_data, f)
+        # make the logged file read only
+        os.chmod(fname, stat.S_IREAD)
 
     def clear_tasks(self):
         if self.digital_task is not None:

@@ -278,7 +278,7 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
                     callback_time = out[0]
                     self.callback_step = int(callback_time/expt_settings.callback_resolution)
                     # print('updatin callback step', self.callback_step)
-                    self.callback_func = out[1]
+                    self.callback_funcs = out[1]
 
         self.n_callbacks += 1
         #print('n_callbacks', self.n_callbacks)

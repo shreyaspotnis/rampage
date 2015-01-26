@@ -141,6 +141,8 @@ class DaqThread(threading.Thread):
 
         self.prev_data_list = []
 
+        self.main_log_dir = get_log_dir()
+
     def run(self):
         # As long as we weren't asked to stop, try to take new tasks from the
         # queue. The tasks are taken with a blocking 'get', so no CPU
@@ -214,11 +216,12 @@ class DaqThread(threading.Thread):
 
         ls1 = 'Task started at: {0}'.format(self.task_start_time)
         ls2 = 'Task ended at: {0}'.format(self.task_end_time)
-        log_string = '\n'.join(ls1, ls2)
+        log_string = '\n'.join([ls1, ls2])
         log_data['properties']['run_details'] = log_string
         fname = self.task_start_time.strftime('%H-%M-%S')
         fname += '.json'
-        fname = os.path.join(get_log_dir(), fname)
+        folder_name = make_folder_for_today(self.main_log_dir)
+        fname = os.path.join(folder_name, fname)
         with open(fname, 'w') as f:
             json.dump(log_data, f)
 

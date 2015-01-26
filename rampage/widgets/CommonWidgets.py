@@ -76,10 +76,10 @@ class QMultipleSpinBoxEdit(QtGui.QWidget):
         for an, av in zip(self.attribute_names, self.attribute_values):
             sb = MyDoubleSpinBox(self)
             sb.setToolTip(an)
-            sb.setValue(av)
             sb.setDecimals(3)
             sb.setMinimum(-100.)
             sb.setMaximum(100.)
+            sb.setValue(av)
             sb.valueChanged.connect(self.handleValueChanged)
             self.vbox.addWidget(sb)
             self.spin_boxes.append(sb)

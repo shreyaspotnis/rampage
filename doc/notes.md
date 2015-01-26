@@ -26,3 +26,8 @@ when user says start, state goes to 'running' if there are ramps queued
 
 if user says abort, cancels currently running ramp and goes to 'paused'. Does not remove the ramp from the queue.
 
+
+
+# issues
+
+when adding and removing channels, some numbers in the GUI change to 0, whereas in the ramp they are fine.

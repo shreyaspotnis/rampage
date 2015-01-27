@@ -162,11 +162,6 @@ class DaqThread(threading.Thread):
                     # pending to be done
                     self.task_pending = True
 
-                    properties = self.current_data['properties']
-                    if 'wait_after_running' in properties:
-                        self.wait_time_after_running = properties['wait_after_running']
-                    else:
-                        self.wait_time_after_running = 0.0
 
             if self.task_pending and not self.ramp_generated:
                 print('Making ramps')
@@ -191,10 +186,19 @@ class DaqThread(threading.Thread):
                 time_elapsed_after_task_end = delta_t.total_seconds()*1000
                 if time_elapsed_after_task_end > self.wait_time_after_running:
                     print('Waited for {0} ms\n'.format(time_elapsed_after_task_end))
+                    print('Waiting time is : ' + str(self.wait_time_after_running))
                     self.waiting_after_running = False
+
+                    
             elif (self.ramp_generated):
-                # if not, and if we have a generated ramp, upload it and run
+                properties = self.current_data['properties']
+                if 'wait_after_running' in properties:
+                    self.wait_time_after_running = properties['wait_after_running']
+                else:
+                    self.wait_time_after_running = 0.0
                 self.clear_tasks()
+                # if not, and if we have a generated ramp, upload it and run
+                
                 self.upload_and_start_tasks()
 
                 self.task_start_time = datetime.datetime.now()
@@ -227,6 +231,8 @@ class DaqThread(threading.Thread):
             self.dev2_task.ClearTask()
             self.dev3_task.ClearTask()
             self.digital_task.ClearTask()
+            # print('Reseting clock to high')
+            # daq.reset_analog_sample_clock(False)
 
     def upload_and_start_tasks(self):
         daq.reset_analog_sample_clock()
@@ -274,7 +280,7 @@ class BECServer(RequestProcessor):
         done = False
         while not done:
             try:
-                self.current_data = self.data_q.get(False)
+                self.current_data = self.ramps_queue.get(False)
             except Queue.Empty:
                 done = True
         reply = {'status': 'ok'}
@@ -372,18 +378,29 @@ def make_analog_ramps(ramp_data, dev_name="Dev2"):
         time_array, voltages = an_ch.get_analog_ramp_data(ramp_regions,
                                                           jump_resolution,
                                                           ramp_resolution)
-        time_array2, voltages2 = an_ch.generate_ramp(jump_resolution)
+        # time_array2, voltages2 = an_ch.generate_ramp(jump_resolution)
         # plt.plot(time_array2, voltages2)
         # plt.plot(time_array, voltages, 'o')
         # plt.show()
         voltage_array.append(voltages)
     voltage_array = np.array(voltage_array)
+    
+
     trigger_line = make_trigger_line(time_array, jump_resolution)
+
+    
+    # if dev_name=="Dev3":
+    #     sub_array = voltage_array[1,:]
+    #     time_array = time_array
+    #     for t, s in zip(time_array, sub_array):
+    #         print(t, s)
+    
     return trigger_line, voltage_array
 
 
 def make_trigger_line(time_array, jump_resolution):
     positions = np.rint(time_array/jump_resolution).astype(int)
+    
     trigger_line = np.zeros(np.max(positions) + 1, dtype='uint32')
     trigger_line[positions] = True
     return trigger_line

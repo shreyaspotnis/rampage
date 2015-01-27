@@ -460,6 +460,15 @@ def analog_linear_ramp(ramp_data, start_time, end_time, value_final,
     return value_initial*(1.0 - interp) + value_final*interp
 
 
+def analog_linear2_ramp(ramp_data, start_time, end_time, value_final,
+                       time_subarray):
+    """Use this when you want a discontinuous jump at the end of the linear ramp."""
+    value_initial = ramp_data["value"]
+    value_final2 = ramp_data["value_final"]
+    interp = (time_subarray - start_time)/(end_time - start_time)
+    return value_initial*(1.0 - interp) + value_final2*interp
+
+
 def analog_quadratic_ramp(ramp_data, start_time, end_time, value_final,
                           time_subarray):
     value_initial = ramp_data["value"]
@@ -535,6 +544,7 @@ def digital_pulsetrain_ramp(ramp_data, start_time, end_time, state,
 analog_ramp_types = {"jump": ["value"],
                      "quadratic": ["value", "slope"],
                      "linear": ["value"],
+                     "linear2": ["value", "value_final"],
                      "cubic": ["value", "slope_left", "slope_right"],
                      "sine": ["value", "amp", "freq", "phase"],
                      "quadratic2": ["value", "curvature"],
@@ -545,6 +555,7 @@ digital_ramp_types = {"jump": [],
 
 analog_ramp_functions = {"jump": analog_jump_ramp,
                          "linear": analog_linear_ramp,
+                         "linear2": analog_linear2_ramp,
                          "quadratic": analog_quadratic_ramp,
                          "cubic": analog_cubic_ramp,
                          "sine": analog_sine_ramp,

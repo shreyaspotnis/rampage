@@ -331,7 +331,10 @@ class Channel(object):
             else:
                 start_time = all_kf_times[region_number]
                 end_time = all_kf_times[region_number + 1]
-                time_array = np.arange(start_time, end_time, ramp_resolution)
+                # find number of time steps
+                n_time_steps = round((end_time-start_time)/ramp_resolution)
+                time_array = start_time + np.arange(n_time_steps)*ramp_resolution
+                # time_array = np.arange(start_time, end_time, ramp_resolution)
                 time_array_list.append(time_array)
                 n_points += len(time_array)
         time_array_list.append([all_kf_times[-1]])

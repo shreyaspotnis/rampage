@@ -25,6 +25,21 @@ def run_ramp_immediately(path_to_ramp_file, settings=None):
     client.start({})
 
 
+def queue_ramp_pair(path_to_ramp_file1, path_to_ramp_file2, settings=None):
+    with open(path_to_ramp_file1, 'r') as f:
+        data1 = json.load(f)
+    with open(path_to_ramp_file2, 'r') as f:
+        data2 = json.load(f)
+    settings.beginGroup('rampqueuer')
+    text = settings.value('server_ip_and_port',
+                          'tcp://localhost:6023').toString()
+    settings.endGroup()
+    client = server.ClientForServer(server.BECServer, str(text))
+    client.queue_ramp(data1)
+    client.queue_ramp(data2)
+    client.start({})
+
+
 def flatten_dict(dct, separator='-->', allowed_types=[int, float, bool]):
     """Returns a list of string identifiers for each element in dct.
 

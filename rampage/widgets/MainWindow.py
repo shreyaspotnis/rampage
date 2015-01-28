@@ -154,8 +154,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.setWindowTitle(self.path_to_ramp_file)
             self.is_saved = True
 
-    def handleRunCurrent(self, add_load_mot=False):
-        print('running current')
+    def handleRunCurrent(self):
         if not self.is_saved:
             msg_str = ("Do you want to save changes? Unsaved changes won't be uploaded. File:"
                        + self.path_to_ramp_file+"?")
@@ -171,13 +170,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 return
             else:
                 self.handleSave()
-        if add_load_mot:
-            queuer.run_ramp_immediately(self.path_to_load_mot_file,
-                                        self.settings)
         queuer.run_ramp_immediately(self.path_to_ramp_file, self.settings)
 
     def handleRunWithLoadMot(self):
-        self.handleRunCurrent(add_load_mot=True)
+        if not self.is_saved:
+            msg_str = ("Do you want to save changes? Unsaved changes won't be uploaded. File:"
+                       + self.path_to_ramp_file+"?")
+            reply = QtGui.QMessageBox.warning(self, 'Unsaved Scene',
+                                              msg_str,
+                                              (QtGui.QMessageBox.Yes |
+                                               QtGui.QMessageBox.No |
+                                               QtGui.QMessageBox.Cancel),
+                                              QtGui.QMessageBox.Yes)
+            if reply == QtGui.QMessageBox.No:
+                pass
+            elif reply == QtGui.QMessageBox.Cancel:
+                return
+            else:
+                self.handleSave()
+        queuer.queue_ramp_pair(self.path_to_load_mot_file,
+                               self.path_to_ramp_file,
+                               self.settings)
 
     def handleChangeLoadMotFile(self):
         # save old opened file

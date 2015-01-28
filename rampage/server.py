@@ -187,10 +187,10 @@ class DaqThread(threading.Thread):
                 if time_elapsed_after_task_end > self.wait_time_after_running:
                     print('Waiting time is : ' + str(self.wait_time_after_running))
                     print('Waited for {0} ms\n'.format(time_elapsed_after_task_end))
-                    
+
                     self.waiting_after_running = False
 
-                    
+
             elif (self.ramp_generated):
                 properties = self.prev_data_list[0]['properties']
                 if 'wait_after_running' in properties:
@@ -199,7 +199,7 @@ class DaqThread(threading.Thread):
                     self.wait_time_after_running = 0.0
                 self.clear_tasks()
                 # if not, and if we have a generated ramp, upload it and run
-                
+
                 self.upload_and_start_tasks()
 
                 self.task_start_time = datetime.datetime.now()
@@ -385,23 +385,23 @@ def make_analog_ramps(ramp_data, dev_name="Dev2"):
         # plt.show()
         voltage_array.append(voltages)
     voltage_array = np.array(voltage_array)
-    
+
 
     trigger_line = make_trigger_line(time_array, jump_resolution)
 
-    
+
     # if dev_name=="Dev3":
     #     sub_array = voltage_array[1,:]
     #     time_array = time_array
     #     for t, s in zip(time_array, sub_array):
     #         print(t, s)
-    
+
     return trigger_line, voltage_array
 
 
 def make_trigger_line(time_array, jump_resolution):
     positions = np.rint(time_array/jump_resolution).astype(int)
-    
+
     trigger_line = np.zeros(np.max(positions) + 1, dtype='uint32')
     trigger_line[positions] = True
     return trigger_line
@@ -450,7 +450,7 @@ def check_ramp_for_errors(ramp_data):
 
         # check if all times are a multiple of minimum resolution
         steps_float = abs_time / jump_resolution
-        steps_residue = steps_float - int(steps_float)
+        steps_residue = steps_float - round(steps_float)
         if steps_residue > 0.0001:
             error_fmt = ("keyframe \'{0}\' has absolute time {1} which is not"
                          " a multiple of jump_resolution {2}")

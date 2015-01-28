@@ -185,13 +185,14 @@ class DaqThread(threading.Thread):
                 delta_t = datetime.datetime.now() - self.task_end_time
                 time_elapsed_after_task_end = delta_t.total_seconds()*1000
                 if time_elapsed_after_task_end > self.wait_time_after_running:
-                    print('Waited for {0} ms\n'.format(time_elapsed_after_task_end))
                     print('Waiting time is : ' + str(self.wait_time_after_running))
+                    print('Waited for {0} ms\n'.format(time_elapsed_after_task_end))
+                    
                     self.waiting_after_running = False
 
                     
             elif (self.ramp_generated):
-                properties = self.current_data['properties']
+                properties = self.prev_data_list[0]['properties']
                 if 'wait_after_running' in properties:
                     self.wait_time_after_running = properties['wait_after_running']
                 else:

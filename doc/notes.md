@@ -31,3 +31,6 @@ if user says abort, cancels currently running ramp and goes to 'paused'. Does no
 # issues
 
 when adding and removing channels, some numbers in the GUI change to 0, whereas in the ramp they are fine.
+
+# icon
+taken from: http://www.clker.com/cliparts/a/4/e/b/12074320141808516011slippery%20ramp%20white.svg.hi.png

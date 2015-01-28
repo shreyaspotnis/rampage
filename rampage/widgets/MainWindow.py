@@ -57,6 +57,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.path_to_ramp_file = str(self.settings.value('path_to_ramp_file',
                                      default_ramp_path).toString())
+        self.path_to_load_mot_file = str(self.settings.value('path_to_load_mot_file',
+                                         default_ramp_path).toString())
         if not os.path.isfile(self.path_to_ramp_file):
             self.path_to_ramp_file = default_ramp_path
         self.settings.endGroup()
@@ -70,6 +72,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.settings.setValue('geometry', self.saveGeometry())
         self.settings.setValue('windowstate', self.saveState())
         self.settings.setValue('path_to_ramp_file', self.path_to_ramp_file)
+        self.settings.setValue('path_to_load_mot_file',
+                               self.path_to_load_mot_file)
         self.settings.endGroup()
 
     def closeEvent(self, event):
@@ -150,7 +154,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.setWindowTitle(self.path_to_ramp_file)
             self.is_saved = True
 
-    def handleRunCurrent(self):
+    def handleRunCurrent(self, add_load_mot=False):
         print('running current')
         if not self.is_saved:
             msg_str = ("Do you want to save changes? Unsaved changes won't be uploaded. File:"
@@ -167,11 +171,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 return
             else:
                 self.handleSave()
+        if add_load_mot:
+            queuer.run_ramp_immediately(self.path_to_load_mot_file,
+                                        self.settings)
         queuer.run_ramp_immediately(self.path_to_ramp_file, self.settings)
 
+    def handleRunWithLoadMot(self):
+        self.handleRunCurrent(add_load_mot=True)
 
+    def handleChangeLoadMotFile(self):
+        # save old opened file
+        fname = QFileDialog.getOpenFileName
+        path_to_new_file = str(fname(self, "Open File",
+                                     self.path_to_load_mot_file,
+                                     "Ramp files (*.json)"))
 
-
+        if path_to_new_file is not '':
+            self.path_to_load_mot_file = path_to_new_file
 
 
 class Overlay(QtGui.QWidget):

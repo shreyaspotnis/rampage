@@ -50,6 +50,8 @@
      <string>Queuer</string>
     </property>
     <addaction name="actionRun_Current"/>
+    <addaction name="actionRun_with_Load_MOT"/>
+    <addaction name="actionChange_Load_MOT_File"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -105,6 +107,19 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionRun_with_Load_MOT">
+   <property name="text">
+    <string>Run with Load MOT</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+R</string>
+   </property>
+  </action>
+  <action name="actionChange_Load_MOT_File">
+   <property name="text">
+    <string>Change Load MOT File</string>
    </property>
   </action>
  </widget>
@@ -222,6 +237,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionRun_with_Load_MOT</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>handleRunWithLoadMot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionChange_Load_MOT_File</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>handleChangeLoadMotFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>handleSave()</slot>
@@ -230,5 +277,7 @@
   <slot>handleToggleOverlay()</slot>
   <slot>handleCheckForErrors()</slot>
   <slot>handleRunCurrent()</slot>
+  <slot>handleRunWithLoadMot()</slot>
+  <slot>handleChangeLoadMotFile()</slot>
  </slots>
 </ui>

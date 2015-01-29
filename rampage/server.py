@@ -229,6 +229,7 @@ class DaqThread(threading.Thread):
 
     def clear_tasks(self):
         if self.digital_task is not None:
+            self.dev1_task.ClearTask()
             self.dev2_task.ClearTask()
             self.dev3_task.ClearTask()
             self.digital_task.ClearTask()
@@ -238,10 +239,12 @@ class DaqThread(threading.Thread):
     def upload_and_start_tasks(self):
         daq.reset_analog_sample_clock()
         out = self.ramp_out
-        dev2_task, dev3_task, digital_task = daq.create_all_tasks(*out)
+        dev1_task, dev2_task, dev3_task, digital_task = daq.create_all_tasks(*out)
+        dev1_task.StartTask()
         dev2_task.StartTask()
         dev3_task.StartTask()
         digital_task.StartTask()
+        self.dev1_task = dev1_task
         self.dev2_task = dev2_task
         self.dev3_task = dev3_task
         self.digital_task = digital_task
@@ -308,9 +311,17 @@ def digital_channel_ids():
 
 
 def get_analog_ids(dev_name="Dev2"):
+    if dev_name == "Dev1":
+        n_channels = 4
+    else:
+        n_channels = 8
     line_fmt = dev_name + "/ao{0:1d}"
-    line_ids = [line_fmt.format(n) for n in range(8)]
+    line_ids = [line_fmt.format(n) for n in range(n_channels)]
     return line_ids
+
+
+def dev1_analog_ids():
+    return get_analog_ids("Dev1")
 
 
 def dev2_analog_ids():
@@ -379,22 +390,11 @@ def make_analog_ramps(ramp_data, dev_name="Dev2"):
         time_array, voltages = an_ch.get_analog_ramp_data(ramp_regions,
                                                           jump_resolution,
                                                           ramp_resolution)
-        # time_array2, voltages2 = an_ch.generate_ramp(jump_resolution)
-        # plt.plot(time_array2, voltages2)
-        # plt.plot(time_array, voltages, 'o')
-        # plt.show()
         voltage_array.append(voltages)
     voltage_array = np.array(voltage_array)
 
 
     trigger_line = make_trigger_line(time_array, jump_resolution)
-
-
-    # if dev_name=="Dev3":
-    #     sub_array = voltage_array[1,:]
-    #     time_array = time_array
-    #     for t, s in zip(time_array, sub_array):
-    #         print(t, s)
 
     return trigger_line, voltage_array
 
@@ -476,10 +476,12 @@ def check_ramp_for_errors(ramp_data):
 
 def make_ramps(data):
     digital_data = make_digital_ramps(data)
+    dev1_trigger_line, dev1_voltages = make_analog_ramps(data, dev_name="Dev1")
     dev2_trigger_line, dev2_voltages = make_analog_ramps(data, dev_name="Dev2")
     dev3_trigger_line, dev3_voltages = make_analog_ramps(data, dev_name="Dev3")
     callback_list = make_callback_list(data)
-    return (digital_data, dev2_trigger_line, dev2_voltages, dev3_trigger_line,
+    return (digital_data, dev1_trigger_line, dev1_voltages,
+            dev2_trigger_line, dev2_voltages, dev3_trigger_line,
             dev3_voltages, callback_list)
 
 

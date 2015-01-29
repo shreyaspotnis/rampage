@@ -210,7 +210,6 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
                      expt_settings.callback_resolution)
         self.n_wait = n_wait
         self.n_callbacks = 0
-        print('n wait', n_wait)
         # pad the digital data. For callbacks to work, the total number of
         # samples to write should be a multiple of the number of samples to wait
         # before a callback. Hence we append the last value of the digital data
@@ -286,7 +285,6 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
 
     def DoneCallback(self, status):
         """Called whenever the task is done."""
-        print "Status, done", status
         self.is_task_done = True
         return 0  # The function should return an integer
 

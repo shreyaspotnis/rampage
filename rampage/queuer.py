@@ -6,6 +6,12 @@ import sys
 import json
 import os
 import numpy as np
+from sys import platform as _platform
+
+
+main_dir = os.path.dirname(os.path.abspath(__file__))
+path_to_icon = os.path.join(main_dir, 'queuer_icon.png')
+
 
 from rampage import server
 
@@ -376,6 +382,13 @@ def main():
     main_dir = os.path.dirname(os.path.abspath(__file__))
     path_to_settings = os.path.join(main_dir, 'settings.ini')
     settings = QtCore.QSettings(path_to_settings, QtCore.QSettings.IniFormat)
+
+    if _platform == "win32":
+        import ctypes
+        myappid = 'steinberglabs.rampage.queuer.0.1'  # arbitrary string
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+    print('path', path_to_icon)
+    app.setWindowIcon(QtGui.QIcon(path_to_icon))
 
     w = RampQueuer(settings, None)
     w.show()

@@ -48,7 +48,6 @@ class KeyFrameList(object):
                                     '"" which is not a known KeyFrame')
                     raise KeyError(error_string)
         self.is_baked = False
-        self.unbake()
         # find absolute times for all the keys
         self.bake()
 

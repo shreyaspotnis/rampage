@@ -165,7 +165,11 @@ class DaqThread(threading.Thread):
 
             if self.task_pending and not self.ramp_generated:
                 print('Making ramps')
+                start_making_time = datetime.datetime.now()
                 self.ramp_out = make_ramps(self.current_data)
+                end_making_time = datetime.datetime.now()
+                dt = end_making_time - start_making_time
+                print('Took {0} to make ramps'.format(dt))
                 self.ramp_generated = True
                 self.task_pending = False
 
@@ -202,7 +206,6 @@ class DaqThread(threading.Thread):
 
                 self.upload_and_start_tasks()
 
-                self.task_start_time = datetime.datetime.now()
                 print('Task started at {0}'.format(self.task_start_time))
 
                 self.task_running = True

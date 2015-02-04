@@ -48,6 +48,7 @@ class KeyFrameList(object):
                                     '"" which is not a known KeyFrame')
                     raise KeyError(error_string)
         self.is_baked = False
+        self.unbake()
         # find absolute times for all the keys
         self.bake()
 
@@ -64,7 +65,8 @@ class KeyFrameList(object):
     def unbake(self):
         """Remove absolute times for all keys."""
         for key in self.dct:
-            self.dct[key].pop('__abs_time__', None)
+            if '__abs_time__' in self.dct[key]:
+                self.dct[key].pop('__abs_time__', None)
         self.is_baked = False
 
     def get_absolute_time(self, key):

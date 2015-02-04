@@ -7,13 +7,16 @@ import datetime
 
 class ExptSettings(object):
     external_clock_line = "/Dev1/PFI8"
-    max_expected_rate = 1000000  # Hz
+    max_expected_rate = 500000  # Hz
     dev2_clock_line = "/Dev1/PFI3"
     dev3_clock_line = "/Dev1/PFI4"
+    dev1_clock_line = "/Dev1/PFI5"
     dev2_clock_out = 31
     dev2_clock_out_name = "Dev1/port0/line31"
     dev3_clock_out = 27
     dev3_clock_out_name = "Dev1/port0/line27"
+    dev1_clock_out = 12
+    dev1_clock_out_name = "Dev1/port0/line12"
     callback_resolution = 10e-3  # (ms)
     ext_clock_frequency = 250e3  # (Hz)
 
@@ -210,7 +213,6 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
                      expt_settings.callback_resolution)
         self.n_wait = n_wait
         self.n_callbacks = 0
-        print('n wait', n_wait)
         # pad the digital data. For callbacks to work, the total number of
         # samples to write should be a multiple of the number of samples to wait
         # before a callback. Hence we append the last value of the digital data
@@ -286,7 +288,6 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
 
     def DoneCallback(self, status):
         """Called whenever the task is done."""
-        print "Status, done", status
         self.is_task_done = True
         return 0  # The function should return an integer
 
@@ -358,8 +359,15 @@ class FiniteAnalogOutputTask(pydaq.Task):
         # print('Analog n_written', n_written.value)
 
 
-def create_all_tasks(digital_data, dev2_trigger_line, dev2_voltages,
+def create_all_tasks(digital_data, dev1_trigger_line, dev1_voltages,
+                     dev2_trigger_line, dev2_voltages,
                      dev3_trigger_line, dev3_voltages, callback_list):
+
+    # create Dev1 Analog Task
+    _, n_dev1_samples = dev1_voltages.shape
+    dev1_task = FiniteAnalogOutputTask("Dev1/ao0:3", dev1_voltages.T.flatten(),
+                                       n_dev1_samples,
+                                       clock_line=expt_settings.dev1_clock_line)
 
     # create Dev2 Task
     _, n_dev2_samples = dev2_voltages.shape
@@ -372,6 +380,7 @@ def create_all_tasks(digital_data, dev2_trigger_line, dev2_voltages,
                                        n_dev3_samples,
                                        clock_line=expt_settings.dev3_clock_line)
 
+    digital_data += dev1_trigger_line*(2**expt_settings.dev1_clock_out)
     digital_data += dev2_trigger_line*(2**expt_settings.dev2_clock_out)
     digital_data += dev3_trigger_line*(2**expt_settings.dev3_clock_out)
 
@@ -379,7 +388,7 @@ def create_all_tasks(digital_data, dev2_trigger_line, dev2_voltages,
     digital_task = DigitalOutputTaskWithCallbacks("Dev1/port0/line8:31",
                                                   digital_data, callback_list)
 
-    return dev2_task, dev3_task, digital_task
+    return dev1_task, dev2_task, dev3_task, digital_task
 
 
 def p24_pulse_train(n_samples=100):

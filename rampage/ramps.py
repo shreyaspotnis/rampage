@@ -58,6 +58,7 @@ class KeyFrameList(object):
         Absolute time is stored in the KeyFrame dictionary as the variable
         __abs_time__.
         """
+        self.unbake()
         for key in self.dct:
             self.get_absolute_time(key)
         self.is_baked = True
@@ -65,8 +66,8 @@ class KeyFrameList(object):
     def unbake(self):
         """Remove absolute times for all keys."""
         for key in self.dct:
-            if '__abs_time__' in self.dct[key]:
-                self.dct[key].pop('__abs_time__', None)
+            # pop __abs_time__ if it exists
+            self.dct[key].pop('__abs_time__', None)
         self.is_baked = False
 
     def get_absolute_time(self, key):

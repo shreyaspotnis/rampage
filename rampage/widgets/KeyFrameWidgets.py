@@ -398,15 +398,19 @@ class QKeyFrameList(KeyFrameList):
         self.parent_widget.ramp_changed.emit()
 
     def handleTimeChanged(self, key_name, new_time):
-        skl = self.sorted_key_list()
-        prev_index = skl.index(key_name)
+        skl_old = self.sorted_key_list()
         self.set_time(key_name, new_time)
-        skl = self.sorted_key_list()
-        new_index = skl.index(key_name)
-        print('prev_index', prev_index, 'new_index', new_index)
-        if new_index != prev_index:
+        skl_new = self.sorted_key_list()
+        # check if the order of keyframes has changed
+        order_changed = False
+        for kold, knew in zip(skl_old, skl_new):
+            if kold != knew:
+                order_changed = True
+                break
+        if order_changed:
             for kf in self.kf_list:
                 self.disconnectKeyFrame(kf)
+            print('Re do ui')
             self.parent_widget.reDoUi(set_focus_on=key_name)
         else:
             self.parent_widget.ramp_changed.emit()

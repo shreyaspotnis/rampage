@@ -15,7 +15,7 @@ from rampage.zmq_server import RequestProcessor, ClientForServer
 
 # Set this to True if you want to enable DDS functionality
 # make sure that the DDS server is running
-ENABLE_DDS = False
+ENABLE_DDS = True
 
 if __name__ == '__main__':
     # import daq only if server is running
@@ -25,9 +25,9 @@ if __name__ == '__main__':
     from rampage.daq.gpib import agilent_33250a
 
     if ENABLE_DDS:
-        from ramppage.daq import dds_server
+        from rampage.daq import dds_server
         dds_client = ClientForServer(dds_server.DDSCombServer,
-                                     'tcp://localhost:5555')
+                                     'tcp://192.168.0.112:5555')
 
 main_package_dir = os.path.dirname(__file__)
 
@@ -41,7 +41,9 @@ class Hooks(object):
                      'agilent_set_output': {'state': True},
                      'dds_set_freq': {'freq': 80000000,
                                       'ch': 'A'},
-                     'dds_set_amp': {'amp': 1, 'ch': 'A'}
+                     'dds_set_amp': {'amp': 1, 'ch': 'A'},
+                     'dds_set_freq_and_amp': {'ch': 'A', 'amp': 50,
+                                              'freq': 80000000}
                     }
 
     def agilent_set_fm_ext(self, mesg_dict):
@@ -64,6 +66,14 @@ class Hooks(object):
             print('dds_comb: set_amp: ' +
                   str(mesg_dict))
             dds_client.set_amp(mesg_dict)
+
+    def dds_set_freq_and_amp(self, mesg_dict):
+        if ENABLE_DDS:
+            print('dds_comb: set_freq_amd_amp: ' +
+                  str(mesg_dict))
+            dds_client.set_freq(mesg_dict)
+            dds_client.set_amp(mesg_dict)
+
 
 
 global_hooks_object = Hooks()

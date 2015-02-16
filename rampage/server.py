@@ -40,8 +40,7 @@ class Hooks(object):
                      'agilent_set_burst': {'freq': 500e3,
                                            'amplitude': 3.0,
                                            'period': 1e-3,
-                                           'output_state': True}
-
+                                           'output_state': True},
                      'agilent_set_output': {'state': True},
                      'dds_set_freq': {'freq': 80000000,
                                       'ch': 'A'},

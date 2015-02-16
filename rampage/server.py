@@ -31,13 +31,17 @@ if __name__ == '__main__':
 
 main_package_dir = os.path.dirname(__file__)
 
-
 class Hooks(object):
 
     default_mesgs = {'agilent_set_fm_ext': {'freq': 40e6,
                                             'peak_freq_dev':40e6,
                                             'amplitude': 0.7,
                                             'output_state': True},
+                     'agilent_set_burst': {'freq': 500e3,
+                                           'amplitude': 3.0,
+                                           'period': 1e-3,
+                                           'output_state': True}
+
                      'agilent_set_output': {'state': True},
                      'dds_set_freq': {'freq': 80000000,
                                       'ch': 'A'},
@@ -54,6 +58,10 @@ class Hooks(object):
         agilent_33250a.set_output(**mesg_dict)
         print('agilent_33250a: setting output: ' +
               str(mesg_dict['state']))
+
+    def agilent_set_burst(self, mesg_dict):
+        agilent_33250a.set_burst(**mesg_dict)
+        print('agilent_33250a: setting burst mode: ')
 
     def dds_set_freq(self, mesg_dict):
         if ENABLE_DDS:

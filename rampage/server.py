@@ -41,26 +41,40 @@ class Hooks(object):
                                            'amplitude': 3.0,
                                            'period': 1e-3,
                                            'output_state': True},
+                     'agilent_set_freq_sweep': {'start_freq':1e6,
+                                                'stop_freq': 400e3,
+                                                'sweep_time': 10e-3,
+                                                'amplitude': 5.0,
+                                                'output_state': True},
                      'agilent_set_output': {'state': True},
                      'dds_set_freq': {'freq': 80000000,
                                       'ch': 'A'},
                      'dds_set_amp': {'amp': 1, 'ch': 'A'},
                      'dds_set_freq_and_amp': {'ch': 'A', 'amp': 50,
-                                              'freq': 80000000}
+                                              'freq': 80000000},
+
+                    # def set_freq_sweep(self, start_freq, stop_freq, sweep_time, amplitude, output_state=True):
                     }
 
     def agilent_set_fm_ext(self, mesg_dict):
-        agilent_33250a.set_fm_ext(**mesg_dict)
         print('agilent_33250a: set to FM External modulation.')
+        agilent_33250a.set_fm_ext(**mesg_dict)
+
 
     def agilent_set_output(self, mesg_dict):
-        agilent_33250a.set_output(**mesg_dict)
         print('agilent_33250a: setting output: ' +
               str(mesg_dict['state']))
+        agilent_33250a.set_output(**mesg_dict)
 
     def agilent_set_burst(self, mesg_dict):
-        agilent_33250a.set_burst(**mesg_dict)
         print('agilent_33250a: setting burst mode')
+        agilent_33250a.set_burst(**mesg_dict)
+
+
+    def agilent_set_freq_sweep(self, mesg_dict):
+        print('agilent_33250a: setting freq sweep mode')
+        agilent_33250a.set_freq_sweep(**mesg_dict)
+        
 
     def dds_set_freq(self, mesg_dict):
         if ENABLE_DDS:

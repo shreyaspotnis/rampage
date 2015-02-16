@@ -37,8 +37,10 @@ class Aglient33250A(object):
 		if peak_freq_dev is None:
 			peak_freq_dev = freq
 		commands = ['FUNC SIN',  # set to output sine functions
+					'FM:STAT ON',
 					'FM:SOUR EXT',
-					'FM:FREQ {0}'.format(freq),
+					'FREQ {0}'.format(freq),
+					# 'FM:FREQ {0}'.format(freq),
 					'FM:DEV {0}'.format(peak_freq_dev),
 					'VOLT {0}'.format(amplitude),
 					'FM:STAT ON']	 # set to frequency modulation
@@ -46,9 +48,10 @@ class Aglient33250A(object):
 			commands.append('OUTP ON')
 		else:
 			commands.append('OUTP OFF')
-
 		command_string = '\n'.join(commands)
+		print(command_string)
 		self.instr.write(command_string)
+		#self.read_all_errors()
 
 	def set_burst(self, freq, amplitude, period, output_state=True):
 		"""Sets the func generator to burst mode with external trigerring."""
@@ -70,6 +73,37 @@ class Aglient33250A(object):
 		command_string = '\n'.join(commands)
 		print('sending string:\n'+command_string)
 		self.instr.write(command_string)
+		
+		#self.read_all_errors()
+
+	def set_freq_sweep(self, start_freq, stop_freq, sweep_time, amplitude, output_state=True):
+		commands = ['FUNC SIN',
+					'TRIG:SOUR EXT',
+					'TRIG:SLOP POS',
+					'SWE:STAT ON',
+					'FREQ:STAR {0}'.format(start_freq),
+					'FREQ:STOP {0}'.format(stop_freq),
+					'SWE:TIME {0}'.format(sweep_time),
+					'VOLT {0}'.format(amplitude),
+					'SWE:STAT ON']
+		if output_state is True:
+			commands.append('OUTP ON')
+		else:
+			commands.append('OUTP OFF')
+
+		command_string = '\n'.join(commands)
+		print('sending string:\n'+command_string)
+		self.instr.write(command_string)
+		
+
+	def read_all_errors(self):
+		done = False
+		while not done:
+			err = self.instr.query('SYST:ERR?')
+			print(err)
+			if err[:2] == '+0':
+				done = True
+
 
 class GPIBError(Exception):
 	def __init__(self, value):

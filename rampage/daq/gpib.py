@@ -36,7 +36,7 @@ class Aglient33250A(object):
 
 		if peak_freq_dev is None:
 			peak_freq_dev = freq
-		commands = ['FUNC SHAP SIN',  # set to output sine functions
+		commands = ['FUNC SIN',  # set to output sine functions
 					'FM:SOUR EXT',
 					'FM:FREQ {0}'.format(freq),
 					'FM:DEV {0}'.format(peak_freq_dev),
@@ -53,12 +53,12 @@ class Aglient33250A(object):
 	def set_burst(self, freq, amplitude, period, output_state=True):
 		"""Sets the func generator to burst mode with external trigerring."""
 
-		ncyc - int(period*freq)
-		commands = ['FUNC SHAP SIN',
+		ncyc = int(period*freq)
+		commands = ['FUNC SIN',
 					'TRIG:SOUR EXT',
 					'TRIG:SLOP POS',
 					'BURS:MODE TRIG',  # external trigger
-					'FREQ: {0}'.format(freq),
+					'FREQ {0}'.format(freq),
 					'VOLT {0}'.format(amplitude),
 					'BURS:NCYC {0}'.format(ncyc),
 					'BURS:STAT ON']
@@ -68,6 +68,7 @@ class Aglient33250A(object):
 			commands.append('OUTP OFF')
 
 		command_string = '\n'.join(commands)
+		print('sending string:\n'+command_string)
 		self.instr.write(command_string)
 
 class GPIBError(Exception):

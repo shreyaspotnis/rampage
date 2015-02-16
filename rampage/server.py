@@ -60,7 +60,7 @@ class Hooks(object):
 
     def agilent_set_burst(self, mesg_dict):
         agilent_33250a.set_burst(**mesg_dict)
-        print('agilent_33250a: setting burst mode: ')
+        print('agilent_33250a: setting burst mode')
 
     def dds_set_freq(self, mesg_dict):
         if ENABLE_DDS:

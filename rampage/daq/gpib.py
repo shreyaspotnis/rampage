@@ -38,12 +38,11 @@ class Aglient33250A(object):
 			peak_freq_dev = freq
 		commands = ['FUNC SIN',  # set to output sine functions
 					'FM:STAT ON',
-					'FM:SOUR EXT',
 					'FREQ {0}'.format(freq),
+					'FM:SOUR EXT',
 					# 'FM:FREQ {0}'.format(freq),
 					'FM:DEV {0}'.format(peak_freq_dev),
-					'VOLT {0}'.format(amplitude),
-					'FM:STAT ON']	 # set to frequency modulation
+					'VOLT {0}'.format(amplitude)]	 # set to frequency modulation
 		if output_state is True:
 			commands.append('OUTP ON')
 		else:
@@ -51,20 +50,20 @@ class Aglient33250A(object):
 		command_string = '\n'.join(commands)
 		print(command_string)
 		self.instr.write(command_string)
-		#self.read_all_errors()
+		self.read_all_errors()
 
 	def set_burst(self, freq, amplitude, period, output_state=True):
 		"""Sets the func generator to burst mode with external trigerring."""
 
 		ncyc = int(period*freq)
 		commands = ['FUNC SIN',
+					'BURS:STAT ON',
+					'BURS:MODE TRIG',  # external trigger
 					'TRIG:SOUR EXT',
 					'TRIG:SLOP POS',
-					'BURS:MODE TRIG',  # external trigger
 					'FREQ {0}'.format(freq),
 					'VOLT {0}'.format(amplitude),
-					'BURS:NCYC {0}'.format(ncyc),
-					'BURS:STAT ON']
+					'BURS:NCYC {0}'.format(ncyc)]
 		if output_state is True:
 			commands.append('OUTP ON')
 		else:
@@ -74,7 +73,7 @@ class Aglient33250A(object):
 		print('sending string:\n'+command_string)
 		self.instr.write(command_string)
 		
-		#self.read_all_errors()
+		self.read_all_errors()
 
 	def set_freq_sweep(self, start_freq, stop_freq, sweep_time, amplitude, output_state=True):
 		commands = ['FUNC SIN',

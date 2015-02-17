@@ -52,6 +52,10 @@ class Hooks(object):
                      'dds_set_amp': {'amp': 1, 'ch': 'A'},
                      'dds_set_freq_and_amp': {'ch': 'A', 'amp': 50,
                                               'freq': 80000000},
+                     'dds_set_a_and_b': {'a_freq': 80000000,
+                                         'b_freq': 80000000,
+                                         'a_amp': 50,
+                                         'b_amp': 50}
 
                     # def set_freq_sweep(self, start_freq, stop_freq, sweep_time, amplitude, output_state=True):
                     }
@@ -94,6 +98,23 @@ class Hooks(object):
                   str(mesg_dict))
             dds_client.set_freq(mesg_dict)
             dds_client.set_amp(mesg_dict)
+
+    def dds_set_a_and_b(self, mesg_dict):
+        if ENABLE_DDS:
+            print('dds_comb: Setting amplitude and voltage of channel A and B')
+            mesg1 = {'ch': 'A',
+                     'amp': mesg_dict['a_amp'],
+                     'freq': mesg_dict['a_freq']}
+            mesg2 = {'ch': 'B',
+                     'amp': mesg_dict['b_amp'],
+                     'freq': mesg_dict['b_freq']}
+            dds_client.set_freq(mesg1)
+            dds_client.set_amp(mesg1)
+
+            dds_client.set_freq(mesg2)
+            dds_client.set_amp(mesg2)
+
+
 
 
 

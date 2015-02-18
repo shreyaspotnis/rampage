@@ -65,7 +65,7 @@ class Hooks(object):
                                                    'low_freq': 80000000,
                                                    'high_freq': 80500000,
                                                    'sweep_time(s)': 3.0e-3,
-                                                   'step_szie(Hz)': 10}
+                                                   'step_size(Hz)': 10}
                     # def set_freq_sweep(self, start_freq, stop_freq, sweep_time, amplitude, output_state=True):
                     }
 

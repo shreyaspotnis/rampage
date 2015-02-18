@@ -27,7 +27,7 @@ if __name__ == '__main__':
     if ENABLE_DDS:
         from rampage.daq import dds_server
         dds_client = ClientForServer(dds_server.DDSCombServer,
-                                     'tcp://192.168.0.112:5555')
+                                     'tcp://192.168.0.108:5555')
 
 main_package_dir = os.path.dirname(__file__)
 

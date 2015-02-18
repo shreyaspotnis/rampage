@@ -7,6 +7,7 @@ import inspect
 import zmq
 import json
 import socket
+from subprocess import Popen, PIPE
 
 from rampage.zmq_server import RequestProcessor
 from rampage.zmq_server import ClientForServer
@@ -16,8 +17,23 @@ class DDSCombServer(RequestProcessor):
     def __init__(self, bind_port):
         RequestProcessor.__init__(self, bind_port)
         # write code to connect to DDS comb here
+
+        # Finds the IP of the DDSComb from its MAC address
+        # NEED TO IMPORT: from subprocess import Popen, PIPE
+        DDS_MAC_ADDRESS = '00:90:c2:ee:a9:8f'
+        DDS_PORT = 37829
+
+        for a in range(255):
+            IP = '192.168.0.' + str(a)
+            pid = Popen(["arp", "-n", IP], stdout=PIPE)
+            s = pid.communicate()[0]
+
+            if DDS_MAC_ADDRESS in s:
+                DDS_IP = IP
+
+
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.connect(('192.168.0.115', 37829))
+        self.socket.connect((DDS_IP, DDS_PORT))
 
         
     def set_freq(self, mesg):

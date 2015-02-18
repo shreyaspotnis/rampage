@@ -55,8 +55,12 @@ class Hooks(object):
                      'dds_set_a_and_b': {'a_freq': 80000000,
                                          'b_freq': 80000000,
                                          'a_amp': 50,
-                                         'b_amp': 50}
-
+                                         'b_amp': 50},
+                     'dds_sweep_freq': {'low_freq': 80000000,
+                                        'high_freq': 80500000,
+                                        'step_size': 10,
+                                        'step_time': 1000,
+                                        'ch': 'A'}
                     # def set_freq_sweep(self, start_freq, stop_freq, sweep_time, amplitude, output_state=True):
                     }
 
@@ -114,9 +118,10 @@ class Hooks(object):
             dds_client.set_freq(mesg2)
             dds_client.set_amp(mesg2)
 
-
-
-
+    def dds_sweep_freq(self, mesg_dict):
+        if ENABLE_DDS:
+            print('Setting DDS Sweep Frequency')
+            dds_client.sweep_freq(mesg_dict)
 
 global_hooks_object = Hooks()
 global_hooks_object.function_dict = {}

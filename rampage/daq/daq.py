@@ -69,6 +69,7 @@ def reset_analog_sample_clock(state=False):
 
     Use this just before starting a run to avoid timing issues.
     """
+    set_digital_line_state(expt_settings.dev1_clock_out_name, state)
     set_digital_line_state(expt_settings.dev2_clock_out_name, state)
     set_digital_line_state(expt_settings.dev3_clock_out_name, state)
 

@@ -60,7 +60,12 @@ class Hooks(object):
                                         'high_freq': 80500000,
                                         'step_size': 10,
                                         'step_time': 1000,
-                                        'ch': 'A'}
+                                        'ch': 'A'},
+                     'dds_sweep_freq_for_humans': {'ch': 'A',
+                                                   'low_freq': 80000000,
+                                                   'high_freq': 80500000,
+                                                   'sweep_time(s)': 3.0e-3,
+                                                   'step_szie(Hz)': 10}
                     # def set_freq_sweep(self, start_freq, stop_freq, sweep_time, amplitude, output_state=True):
                     }
 
@@ -122,6 +127,23 @@ class Hooks(object):
         if ENABLE_DDS:
             print('Setting DDS Sweep Frequency')
             dds_client.sweep_freq(mesg_dict)
+
+    def dds_sweep_freq_for_humans(self, mesg_dict):
+        if ENABLE_DDS:
+            print('DDS Sweep for humans')
+            step_size = mesg_dict['step_size(Hz)']
+            sweep_time = mesg_dict['sweep_time(s)']
+            low_freq = mesg_dict['low_freq']
+            high_freq = mesg_dict['high_freq']
+            n_steps = (high_freq - low_freq)/step_size
+            step_time = int(sweep_time/n_steps*1e9)
+            out_mesg = {'low_freq': low_freq,
+                        'high_freq': high_freq,
+                        'ch': mesg_dict['ch'],
+                        'step_size': step_size,
+                        'step_time': step_time}
+            print(out_mesg)
+            dds_client.sweep_freq(out_mesg)
 
 global_hooks_object = Hooks()
 global_hooks_object.function_dict = {}

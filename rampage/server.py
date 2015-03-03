@@ -46,6 +46,10 @@ class Hooks(object):
                                                 'sweep_time': 10e-3,
                                                 'amplitude': 5.0,
                                                 'output_state': True},
+                     'agilent_set_continuous': {'freq': 700e3,
+                                                'amplitude': 0.2,
+                                                'offset': 0.0,
+                                                'output_state': True},
                      'agilent_set_output': {'state': True},
                      'dds_set_freq': {'freq': 80000000,
                                       'ch': 'A'},
@@ -88,6 +92,10 @@ class Hooks(object):
         print('agilent_33250a: setting freq sweep mode')
         agilent_33250a.set_freq_sweep(**mesg_dict)
         
+    def agilent_set_continuous(self, mesg_dict):
+        print('agilent_33250a: setting continuous mode')
+        agilent_33250a.set_continuous(**mesg_dict)
+
 
     def dds_set_freq(self, mesg_dict):
         if ENABLE_DDS:

@@ -75,6 +75,27 @@ class Aglient33250A(object):
 		
 		self.read_all_errors()
 
+	def set_continuous(self, freq, amplitude, offset, output_state=True):
+		"""Programs the function generator to output a continuous sine wave."""
+		commands = ['FUNC SIN',
+					'BURS:STAT OFF',
+					'SWE:STAT OFF',
+					'FM:STAT OFF',
+					'FREQ {0}'.format(freq),
+					'VOLT {0}'.format(amplitude),
+					'VOLT:OFFS {0}'.format(offset),
+					]
+		if output_state is True:
+			commands.append('OUTP ON')
+		else:
+			commands.append('OUTP OFF')
+
+		command_string = '\n'.join(commands)
+		print('sending string:\n'+command_string)
+		self.instr.write(command_string)
+		
+		self.read_all_errors()
+
 	def set_freq_sweep(self, start_freq, stop_freq, sweep_time, amplitude, output_state=True):
 		commands = ['FUNC SIN',
 					'TRIG:SOUR EXT',

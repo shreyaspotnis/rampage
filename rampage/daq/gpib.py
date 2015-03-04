@@ -1,5 +1,6 @@
 import visa
 import time
+import numpy as np
 
 resource_manager = visa.ResourceManager()
 
@@ -42,7 +43,8 @@ class Aglient33250A(object):
 					'FM:SOUR EXT',
 					# 'FM:FREQ {0}'.format(freq),
 					'FM:DEV {0}'.format(peak_freq_dev),
-					'VOLT {0}'.format(amplitude)]	 # set to frequency modulation
+					'VOLT {0}'.format(amplitude),
+					'VOLT:OFFS 0']	 # set to frequency modulation
 		if output_state is True:
 			commands.append('OUTP ON')
 		else:
@@ -63,6 +65,7 @@ class Aglient33250A(object):
 					'TRIG:SLOP POS',
 					'FREQ {0}'.format(freq),
 					'VOLT {0}'.format(amplitude),
+					'VOLT:OFFS 0',
 					'BURS:NCYC {0}'.format(ncyc)]
 		if output_state is True:
 			commands.append('OUTP ON')
@@ -105,6 +108,7 @@ class Aglient33250A(object):
 					'FREQ:STOP {0}'.format(stop_freq),
 					'SWE:TIME {0}'.format(sweep_time),
 					'VOLT {0}'.format(amplitude),
+					'VOLT:OFFS 0',
 					'SWE:STAT ON']
 		if output_state is True:
 			commands.append('OUTP ON')
@@ -123,6 +127,45 @@ class Aglient33250A(object):
 			print(err)
 			if err[:2] == '+0':
 				done = True
+
+
+class TektronixTDS1002(object):
+
+	def __init__(self):
+		self.instr = self.open_instrument()		
+
+	def open_instrument(self):
+		resource_list = resource_manager.list_resources()
+		gpib_address_list = filter(lambda x: x[:4]=='GPIB', resource_list)
+
+		for addr in gpib_address_list:
+			instr = resource_manager.open_resource(addr)
+			idn = instr.query('*IDN?')
+			if 'TEKTRONIX,TDS 1002' in idn:
+				return instr
+		else:
+			raise GPIBError('TektronicsTDS1002 oscilloscope not in GPIB device list')
+			# device not round raise exception
+
+	def get_data(self, channel=1):
+		hor_pos = float(self.instr.query('HOR:MAI:POS?'))
+		hor_scale = float(self.instr.query('HOR:MAI:SCA?'))
+		ch1_pos = float(self.instr.query('CH{0}:POS?'.format(channel)))
+		ch1_sca = float(self.instr.query('CH{0}:SCA?'.format(channel)))
+		commands = ['DATA:WIDTH 1',
+					'DATA:STAR 1',
+					'DATA:STOP 2500',
+					'DATA:SOU CH{0}'.format(channel),
+					'CURV?']
+		command_string = '\r\n'.join(commands)
+		self.instr.write(command_string)
+		# the first 6 bytes are #42500 and the last byte is \n
+		# ignore those
+		data = self.instr.read_raw()[6:-1]
+		data = np.fromstring(data, dtype=np.int8)
+		data_scaled = (np.array(data, dtype='float')*(10.0/2**8) - ch1_pos)*ch1_sca
+		time = np.arange(len(data_scaled), dtype='float')*10.0*hor_scale/len(data_scaled)
+		return time, data_scaled
 
 
 class GPIBError(Exception):

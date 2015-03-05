@@ -1,5 +1,6 @@
 import visa
 import numpy as np
+import logging
 
 resource_manager = visa.ResourceManager()
 
@@ -49,7 +50,8 @@ class Aglient33250A(object):
         else:
             commands.append('OUTP OFF')
         command_string = '\n'.join(commands)
-        print(command_string)
+        print_string = '\n\t' + command_string.replace('\n', '\n\t')
+        logging.debug(print_string)
         self.instr.write(command_string)
         # self.read_all_errors()
 
@@ -72,7 +74,8 @@ class Aglient33250A(object):
             commands.append('OUTP OFF')
 
         command_string = '\n'.join(commands)
-        print('sending string:\n'+command_string)
+        print_string = '\n\t' + command_string.replace('\n', '\n\t')
+        logging.debug(print_string)
         self.instr.write(command_string)
 
         # self.read_all_errors()
@@ -93,7 +96,8 @@ class Aglient33250A(object):
             commands.append('OUTP OFF')
 
         command_string = '\n'.join(commands)
-        print('sending string:\n'+command_string)
+        print_string = '\n\t' + command_string.replace('\n', '\n\t')
+        logging.debug(print_string)
         self.instr.write(command_string)
 
         # self.read_all_errors()
@@ -116,7 +120,8 @@ class Aglient33250A(object):
             commands.append('OUTP OFF')
 
         command_string = '\n'.join(commands)
-        print('sending string:\n'+command_string)
+        print_string = '\n\t' + command_string.replace('\n', '\n\t')
+        logging.debug(print_string)
         self.instr.write(command_string)
 
     def read_all_errors(self):

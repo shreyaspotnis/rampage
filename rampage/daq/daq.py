@@ -1,8 +1,7 @@
-import PyDAQmx.DAQmxTypes as daqtypes
 import PyDAQmx as pydaq
 import ctypes
 import numpy as np
-import datetime
+import logging
 
 
 class ExptSettings(object):
@@ -289,6 +288,7 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
 
     def DoneCallback(self, status):
         """Called whenever the task is done."""
+        logging.debug('Done Callback called')
         self.is_task_done = True
         return 0  # The function should return an integer
 

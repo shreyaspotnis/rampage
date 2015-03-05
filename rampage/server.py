@@ -1,6 +1,5 @@
 """This module handles running the ramps on the experiment."""
 import inspect
-import zmq
 import json
 import os
 import numpy as np
@@ -191,7 +190,6 @@ class DaqThread(threading.Thread):
         self.digital_task = None
 
         self.task_running = False
-        self.task_pending = False
         self.ramp_generated = False
         self.waiting_after_running = False
         self.current_data = None
@@ -208,31 +206,23 @@ class DaqThread(threading.Thread):
         # even if there's nothing in the queue.
         while not self.stoprequest.isSet():
             self.running.wait()
-            # print('task_running', self.task_running)
-            # print('task_pending', self.task_pending)
-            # print('ramp_generated', self.ramp_generated)
-
-            if not self.task_pending:
+            if not self.ramp_generated:
                 try:
                     self.current_data = self.data_q.get(True, 0.05)
                     self.prev_data_list.append(self.current_data)
+                    logging.info('New task received')
                 except Queue.Empty:
                     pass
                 else:
-                    logging.info('New task received')
                     # there is data in the queue, which means there is a task
                     # pending to be done
-                    self.task_pending = True
-
-            if self.task_pending and not self.ramp_generated:
-                logging.info('Making ramps')
-                start_making_time = datetime.datetime.now()
-                self.ramp_out = make_ramps(self.current_data)
-                end_making_time = datetime.datetime.now()
-                dt = end_making_time - start_making_time
-                logging.info('Took {0} to make ramps'.format(dt))
-                self.ramp_generated = True
-                self.task_pending = False
+                    logging.info('Making ramps')
+                    start_making_time = datetime.datetime.now()
+                    self.ramp_out = make_ramps(self.current_data)
+                    end_making_time = datetime.datetime.now()
+                    dt = end_making_time - start_making_time
+                    logging.info('Took {0} to make ramps'.format(dt))
+                    self.ramp_generated = True
 
             if self.task_running:
                 # check if task is done
@@ -254,7 +244,7 @@ class DaqThread(threading.Thread):
                     logging.info('Waited for {0} ms'.format(time_elapsed_after_task_end))
                     self.waiting_after_running = False
 
-            elif (self.ramp_generated):
+            elif self.ramp_generated:
                 properties = self.prev_data_list[0]['properties']
                 if 'wait_after_running' in properties:
                     self.wait_time_after_running = properties['wait_after_running']

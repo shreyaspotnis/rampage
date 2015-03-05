@@ -52,7 +52,7 @@ class Aglient33250A(object):
 		command_string = '\n'.join(commands)
 		print(command_string)
 		self.instr.write(command_string)
-		self.read_all_errors()
+		# self.read_all_errors()
 
 	def set_burst(self, freq, amplitude, period, output_state=True):
 		"""Sets the func generator to burst mode with external trigerring."""
@@ -76,7 +76,7 @@ class Aglient33250A(object):
 		print('sending string:\n'+command_string)
 		self.instr.write(command_string)
 		
-		self.read_all_errors()
+		# self.read_all_errors()
 
 	def set_continuous(self, freq, amplitude, offset, output_state=True):
 		"""Programs the function generator to output a continuous sine wave."""
@@ -97,7 +97,7 @@ class Aglient33250A(object):
 		print('sending string:\n'+command_string)
 		self.instr.write(command_string)
 		
-		self.read_all_errors()
+		# self.read_all_errors()
 
 	def set_freq_sweep(self, start_freq, stop_freq, sweep_time, amplitude, output_state=True):
 		commands = ['FUNC SIN',

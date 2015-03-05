@@ -11,13 +11,22 @@ import ConfigParser
 import stat
 import time
 import logging
+import logging.handlers
 
 from rampage import ramps
 from rampage.zmq_server import RequestProcessor, ClientForServer
 
 
-logging.basicConfig(format='[%(asctime)s][%(levelname)s] %(message)s',
-                    level=logging.DEBUG)
+format_string = '[%(asctime)s][%(levelname)s] %(message)s'
+logging.basicConfig(format=format_string,
+                    level=logging.INFO)
+
+handler = logging.handlers.RotatingFileHandler('E:\\rampage.server.logs\\server.log',
+                                               maxBytes=1024*1024,
+                                               backupCount=10)
+handler.setFormatter(logging.Formatter(format_string))
+logging.getLogger().addHandler(handler)
+# logging.getLogger().addHandler(logging.StreamHandler())
 
 # Set this to True if you want to enable DDS functionality
 # make sure that the DDS server is running
@@ -82,52 +91,52 @@ class Hooks(object):
 
     def test_sleep(self, mesg_dict):
         time_s = mesg_dict['sleep_time_ms']/1000.0
-        print('Sleeping for {0} seconds'.format(time_s))
+        logging.info('HOOK:Sleeping for {0} seconds'.format(time_s))
         time.sleep(time_s)
 
     def agilent_set_fm_ext(self, mesg_dict):
-        print('agilent_33250a: set to FM External modulation.')
+        logging.info('HOOK:agilent_33250a: set to FM External modulation.')
         agilent_33250a.set_fm_ext(**mesg_dict)
 
     def agilent_set_output(self, mesg_dict):
-        print('agilent_33250a: setting output: ' +
+        logging.info('HOOK:agilent_33250a: setting output: ' +
               str(mesg_dict['state']))
         agilent_33250a.set_output(**mesg_dict)
 
     def agilent_set_burst(self, mesg_dict):
-        print('agilent_33250a: setting burst mode')
+        logging.info('HOOK:agilent_33250a: setting burst mode')
         agilent_33250a.set_burst(**mesg_dict)
 
     def agilent_set_freq_sweep(self, mesg_dict):
-        print('agilent_33250a: setting freq sweep mode')
+        logging.info('HOOK:agilent_33250a: setting freq sweep mode')
         agilent_33250a.set_freq_sweep(**mesg_dict)
 
     def agilent_set_continuous(self, mesg_dict):
-        print('agilent_33250a: setting continuous mode')
+        logging.info('HOOK:agilent_33250a: setting continuous mode')
         agilent_33250a.set_continuous(**mesg_dict)
 
     def dds_set_freq(self, mesg_dict):
         if ENABLE_DDS:
-            print('dds_comb: set_freq: ' +
+            logging.info('HOOK:dds_comb: set_freq: ' +
                   str(mesg_dict))
             dds_client.set_freq(mesg_dict)
 
     def dds_set_amp(self, mesg_dict):
         if ENABLE_DDS:
-            print('dds_comb: set_amp: ' +
+            logging.info('HOOK:dds_comb: set_amp: ' +
                   str(mesg_dict))
             dds_client.set_amp(mesg_dict)
 
     def dds_set_freq_and_amp(self, mesg_dict):
         if ENABLE_DDS:
-            print('dds_comb: set_freq_amd_amp: ' +
+            logging.info('HOOK:dds_comb: set_freq_amd_amp: ' +
                   str(mesg_dict))
             dds_client.set_freq(mesg_dict)
             dds_client.set_amp(mesg_dict)
 
     def dds_set_a_and_b(self, mesg_dict):
         if ENABLE_DDS:
-            print('dds_comb: Setting amplitude and voltage of channel A and B')
+            logging.info('HOOK:dds_comb: Setting amplitude and voltage of channel A and B')
             mesg1 = {'ch': 'A',
                      'amp': mesg_dict['a_amp'],
                      'freq': mesg_dict['a_freq']}
@@ -142,12 +151,12 @@ class Hooks(object):
 
     def dds_sweep_freq(self, mesg_dict):
         if ENABLE_DDS:
-            print('Setting DDS Sweep Frequency')
+            logging.info('HOOK:Setting DDS Sweep Frequency')
             dds_client.sweep_freq(mesg_dict)
 
     def dds_sweep_freq_for_humans(self, mesg_dict):
         if ENABLE_DDS:
-            print('DDS Sweep for humans')
+            logging.info('HOOK:DDS Sweep for humans')
             step_size = mesg_dict['step_size(Hz)']
             sweep_time = mesg_dict['sweep_time(s)']
             low_freq = mesg_dict['low_freq']
@@ -242,7 +251,7 @@ class DaqThread(threading.Thread):
                 time_elapsed_after_task_end = delta_t.total_seconds()*1000
                 if time_elapsed_after_task_end > self.wait_time_after_running:
                     logging.info('Waiting time is : ' + str(self.wait_time_after_running))
-                    logging.info('Waited for {0} ms\n'.format(time_elapsed_after_task_end))
+                    logging.info('Waited for {0} ms'.format(time_elapsed_after_task_end))
                     self.waiting_after_running = False
 
             elif (self.ramp_generated):
@@ -281,7 +290,7 @@ class DaqThread(threading.Thread):
         os.chmod(fname, stat.S_IREAD)
 
     def clear_tasks(self):
-        logging.debug('Clearing tasks')
+        logging.info('Clearing tasks')
         if self.digital_task is not None:
             self.dev1_task.ClearTask()
             self.dev2_task.ClearTask()

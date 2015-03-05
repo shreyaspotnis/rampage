@@ -288,7 +288,7 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
 
     def DoneCallback(self, status):
         """Called whenever the task is done."""
-        logging.debug('Done Callback called')
+        logging.info('Done Callback called')
         self.is_task_done = True
         return 0  # The function should return an integer
 

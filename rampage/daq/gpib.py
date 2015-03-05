@@ -51,7 +51,7 @@ class Aglient33250A(object):
             commands.append('OUTP OFF')
         command_string = '\n'.join(commands)
         print_string = '\n\t' + command_string.replace('\n', '\n\t')
-        logging.debug(print_string)
+        logging.info(print_string)
         self.instr.write(command_string)
         # self.read_all_errors()
 
@@ -75,7 +75,7 @@ class Aglient33250A(object):
 
         command_string = '\n'.join(commands)
         print_string = '\n\t' + command_string.replace('\n', '\n\t')
-        logging.debug(print_string)
+        logging.info(print_string)
         self.instr.write(command_string)
 
         # self.read_all_errors()
@@ -97,7 +97,7 @@ class Aglient33250A(object):
 
         command_string = '\n'.join(commands)
         print_string = '\n\t' + command_string.replace('\n', '\n\t')
-        logging.debug(print_string)
+        logging.info(print_string)
         self.instr.write(command_string)
 
         # self.read_all_errors()
@@ -121,7 +121,7 @@ class Aglient33250A(object):
 
         command_string = '\n'.join(commands)
         print_string = '\n\t' + command_string.replace('\n', '\n\t')
-        logging.debug(print_string)
+        logging.info(print_string)
         self.instr.write(command_string)
 
     def read_all_errors(self):

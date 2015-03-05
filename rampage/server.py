@@ -9,6 +9,7 @@ import Queue
 import datetime
 import ConfigParser
 import stat
+import time
 
 from rampage import ramps
 from rampage.zmq_server import RequestProcessor, ClientForServer
@@ -69,9 +70,15 @@ class Hooks(object):
                                                    'low_freq': 80000000,
                                                    'high_freq': 80500000,
                                                    'sweep_time(s)': 3.0e-3,
-                                                   'step_size(Hz)': 10}
-                    # def set_freq_sweep(self, start_freq, stop_freq, sweep_time, amplitude, output_state=True):
+                                                   'step_size(Hz)': 10},
+                     'test_sleep': {'sleep_time_ms': 1.0}
                     }
+
+
+    def test_sleep(self, mesg_dict):
+        time_s = mesg_dict['sleep_time_ms']/1000.0
+        print('Sleeping for {0} seconds'.format(time_s))
+        time.sleep(time_s)
 
     def agilent_set_fm_ext(self, mesg_dict):
         print('agilent_33250a: set to FM External modulation.')

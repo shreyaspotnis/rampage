@@ -1,6 +1,5 @@
 """This module handles running the ramps on the experiment."""
 import inspect
-import zmq
 import json
 import os
 import numpy as np
@@ -10,9 +9,24 @@ import datetime
 import ConfigParser
 import stat
 import time
+import logging
+import logging.handlers
+import zmq
 
 from rampage import ramps
 from rampage.zmq_server import RequestProcessor, ClientForServer
+
+
+format_string = '[%(asctime)s][%(levelname)s] %(message)s'
+logging.basicConfig(format=format_string,
+                    level=logging.INFO)
+
+handler = logging.handlers.RotatingFileHandler('E:\\rampage.server.logs\\server.log',
+                                               maxBytes=1024*1024,
+                                               backupCount=10)
+handler.setFormatter(logging.Formatter(format_string))
+logging.getLogger().addHandler(handler)
+# logging.getLogger().addHandler(logging.StreamHandler())
 
 # Set this to True if you want to enable DDS functionality
 # make sure that the DDS server is running
@@ -25,6 +39,9 @@ if __name__ == '__main__':
     from rampage.daq import daq
     from rampage.daq.gpib import agilent_33250a
 
+    zmq_context = zmq.Context()
+    pub_socket = zmq_context.socket(zmq.PUB)
+    pub_socket.bind('tcp://*:8081')
     if ENABLE_DDS:
         from rampage.daq import dds_server
         dds_client = ClientForServer(dds_server.DDSCombServer,
@@ -32,17 +49,18 @@ if __name__ == '__main__':
 
 main_package_dir = os.path.dirname(__file__)
 
+
 class Hooks(object):
 
     default_mesgs = {'agilent_set_fm_ext': {'freq': 40e6,
-                                            'peak_freq_dev':40e6,
+                                            'peak_freq_dev': 40e6,
                                             'amplitude': 0.7,
                                             'output_state': True},
                      'agilent_set_burst': {'freq': 500e3,
                                            'amplitude': 3.0,
                                            'period': 1e-3,
                                            'output_state': True},
-                     'agilent_set_freq_sweep': {'start_freq':1e6,
+                     'agilent_set_freq_sweep': {'start_freq': 1e6,
                                                 'stop_freq': 400e3,
                                                 'sweep_time': 10e-3,
                                                 'amplitude': 5.0,
@@ -72,60 +90,56 @@ class Hooks(object):
                                                    'sweep_time(s)': 3.0e-3,
                                                    'step_size(Hz)': 10},
                      'test_sleep': {'sleep_time_ms': 1.0}
-                    }
-
+                     }
 
     def test_sleep(self, mesg_dict):
         time_s = mesg_dict['sleep_time_ms']/1000.0
-        print('Sleeping for {0} seconds'.format(time_s))
+        logging.info('HOOK:Sleeping for {0} seconds'.format(time_s))
         time.sleep(time_s)
 
     def agilent_set_fm_ext(self, mesg_dict):
-        print('agilent_33250a: set to FM External modulation.')
+        logging.info('HOOK:agilent_33250a: set to FM External modulation.')
         agilent_33250a.set_fm_ext(**mesg_dict)
 
-
     def agilent_set_output(self, mesg_dict):
-        print('agilent_33250a: setting output: ' +
+        logging.info('HOOK:agilent_33250a: setting output: ' +
               str(mesg_dict['state']))
         agilent_33250a.set_output(**mesg_dict)
 
     def agilent_set_burst(self, mesg_dict):
-        print('agilent_33250a: setting burst mode')
+        logging.info('HOOK:agilent_33250a: setting burst mode')
         agilent_33250a.set_burst(**mesg_dict)
 
-
     def agilent_set_freq_sweep(self, mesg_dict):
-        print('agilent_33250a: setting freq sweep mode')
+        logging.info('HOOK:agilent_33250a: setting freq sweep mode')
         agilent_33250a.set_freq_sweep(**mesg_dict)
-        
-    def agilent_set_continuous(self, mesg_dict):
-        print('agilent_33250a: setting continuous mode')
-        agilent_33250a.set_continuous(**mesg_dict)
 
+    def agilent_set_continuous(self, mesg_dict):
+        logging.info('HOOK:agilent_33250a: setting continuous mode')
+        agilent_33250a.set_continuous(**mesg_dict)
 
     def dds_set_freq(self, mesg_dict):
         if ENABLE_DDS:
-            print('dds_comb: set_freq: ' +
+            logging.info('HOOK:dds_comb: set_freq: ' +
                   str(mesg_dict))
             dds_client.set_freq(mesg_dict)
 
     def dds_set_amp(self, mesg_dict):
         if ENABLE_DDS:
-            print('dds_comb: set_amp: ' +
+            logging.info('HOOK:dds_comb: set_amp: ' +
                   str(mesg_dict))
             dds_client.set_amp(mesg_dict)
 
     def dds_set_freq_and_amp(self, mesg_dict):
         if ENABLE_DDS:
-            print('dds_comb: set_freq_amd_amp: ' +
+            logging.info('HOOK:dds_comb: set_freq_amd_amp: ' +
                   str(mesg_dict))
             dds_client.set_freq(mesg_dict)
             dds_client.set_amp(mesg_dict)
 
     def dds_set_a_and_b(self, mesg_dict):
         if ENABLE_DDS:
-            print('dds_comb: Setting amplitude and voltage of channel A and B')
+            logging.info('HOOK:dds_comb: Setting amplitude and voltage of channel A and B')
             mesg1 = {'ch': 'A',
                      'amp': mesg_dict['a_amp'],
                      'freq': mesg_dict['a_freq']}
@@ -140,12 +154,12 @@ class Hooks(object):
 
     def dds_sweep_freq(self, mesg_dict):
         if ENABLE_DDS:
-            print('Setting DDS Sweep Frequency')
+            logging.info('HOOK:Setting DDS Sweep Frequency')
             dds_client.sweep_freq(mesg_dict)
 
     def dds_sweep_freq_for_humans(self, mesg_dict):
         if ENABLE_DDS:
-            print('DDS Sweep for humans')
+            logging.info('HOOK:DDS Sweep for humans')
             step_size = mesg_dict['step_size(Hz)']
             sweep_time = mesg_dict['sweep_time(s)']
             low_freq = mesg_dict['low_freq']
@@ -180,7 +194,6 @@ class DaqThread(threading.Thread):
         self.digital_task = None
 
         self.task_running = False
-        self.task_pending = False
         self.ramp_generated = False
         self.waiting_after_running = False
         self.current_data = None
@@ -197,32 +210,23 @@ class DaqThread(threading.Thread):
         # even if there's nothing in the queue.
         while not self.stoprequest.isSet():
             self.running.wait()
-            # print('task_running', self.task_running)
-            # print('task_pending', self.task_pending)
-            # print('ramp_generated', self.ramp_generated)
-
-            if not self.task_pending:
+            if not self.ramp_generated:
                 try:
                     self.current_data = self.data_q.get(True, 0.05)
                     self.prev_data_list.append(self.current_data)
+                    logging.info('New task received')
                 except Queue.Empty:
                     pass
                 else:
-                    print('I Have a new task')
                     # there is data in the queue, which means there is a task
                     # pending to be done
-                    self.task_pending = True
-
-
-            if self.task_pending and not self.ramp_generated:
-                print('Making ramps')
-                start_making_time = datetime.datetime.now()
-                self.ramp_out = make_ramps(self.current_data)
-                end_making_time = datetime.datetime.now()
-                dt = end_making_time - start_making_time
-                print('Took {0} to make ramps'.format(dt))
-                self.ramp_generated = True
-                self.task_pending = False
+                    logging.info('Making ramps')
+                    start_making_time = datetime.datetime.now()
+                    self.ramp_out = make_ramps(self.current_data)
+                    end_making_time = datetime.datetime.now()
+                    dt = end_making_time - start_making_time
+                    logging.info('Took {0} to make ramps'.format(dt))
+                    self.ramp_generated = True
 
             if self.task_running:
                 # check if task is done
@@ -232,21 +236,19 @@ class DaqThread(threading.Thread):
                     self.waiting_after_running = True
                     self.log_ramps()
 
-                    print('Task ended at {0}'.format(self.task_end_time))
+                    logging.info('Task done')
                     dt = self.task_end_time - self.task_start_time
-                    print('Task running length {0}'.format(dt))
+                    logging.info('Task running length {0}'.format(dt))
 
             elif self.waiting_after_running:
                 delta_t = datetime.datetime.now() - self.task_end_time
                 time_elapsed_after_task_end = delta_t.total_seconds()*1000
                 if time_elapsed_after_task_end > self.wait_time_after_running:
-                    print('Waiting time is : ' + str(self.wait_time_after_running))
-                    print('Waited for {0} ms\n'.format(time_elapsed_after_task_end))
-
+                    logging.info('Waiting time is : ' + str(self.wait_time_after_running))
+                    logging.info('Waited for {0} ms'.format(time_elapsed_after_task_end))
                     self.waiting_after_running = False
 
-
-            elif (self.ramp_generated):
+            elif self.ramp_generated:
                 properties = self.prev_data_list[0]['properties']
                 if 'wait_after_running' in properties:
                     self.wait_time_after_running = properties['wait_after_running']
@@ -257,7 +259,7 @@ class DaqThread(threading.Thread):
 
                 self.upload_and_start_tasks()
 
-                print('Task started at {0}'.format(self.task_start_time))
+                logging.info('Task started at {0}'.format(self.task_start_time))
 
                 self.task_running = True
                 self.ramp_generated = False
@@ -267,7 +269,15 @@ class DaqThread(threading.Thread):
         if 'log_ramp_file' in log_data['properties']:
             if not log_data['properties']['log_ramp_file']:
                 return
-
+        dt = self.task_end_time - self.task_start_time
+        if(dt.total_seconds() < 15.0):
+            logging.error('Task ran for less than 15 seconds.')
+            # publish the error so that anyone waiting for an image can catch
+            # it and take action
+            pub_socket.send('server_error Task ran for less than 15 seconds')
+        else:
+            # pub_socket.send('server_error OK')
+            pass
         ls1 = 'Task started at: {0}'.format(self.task_start_time)
         ls2 = 'Task ended at: {0}'.format(self.task_end_time)
         log_string = '\n'.join([ls1, ls2])
@@ -282,6 +292,7 @@ class DaqThread(threading.Thread):
         os.chmod(fname, stat.S_IREAD)
 
     def clear_tasks(self):
+        logging.info('Clearing tasks')
         if self.digital_task is not None:
             self.dev1_task.ClearTask()
             self.dev2_task.ClearTask()

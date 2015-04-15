@@ -16,23 +16,23 @@ import zmq
 from rampage import ramps
 from rampage.zmq_server import RequestProcessor, ClientForServer
 
-
-format_string = '[%(asctime)s][%(levelname)s] %(message)s'
-logging.basicConfig(format=format_string,
-                    level=logging.INFO)
-
-handler = logging.handlers.RotatingFileHandler('E:\\rampage.server.logs\\server.log',
-                                               maxBytes=1024*1024,
-                                               backupCount=10)
-handler.setFormatter(logging.Formatter(format_string))
-logging.getLogger().addHandler(handler)
-# logging.getLogger().addHandler(logging.StreamHandler())
-
-# Set this to True if you want to enable DDS functionality
-# make sure that the DDS server is running
-ENABLE_DDS = True
-
 if __name__ == '__main__':
+
+    format_string = '[%(asctime)s][%(levelname)s] %(message)s'
+    logging.basicConfig(format=format_string,
+                        level=logging.INFO)
+
+    handler = logging.handlers.RotatingFileHandler('E:\\rampage.server.logs\\server.log',
+                                                   maxBytes=1024*1024,
+                                                   backupCount=10)
+    handler.setFormatter(logging.Formatter(format_string))
+    logging.getLogger().addHandler(handler)
+    # logging.getLogger().addHandler(logging.StreamHandler())
+
+    # Set this to True if you want to enable DDS functionality
+    # make sure that the DDS server is running
+    ENABLE_DDS = True
+
     # import daq only if server is running
     # not if some other module is importing functions from
     # this module

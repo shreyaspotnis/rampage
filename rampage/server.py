@@ -11,6 +11,7 @@ import stat
 import time
 import logging
 import logging.handlers
+import zmq
 
 from rampage import ramps
 from rampage.zmq_server import RequestProcessor, ClientForServer
@@ -38,6 +39,9 @@ if __name__ == '__main__':
     from rampage.daq import daq
     from rampage.daq.gpib import agilent_33250a
 
+    zmq_context = zmq.Context()
+    pub_socket = zmq_context.socket(zmq.PUB)
+    pub_socket.bind('tcp://*:8081')
     if ENABLE_DDS:
         from rampage.daq import dds_server
         dds_client = ClientForServer(dds_server.DDSCombServer,
@@ -265,7 +269,15 @@ class DaqThread(threading.Thread):
         if 'log_ramp_file' in log_data['properties']:
             if not log_data['properties']['log_ramp_file']:
                 return
-
+        dt = self.task_end_time - self.task_start_time
+        if(dt.total_seconds() < 15.0):
+            logging.error('Task ran for less than 15 seconds.')
+            # publish the error so that anyone waiting for an image can catch
+            # it and take action
+            pub_socket.send('server_error Task ran for less than 15 seconds')
+        else:
+            # pub_socket.send('server_error OK')
+            pass
         ls1 = 'Task started at: {0}'.format(self.task_start_time)
         ls2 = 'Task ended at: {0}'.format(self.task_end_time)
         log_string = '\n'.join([ls1, ls2])

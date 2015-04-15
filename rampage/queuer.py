@@ -45,6 +45,14 @@ def queue_ramp_pair(path_to_ramp_file1, path_to_ramp_file2, settings=None):
     client.queue_ramp(data2)
     client.start({})
 
+def queue_ramp_dicts(ramp_dict_list, server_ip_and_port):
+    """Simple utility function to queue up a list of dictionaries."""
+    client = server.ClientForServer(server.BECServer, server_ip_and_port)
+    for dct in ramp_dict_list:
+        client.queue_ramp(dct)
+    client.start({})
+
+
 
 def flatten_dict(dct, separator='-->', allowed_types=[int, float, bool]):
     """Returns a list of string identifiers for each element in dct.
@@ -128,11 +136,13 @@ class Ramp1DScan(QRamp1DScan, Ui_Ramp1DScan):
         start_val = QtGui.QDoubleSpinBox(self)
         start_val.setMinimum(-1e100)
         start_val.setMaximum(1e100)
+        start_val.setDecimals(7)
 
         step_label = QtGui.QLabel('Step:')
         step_val = QtGui.QDoubleSpinBox(self)
         step_val.setMinimum(-1e100)
         step_val.setMaximum(1e100)
+        step_val.setDecimals(7)
 
         for i, widget in enumerate((combo, start_label, start_val,
                                     step_label, step_val)):

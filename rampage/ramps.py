@@ -373,7 +373,7 @@ class Channel(object):
             voltage_sub = ramp_function(*parms_tuple)
             voltages[start_pos:end_pos] = voltage_sub
 
-        return time_array, self.convert_voltage(voltages)
+        return time_array, self.convert_voltage(voltages, time)
 
     def generate_ramp(self, time_div=4e-3):
         """Returns the generated ramp and a time array.
@@ -442,12 +442,12 @@ class Channel(object):
             voltage[start_index:end_index] = voltage_sub
 
         # finally use the conversion and return the voltage
-        return time, self.convert_voltage(voltage)
+        return time, self.convert_voltage(voltage, time)
 
-    def convert_voltage(self, voltage):
+    def convert_voltage(self, voltage, time):
         if self.dct['type'] == 'analog':
             conversion_str = self.dct['conversion']
-            return eval(conversion_str, {'x': voltage})
+            return eval(conversion_str, {'x': voltage, 't':time})
         else:
             return voltage
 

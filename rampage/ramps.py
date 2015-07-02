@@ -373,7 +373,7 @@ class Channel(object):
             voltage_sub = ramp_function(*parms_tuple)
             voltages[start_pos:end_pos] = voltage_sub
 
-        return time_array, self.convert_voltage(voltages, time)
+        return time_array, self.convert_voltage(voltages, time_array)
 
     def generate_ramp(self, time_div=4e-3):
         """Returns the generated ramp and a time array.

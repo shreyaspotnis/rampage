@@ -91,12 +91,12 @@ class Hooks(object):
                                                    'step_size(Hz)': 10},
                      'test_sleep': {'sleep_time_ms': 1.0},
                      'tek_scope_trace': {'file_path': 'E:\\traces.logs',
-                                        'ch': 1}
+                                        'channel': 1}
                      }
 
     def tek_scope_trace(self, mesg_dict):
         logging.info('HOOK:Tektronix_TDS1002: acquire trace: ch: ' +
-              str(mesg_dict['ch']))
+              str(mesg_dict['channel']))
         tektronixTDS1002.get_save_data(**mesg_dict)
 
     def test_sleep(self, mesg_dict):

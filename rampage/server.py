@@ -90,8 +90,8 @@ class Hooks(object):
                                                    'sweep_time(s)': 3.0e-3,
                                                    'step_size(Hz)': 10},
                      'test_sleep': {'sleep_time_ms': 1.0},
-                     'tek_scope_trace': {'ch': 1,
-                                        'file_path': 'H:\\BEC Data\\traces'}
+                     'tek_scope_trace': {'file_path': 'H:\\BEC Data\\traces',
+                                        'ch': 1}
                      }
 
     def tek_scope_trace(self, mesg_dict):

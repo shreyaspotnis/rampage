@@ -172,7 +172,7 @@ class TektronixTDS1002(object):
         time_array = np.arange(len(data_scaled), dtype='float')*10.0*hor_scale/len(data_scaled)
         return time_array, data_scaled
 
-    def get_save_data(self, channel=1, dir_path):
+    def get_save_data(self, dir_path, channel=1):
         hor_pos = float(self.instr.query('HOR:MAI:POS?'))
         hor_scale = float(self.instr.query('HOR:MAI:SCA?'))
         ch1_pos = float(self.instr.query('CH{0}:POS?'.format(channel)))

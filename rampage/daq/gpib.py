@@ -1,6 +1,7 @@
 import visa
 import numpy as np
 import logging
+from datetime import now
 
 resource_manager = visa.ResourceManager()
 
@@ -171,6 +172,26 @@ class TektronixTDS1002(object):
         time_array = np.arange(len(data_scaled), dtype='float')*10.0*hor_scale/len(data_scaled)
         return time_array, data_scaled
 
+    def get_save_data(self, channel=1, dir_path):
+        hor_pos = float(self.instr.query('HOR:MAI:POS?'))
+        hor_scale = float(self.instr.query('HOR:MAI:SCA?'))
+        ch1_pos = float(self.instr.query('CH{0}:POS?'.format(channel)))
+        ch1_sca = float(self.instr.query('CH{0}:SCA?'.format(channel)))
+        commands = ['DATA:WIDTH 1',
+                    'DATA:STAR 1',
+                    'DATA:STOP 2500',
+                    'DATA:SOU CH{0}'.format(channel),
+                    'CURV?']
+        command_string = '\r\n'.join(commands)
+        self.instr.write(command_string)
+        # the first 6 bytes are #42500 and the last byte is \n
+        # ignore those
+        data = self.instr.read_raw()[6:-1]
+        data = np.fromstring(data, dtype=np.int8)
+        data_scaled = (np.array(data, dtype='float')*(10.0/2**8) - ch1_pos)*ch1_sca
+        time_array = np.arange(len(data_scaled), dtype='float')*10.0*hor_scale/len(data_scaled)
+        np.savetxt(dir_path + '\\' + now().strftime('%Y_%m_%d_%H_%M_%S') + '.txt', (time_array, data_scaled), fmt='%1.4e')
+        #return time_array, data_scaled
 
 class GPIBError(Exception):
     def __init__(self, value):

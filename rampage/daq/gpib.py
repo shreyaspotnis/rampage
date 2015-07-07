@@ -1,7 +1,7 @@
 import visa
 import numpy as np
 import logging
-from datetime import now
+from datetime import datetime
 
 resource_manager = visa.ResourceManager()
 
@@ -190,7 +190,7 @@ class TektronixTDS1002(object):
         data = np.fromstring(data, dtype=np.int8)
         data_scaled = (np.array(data, dtype='float')*(10.0/2**8) - ch1_pos)*ch1_sca
         time_array = np.arange(len(data_scaled), dtype='float')*10.0*hor_scale/len(data_scaled)
-        np.savetxt(dir_path + '\\' + now().strftime('%Y_%m_%d_%H_%M_%S') + '.txt', (time_array, data_scaled), fmt='%1.4e')
+        np.savetxt(dir_path + '\\' + datetime.now().strftime('%Y_%m_%d_%H_%M_%S') + '.txt', (time_array, data_scaled), fmt='%1.4e')
         #return time_array, data_scaled
 
 class GPIBError(Exception):

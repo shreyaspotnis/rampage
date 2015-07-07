@@ -172,7 +172,7 @@ class TektronixTDS1002(object):
         time_array = np.arange(len(data_scaled), dtype='float')*10.0*hor_scale/len(data_scaled)
         return time_array, data_scaled
 
-    def get_save_data(self, dir_path, channel=1):
+    def get_save_data(self, file_path, channel=1):
         hor_pos = float(self.instr.query('HOR:MAI:POS?'))
         hor_scale = float(self.instr.query('HOR:MAI:SCA?'))
         ch1_pos = float(self.instr.query('CH{0}:POS?'.format(channel)))
@@ -190,7 +190,7 @@ class TektronixTDS1002(object):
         data = np.fromstring(data, dtype=np.int8)
         data_scaled = (np.array(data, dtype='float')*(10.0/2**8) - ch1_pos)*ch1_sca
         time_array = np.arange(len(data_scaled), dtype='float')*10.0*hor_scale/len(data_scaled)
-        np.savetxt(dir_path + '\\' + datetime.now().strftime('%Y_%m_%d_%H_%M_%S') + '.txt', (time_array, data_scaled), fmt='%1.4e')
+        np.savetxt(file_path + '\\' + datetime.now().strftime('%Y_%m_%d_%H_%M_%S') + '.txt', (time_array, data_scaled), fmt='%1.4e')
         #return time_array, data_scaled
 
 class GPIBError(Exception):

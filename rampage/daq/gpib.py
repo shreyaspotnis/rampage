@@ -181,3 +181,4 @@ class GPIBError(Exception):
 
 #globals
 agilent_33250a = Aglient33250A()
+tektronixTDS1002 = TektronixTDS1002()

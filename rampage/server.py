@@ -37,7 +37,7 @@ if __name__ == '__main__':
     # not if some other module is importing functions from
     # this module
     from rampage.daq import daq
-    from rampage.daq.gpib import agilent_33250a
+    from rampage.daq.gpib import agilent_33250a, tektronixTDS1002
 
     zmq_context = zmq.Context()
     pub_socket = zmq_context.socket(zmq.PUB)
@@ -90,7 +90,13 @@ class Hooks(object):
                                                    'sweep_time(s)': 3.0e-3,
                                                    'step_size(Hz)': 10},
                      'test_sleep': {'sleep_time_ms': 1.0}
+                     'tek_scope_trace': {'ch': 1}
                      }
+
+    def tek_scope_trace(self, mesg_dict):
+        logging.info('HOOK:Tektronix_TDS1002: acquire trace: ch: ' +
+              str(mesg_dict['ch']))
+        tektronixTDS1002.get_data(**mesg_dict)
 
     def test_sleep(self, mesg_dict):
         time_s = mesg_dict['sleep_time_ms']/1000.0

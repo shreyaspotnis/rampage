@@ -89,7 +89,7 @@ class Hooks(object):
                                                    'high_freq': 80500000,
                                                    'sweep_time(s)': 3.0e-3,
                                                    'step_size(Hz)': 10},
-                     'test_sleep': {'sleep_time_ms': 1.0}
+                     'test_sleep': {'sleep_time_ms': 1.0},
                      'tek_scope_trace': {'ch': 1,
                                         'file_path': 'H:\\BEC Data\\traces'}
                      }

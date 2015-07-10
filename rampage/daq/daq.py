@@ -2,7 +2,6 @@ import PyDAQmx as pydaq
 import ctypes
 import numpy as np
 import logging
-import threading
 
 
 class ExptSettings(object):
@@ -243,8 +242,6 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
 
             self.callback_function_list = callback_function_list
 
-        self.hook_threads = []
-
 
     def RegisterCallbacks(self):
         self.AutoRegisterEveryNSamplesEvent(pydaq.DAQmx_Val_Transferred_From_Buffer,
@@ -272,10 +269,7 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
             if self.n_callbacks >= self.callback_step:
                 # print('n_callbacks', self.n_callbacks)
                 for func, func_dict in self.callback_funcs:
-                    # create a new thread for the hook
-                    t = threading.Thread(target=func, args=(func_dict,))
-                    self.hook_threads.append(t)
-                    t.start()
+                    func(func_dict)
 
                 self.latest_callback_index +=1
                 if self.latest_callback_index >= len(self.callback_function_list):
@@ -296,9 +290,6 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
         """Called whenever the task is done."""
         logging.info('Done Callback called')
         self.is_task_done = True
-        # wait until all the hook threads are done
-        for t in self.hook_threads:
-            t.join()
         return 0  # The function should return an integer
 
 

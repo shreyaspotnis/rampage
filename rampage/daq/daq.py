@@ -270,6 +270,7 @@ class DigitalOutputTaskWithCallbacks(DigitalOutputTask):
                 # print('n_callbacks', self.n_callbacks)
                 for func, func_dict in self.callback_funcs:
                     func(func_dict)
+                    print('func:::', func)
 
                 self.latest_callback_index +=1
                 if self.latest_callback_index >= len(self.callback_function_list):

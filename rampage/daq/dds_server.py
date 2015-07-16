@@ -30,6 +30,9 @@ class DDSCombServer(RequestProcessor):
 
             if DDS_MAC_ADDRESS in s:
                 DDS_IP = IP
+        else:
+            new_ip = raw_input('MAC ID not found, enter IP manually: ')
+            DDS_IP = new_ip
 
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

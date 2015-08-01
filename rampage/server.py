@@ -22,7 +22,7 @@ if __name__ == '__main__':
     logging.basicConfig(format=format_string,
                         level=logging.INFO)
 
-    handler = logging.handlers.RotatingFileHandler('F:\\rampage.server.logs\\server.log',
+    handler = logging.handlers.RotatingFileHandler('E:\\rampage.server.logs\\server.log',
                                                    maxBytes=1024*1024,
                                                    backupCount=10)
     handler.setFormatter(logging.Formatter(format_string))

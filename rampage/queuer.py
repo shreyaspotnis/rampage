@@ -116,10 +116,15 @@ class Ramp1DScan(QRamp1DScan, Ui_Ramp1DScan):
         self.column_names_list = column_names_list
         self.addScanColumn()
         self.spinNumPoints.setValue(1)
+        self.spinNumRep.setValue(1)
 
     def handleNumPointsChanged(self, new_num_points):
         print(new_num_points)
         self.tableScanPoints.setRowCount(new_num_points)
+
+    def handleNumRepsChanged(self, new_num_reps):
+        print(new_num_reps)
+        self.NumReps = new_num_reps
 
     def handleAddClicked(self):
         self.addScanColumn()
@@ -209,10 +214,12 @@ class Ramp1DScan(QRamp1DScan, Ui_Ramp1DScan):
             vals = self.getTableArray()
             col_names = [str(self.scan_columns[i][0].currentText())
                          for i in range(num_cols)]
+            reps = self.NumReps
         else:
             col_names = []
             vals = np.array([])
-        return execReturn, col_names, vals
+            reps = 1
+        return execReturn, col_names, vals, reps
 
 
 main_package_dir = os.path.dirname(__file__)
@@ -302,25 +309,26 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
         self.ramps_to_queue.append(ramp_dict)
         self.listToQueue.addItem(ramp_dict['properties']['comment'])
 
-    def add1dScanRamps(self, col_names, vals):
+    def add1dScanRamps(self, col_names, vals, reps):
         n_rows, n_cols = vals.shape
-        for nr in range(n_rows):
-            val_data = vals[nr, :]
-            new_ramp_dict = self.getMainRampDict()
-            comment_string = []
-            for i, cn in enumerate(col_names):
-                set_dict_item(new_ramp_dict, cn, val_data[i])
-                comment_string.append(str(cn) + '=' + str(val_data[i]))
-            comment_string = ', '.join(comment_string)
-            new_ramp_dict['properties']['comment'] += 'Scan:' + comment_string
-            self.addRamp(new_ramp_dict)
+        for j in range(reps):
+            for nr in range(n_rows):
+                val_data = vals[nr, :]
+                new_ramp_dict = self.getMainRampDict()
+                comment_string = []
+                for i, cn in enumerate(col_names):
+                    set_dict_item(new_ramp_dict, cn, val_data[i])
+                    comment_string.append(str(cn) + '=' + str(val_data[i]))
+                comment_string = ', '.join(comment_string)
+                new_ramp_dict['properties']['comment'] += 'Scan:' + comment_string
+                self.addRamp(new_ramp_dict)
 
     def handle1DScanPressed(self):
         column_names_list = flatten_dict(self.getMainRampDict())
         ramp_1d_scan_generator = Ramp1DScan(column_names_list, self)
-        exec_return, col_names, vals = ramp_1d_scan_generator.exec_()
+        exec_return, col_names, vals, reps = ramp_1d_scan_generator.exec_()
         if exec_return:
-            self.add1dScanRamps(col_names, vals)
+            self.add1dScanRamps(col_names, vals, reps)
         print(exec_return)
 
     def closeEvent(self, event):

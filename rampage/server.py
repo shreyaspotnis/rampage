@@ -37,7 +37,7 @@ if __name__ == '__main__':
     # not if some other module is importing functions from
     # this module
     from rampage.daq import daq
-    from rampage.daq.gpib import agilent_33250a, tektronixTDS1002
+    from rampage.daq.gpib import agilent_33250a, tektronixTDS1002, newportesp300
 
     zmq_context = zmq.Context()
     pub_socket = zmq_context.socket(zmq.PUB)
@@ -91,8 +91,14 @@ class Hooks(object):
                                                    'step_size(Hz)': 10},
                      'test_sleep': {'sleep_time_ms': 1.0},
                      'tek_scope_trace': {'file_path': 'E:\\traces.logs',
-                                        'channel': 1}
+                                        'channel': 1},
+                     'ESDcontroller_readerrors': {}
                      }
+
+    def ESDcontroller_readerrors(self, mesg_dict):
+        logging.info('HOOK:Newport_ESP300: Move position axis: ' +
+              str(mesg_dict['axis']))
+        newportesp300.read_all_errors()
 
     def tek_scope_trace(self, mesg_dict):
         logging.info('HOOK:Tektronix_TDS1002: acquire trace: ch: ' +

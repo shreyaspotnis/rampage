@@ -212,21 +212,21 @@ class NewportESP300(object):
             # device not round raise exception
 
     def read_position(self, num_axes=2):
-    for i in range(num_axes-1):
-        pos = self.instr.query(str(i+1)+'TP?')
-        print('Pos' + str(i+1) + ' ' + pos[:8])
+        for i in range(num_axes-1):
+            pos = self.instr.query(str(i+1)+'TP?')
+            print('Pos' + str(i+1) + ' ' + pos[:8])
 
     def move_absposition(self, abs_pos, axis):
         self.instr.write(str(int(axis))+'PA'+str(abs_pos))
         print('Set Axis ' + str(axis) + ' to ' + abs_pos)
 
     def read_all_errors(self):
-    done = False
-    while not done:
-        err = self.instr.query('TB?')
-        print(err)
-        if 'NO ERROR DETECTED' in err:
-            done = True
+        done = False
+        while not done:
+            err = self.instr.query('TB?')
+            print(err)
+            if 'NO ERROR DETECTED' in err:
+                done = True
 
 class GPIBError(Exception):
     def __init__(self, value):

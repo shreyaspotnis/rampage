@@ -96,8 +96,7 @@ class Hooks(object):
                      }
 
     def ESDcontroller_readerrors(self, mesg_dict):
-        logging.info('HOOK:Newport_ESP300: Move position axis: ' +
-              str(mesg_dict['axis']))
+        logging.info('HOOK:Newport_ESP300: Read errors. ')
         newportesp300.read_all_errors()
 
     def tek_scope_trace(self, mesg_dict):

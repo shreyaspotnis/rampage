@@ -1,0 +1,1574 @@
+{
+    "channels": {
+        "LMOT Shutter": {
+            "comment": "analog channel",
+            "keys": {
+                "LMOT Shutter off": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "MOT back": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "state": true,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line21"
+        },
+        "Z-Bias-01": {
+            "comment": "analog channel",
+            "keys": {
+                "SG on": {
+                    "ramp_type": "linear",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "SG Ramp Off": {
+                    "ramp_data": {
+                        "value": -3.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "MOT back": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "SG off": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao5"
+        },
+        "RF trigger s/w": {
+            "comment": "Probably will not be used later on",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "QUAD capture/ RF1": {
+                    "state": true,
+                    "ramp_type": "jump",
+                    "ramp_data": {}
+                },
+                "ODT evap1 starts": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {}
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line19"
+        },
+        "AC Sync NOT": {
+            "comment": "Keep high to pipe clock through. When this goes low clock pauses until a rising edge of the AC line. Resumes afterwards",
+            "keys": {
+                "Shut gate valve": {
+                    "state": true,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line17"
+        },
+        "Dev1/ao3": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev1/ao3"
+        },
+        "Dev3/ao5 (faulty?)": {
+            "comment": "analog channel",
+            "keys": {
+                "MOT back": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao5"
+        },
+        "Dev1/port0/line14": {
+            "comment": "Not connected",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line14"
+        },
+        "P24 Scope Trigger": {
+            "comment": "analog channel",
+            "keys": {
+                "AC Sync off": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "End": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "MOT back": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line24"
+        },
+        "UMOT ATE": {
+            "comment": "analog channel",
+            "keys": {
+                "MOT compression": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.1
+                    }
+                },
+                "MOT back": {
+                    "ramp_data": {
+                        "value": 0.1
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao1"
+        },
+        "Barrier Shutter": {
+            "comment": "analog channel",
+            "keys": {
+                "Close Raman shutter": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "End": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Open Raman shutter": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line23"
+        },
+        "RF Analog": {
+            "comment": "Units: MHz. Controls the frequency of the RF knife. Conversion is calibrated for this particular channel using start frequency of 40MHz and deviation of 40MHz",
+            "keys": {
+                "MOT back": {
+                    "ramp_data": {
+                        "value": 40.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "QUAD capture/ RF1": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 29.0
+                    }
+                },
+                "ODT transfer 2": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 10.0
+                    }
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 40.0
+                    }
+                },
+                "RF3 starts": {
+                    "ramp_type": "linear",
+                    "ramp_data": {
+                        "value": 29.0
+                    }
+                },
+                "RF4/ODT transfer starts": {
+                    "ramp_type": "linear2",
+                    "ramp_data": {
+                        "value_final": 2.0,
+                        "value": 3.0
+                    }
+                }
+            },
+            "conversion": "5.1913-x*0.12931",
+            "type": "analog",
+            "id": "Dev3/ao0"
+        },
+        "Raman 2 attenuator": {
+            "comment": "analog channel",
+            "keys": {
+                "Science stops": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "RF On": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev1/ao1"
+        },
+        "Repump Seed Power": {
+            "comment": "analog channel",
+            "keys": {
+                "MOT back": {
+                    "ramp_data": {
+                        "value": 0.5
+                    },
+                    "ramp_type": "jump"
+                },
+                "QUAD capture/ RF1": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "MOT compression": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.5
+                    }
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.5
+                    }
+                },
+                "RF2 starts": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.5
+                    }
+                },
+                "OP starts": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.85
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao4"
+        },
+        "Dev3/ao7 (faulty?)": {
+            "comment": "analog channel",
+            "keys": {
+                "MOT back": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao7"
+        },
+        "Relay 1 Main coils": {
+            "comment": "If this is on and Main coils relay 2 is off, then coils are in anti-helmholtz",
+            "keys": {
+                "Shut gate valve": {
+                    "state": true,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line26"
+        },
+        "BOP Relay": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line20"
+        },
+        "X-Bias": {
+            "comment": "analog channel",
+            "keys": {
+                "MOT back": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Agilent off": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "linear"
+                },
+                "Bias Ramp1": {
+                    "ramp_data": {
+                        "value": 3.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "Xbias on": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 4.0
+                    }
+                },
+                "RF On": {
+                    "ramp_data": {
+                        "value": 1.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "RefFrame ends": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao0"
+        },
+        "Dev1/port0/line12": {
+            "comment": "Not connected",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line12"
+        },
+        "Dev1/port0/line09": {
+            "comment": "",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {}
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line09"
+        },
+        "Dalsa Trigger": {
+            "comment": "Dalsa Trigger",
+            "keys": {
+                "Clean frame2 starts": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Clean frame": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "RefFrame starts": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Clean frame2 ends": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "AbsFrame starts": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "RefFrame ends": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "AbsFrame ends": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Clean frame stops": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line08"
+        },
+        "Raman 1 attenuator": {
+            "comment": "analog channel",
+            "keys": {
+                "Science stops": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "RF On": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev1/ao0"
+        },
+        "Camera Shutter": {
+            "comment": "Camera Shutter",
+            "keys": {
+                "Camera shutter opens": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Close shutters": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line10"
+        },
+        "Trapping Frequency": {
+            "comment": "analog channel",
+            "keys": {
+                "Molasses 2 starts": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.2
+                    }
+                },
+                "MOT back": {
+                    "ramp_data": {
+                        "value": 0.04
+                    },
+                    "ramp_type": "jump"
+                },
+                "MOT compression": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.1
+                    }
+                },
+                "QUAD capture/ RF1": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.04
+                    }
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.04
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao3"
+        },
+        "Relay 2 Main coils": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line28"
+        },
+        "10kHz Strobe": {
+            "comment": "Probably will be used for Dev3 triggering in the future",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line27"
+        },
+        "Barrier Laser Diode": {
+            "comment": "analog channel",
+            "keys": {
+                "MOT back": {
+                    "ramp_data": {
+                        "value": -3.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": -3.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao4"
+        },
+        "RF attenuator": {
+            "comment": "analog channel",
+            "keys": {
+                "ODT transfer 2": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "QUAD capture/ RF1": {
+                    "state": true,
+                    "ramp_type": "jump",
+                    "ramp_data": {}
+                },
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line16"
+        },
+        "Abs/OP Switch": {
+            "comment": "ON - light goes to Optical pumping, OFF - goes to aborption probe",
+            "keys": {
+                "Shut gate valve": {
+                    "state": true,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "QUAD capture/ RF1": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {}
+                },
+                "MOT back": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line18"
+        },
+        "Useful RF": {
+            "comment": "Probably will not be used",
+            "keys": {
+                "ODT transfer 2": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "QUAD capture/ RF1": {
+                    "state": true,
+                    "ramp_type": "jump",
+                    "ramp_data": {}
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line29"
+        },
+        "Abs Probe Shutter": {
+            "comment": "analog channel",
+            "keys": {
+                "Close shutters": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "Open abs shutter": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line22"
+        },
+        "Gate Valve (internal)": {
+            "comment": "Gate Valve (internal)",
+            "keys": {
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line13"
+        },
+        "FET Main Coils": {
+            "comment": "analog channel",
+            "keys": {
+                "Molasses 2 starts": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "QUAD capture/ RF1": {
+                    "state": true,
+                    "ramp_type": "jump",
+                    "ramp_data": {}
+                },
+                "MOT back": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Agilent off": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {}
+                },
+                "Shut gate valve": {
+                    "state": true,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line30"
+        },
+        "Trapping Seed Power": {
+            "comment": "analog channel",
+            "keys": {
+                "Molasses 2 starts": {
+                    "ramp_type": "linear",
+                    "ramp_data": {
+                        "value": 0.8
+                    }
+                },
+                "OP starts": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 1.0
+                    }
+                },
+                "MOT back": {
+                    "ramp_data": {
+                        "value": 1.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao2"
+        },
+        "Dev1/ao2": {
+            "comment": "analog channel",
+            "keys": {
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev1/ao2"
+        },
+        "LMOT Agilent": {
+            "comment": "analog channel",
+            "keys": {
+                "MOT back": {
+                    "ramp_data": {
+                        "value": 0.6
+                    },
+                    "ramp_type": "jump"
+                },
+                "QUAD capture/ RF1": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 5.2
+                    }
+                },
+                "ODT evap1 starts": {
+                    "ramp_data": {
+                        "tau": -1835.0,
+                        "value": 1.26
+                    },
+                    "ramp_type": "exp"
+                },
+                "ODT transfer 2": {
+                    "ramp_data": {
+                        "value": 3.546
+                    },
+                    "ramp_type": "linear"
+                },
+                "MOT compression": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 4.0
+                    }
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.6
+                    }
+                },
+                "ODT evap3 starts": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "ODT evap2 starts": {
+                    "ramp_data": {
+                        "value": 0.3
+                    },
+                    "ramp_type": "linear"
+                },
+                "Molasses 2 starts": {
+                    "ramp_data": {
+                        "value": 8.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "RF4/ODT transfer starts": {
+                    "ramp_data": {
+                        "value": 5.2
+                    },
+                    "ramp_type": "linear"
+                },
+                "Science stops": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao1"
+        },
+        "Raman switch": {
+            "comment": "Not connected",
+            "keys": {
+                "Science stops": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {}
+                },
+                "RF On": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line11"
+        },
+        "Abs/OP Power": {
+            "comment": "analog channel",
+            "keys": {
+                "Take abs image": {
+                    "ramp_data": {
+                        "value": 0.55
+                    },
+                    "ramp_type": "jump"
+                },
+                "FrameGrabber2 off": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "FrameGrabber off": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "MOT back": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "QUAD capture/ RF1": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "OP starts": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.8
+                    }
+                },
+                "Take ref image": {
+                    "ramp_data": {
+                        "value": 0.55
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao6"
+        },
+        "V-Bias": {
+            "comment": "analog channel",
+            "keys": {
+                "MOT back": {
+                    "ramp_data": {
+                        "value": 0.168
+                    },
+                    "ramp_type": "jump"
+                },
+                "Agilent off": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "ODT evap1 starts": {
+                    "ramp_type": "linear",
+                    "ramp_data": {
+                        "value": 0.12
+                    }
+                },
+                "Bias Ramp1": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "linear"
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.168
+                    }
+                },
+                "Bias Ramp2": {
+                    "ramp_data": {
+                        "value": 0.16
+                    },
+                    "ramp_type": "jump"
+                },
+                "RF3 starts": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.12
+                    }
+                },
+                "ODT evap2 starts": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "RF2 starts": {
+                    "ramp_type": "linear",
+                    "ramp_data": {
+                        "value": -1.0
+                    }
+                },
+                "OP starts": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": -1.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao2"
+        },
+        "RF Trigger h/w": {
+            "comment": "analog channel",
+            "keys": {
+                "End": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line25"
+        },
+        "ODT-Z": {
+            "comment": "analog channel",
+            "keys": {
+                "MOT back": {
+                    "ramp_data": {
+                        "value": 0.05
+                    },
+                    "ramp_type": "jump"
+                },
+                "ODT evap1 starts": {
+                    "ramp_data": {
+                        "tau": -1140.0,
+                        "value": -1.4
+                    },
+                    "ramp_type": "exp"
+                },
+                "Science stops": {
+                    "ramp_data": {
+                        "value": 0.05
+                    },
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.05
+                    }
+                },
+                "RF3 starts": {
+                    "ramp_type": "linear",
+                    "ramp_data": {
+                        "value": 0.05
+                    }
+                },
+                "ODT evap3 starts": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": -0.15
+                    }
+                },
+                "ODT evap2 starts": {
+                    "ramp_data": {
+                        "value": -0.15
+                    },
+                    "ramp_type": "linear"
+                },
+                "RF4/ODT transfer starts": {
+                    "ramp_data": {
+                        "value": -1.4
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao3"
+        },
+        "Abs/OP Frequency": {
+            "comment": "analog channel",
+            "keys": {
+                "Camera shutter opens": {
+                    "ramp_data": {
+                        "value": 0.2
+                    },
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.22
+                    }
+                },
+                "QUAD capture/ RF1": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "MOT back": {
+                    "ramp_data": {
+                        "value": 0.22
+                    },
+                    "ramp_type": "jump"
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao7"
+        },
+        "ODT-X": {
+            "comment": "analog channel",
+            "keys": {
+                "MOT back": {
+                    "ramp_data": {
+                        "value": 0.0
+                    },
+                    "ramp_type": "jump"
+                },
+                "ODT evap1 starts": {
+                    "ramp_type": "linear",
+                    "ramp_data": {
+                        "value": 0.2
+                    }
+                },
+                "Science stops": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "Shut gate valve": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "ODT transfer 2": {
+                    "ramp_type": "linear",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "ODT evap2 starts": {
+                    "ramp_type": "linear",
+                    "ramp_data": {
+                        "value": 0.2
+                    }
+                },
+                "ODT evap3 starts": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.15
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao6"
+        },
+        "Frame Grabber": {
+            "comment": "analog channel",
+            "keys": {
+                "Take abs image": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "FrameGrabber2 off": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Take ref image": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                },
+                "Shut gate valve": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "FrameGrabber off": {
+                    "state": false,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line15"
+        }
+    },
+    "properties": {
+        "comment": "Run ramp for BEC. Optimized the ramp for low MOT loading. Using fancy exponential ramps for the ODT evaporations. Helps, but only slightly.\n\nLoad a BEC in the XODT. Switches off Aglient at the end",
+        "ramp_resolution": 0.1,
+        "jump_resolution": 0.004,
+        "wait_after_running": 5000,
+        "log_ramp_file": true
+    },
+    "keyframes": {
+        "Close shutters": {
+            "comment": "comment",
+            "__abs_time__": 18401.199999999993,
+            "parent": "Take ref image",
+            "time": 10.0
+        },
+        "QUAD capture/ RF1": {
+            "comment": "comment",
+            "__abs_time__": 513.1,
+            "time": 1.1,
+            "parent": "OP starts",
+            "hooks": {
+                "agilent_set_output": {
+                    "state": true
+                }
+            }
+        },
+        "Science stops": {
+            "comment": "comment",
+            "__abs_time__": 18341.999999999996,
+            "parent": "RF On",
+            "time": 1.5
+        },
+        "SG Ramp Off": {
+            "comment": "comment",
+            "__abs_time__": 18345.499999999996,
+            "parent": "SG on",
+            "time": 1.5
+        },
+        "AC Sync": {
+            "comment": "comment",
+            "__abs_time__": 18338.199999999997,
+            "parent": "Bias Ramp2",
+            "time": 50.0
+        },
+        "Camera shutter opens": {
+            "comment": "comment",
+            "__abs_time__": 18336.799999999996,
+            "parent": "Take abs image",
+            "time": -25.2
+        },
+        "ODT evap2 starts": {
+            "comment": "comment",
+            "__abs_time__": 17368.1,
+            "time": 4355.0,
+            "parent": "ODT evap1 starts",
+            "hooks": {}
+        },
+        "RefFrame starts": {
+            "comment": "comment",
+            "__abs_time__": 18390.199999999993,
+            "parent": "Take ref image",
+            "time": -1.0
+        },
+        "AC Sync off": {
+            "comment": "comment",
+            "__abs_time__": 18338.299999999996,
+            "parent": "AC Sync",
+            "time": 0.1
+        },
+        "End": {
+            "comment": "comment",
+            "__abs_time__": 18721.199999999993,
+            "parent": "MOT back",
+            "time": 300.0
+        },
+        "AbsFrame ends": {
+            "comment": "comment",
+            "__abs_time__": 18370.099999999995,
+            "parent": "AbsFrame starts",
+            "time": 9.1
+        },
+        "FrameGrabber off": {
+            "comment": "comment",
+            "__abs_time__": 18362.099999999995,
+            "parent": "Take abs image",
+            "time": 0.1
+        },
+        "Open abs shutter": {
+            "comment": "comment",
+            "__abs_time__": 18357.999999999996,
+            "parent": "Take abs image",
+            "time": -4.0
+        },
+        "ODT evap3 starts": {
+            "comment": "comment",
+            "__abs_time__": 18268.1,
+            "time": 900.0,
+            "parent": "ODT evap2 starts",
+            "hooks": {}
+        },
+        "ODT transfer 2": {
+            "comment": "comment",
+            "__abs_time__": 12013.1,
+            "time": 1000.0,
+            "parent": "RF4/ODT transfer starts",
+            "hooks": {
+                "agilent_set_output": {
+                    "state": false
+                }
+            }
+        },
+        "Bias Ramp1": {
+            "comment": "comment",
+            "__abs_time__": 18278.199999999997,
+            "parent": "Agilent off",
+            "time": 10.0
+        },
+        "Xbias on": {
+            "comment": "comment",
+            "__abs_time__": 18344.999999999996,
+            "parent": "Science stops",
+            "time": 3.0
+        },
+        "Bias Ramp2": {
+            "comment": "Sets the X and V Bias fields",
+            "__abs_time__": 18288.199999999997,
+            "parent": "Bias Ramp1",
+            "time": 10.0
+        },
+        "AbsFrame starts": {
+            "comment": "comment",
+            "__abs_time__": 18360.999999999996,
+            "parent": "Take abs image",
+            "time": -1.0
+        },
+        "RF On": {
+            "comment": "comment",
+            "__abs_time__": 18340.499999999996,
+            "parent": "AC Sync off",
+            "time": 2.2
+        },
+        "SG off": {
+            "comment": "comment",
+            "__abs_time__": 18355.499999999996,
+            "parent": "SG Ramp Off",
+            "time": 10.0
+        },
+        "Clean frame stops": {
+            "comment": "comment",
+            "__abs_time__": 18360.899999999998,
+            "parent": "Clean frame",
+            "time": 8.0
+        },
+        "Clean frame2 ends": {
+            "comment": "comment",
+            "__abs_time__": 18390.099999999995,
+            "parent": "Clean frame2 starts",
+            "time": 10.0
+        },
+        "SG on": {
+            "comment": "Turn on the magnetic field gradiant in the z direction",
+            "__abs_time__": 18343.999999999996,
+            "parent": "Science stops",
+            "time": 2.0
+        },
+        "FrameGrabber2 off": {
+            "comment": "comment",
+            "__abs_time__": 18391.299999999992,
+            "parent": "Take ref image",
+            "time": 0.1
+        },
+        "Close Raman shutter": {
+            "comment": "comment",
+            "__abs_time__": 18340.699999999997,
+            "parent": "Science stops",
+            "time": -1.3
+        },
+        "Agilent off": {
+            "comment": "comment",
+            "__abs_time__": 18268.199999999997,
+            "parent": "ODT evap3 starts",
+            "time": 0.1
+        },
+        "LMOT Shutter off": {
+            "comment": "comment",
+            "__abs_time__": 511.6,
+            "parent": "QUAD capture/ RF1",
+            "time": -1.5
+        },
+        "MOT compression": {
+            "comment": "comment",
+            "__abs_time__": 500.0,
+            "time": 500.0,
+            "parent": "Shut gate valve",
+            "hooks": {}
+        },
+        "OP starts": {
+            "comment": "comment",
+            "__abs_time__": 512.0,
+            "parent": "Molasses 2 starts",
+            "time": 6.0
+        },
+        "RefFrame ends": {
+            "comment": "comment",
+            "__abs_time__": 18399.299999999992,
+            "parent": "RefFrame starts",
+            "time": 9.1
+        },
+        "Molasses 2 starts": {
+            "comment": "comment",
+            "__abs_time__": 506.0,
+            "parent": "MOT compression",
+            "time": 6.0
+        },
+        "RF Instr": {
+            "comment": "comment",
+            "__abs_time__": 17268.1,
+            "hooks": {},
+            "parent": "ODT evap3 starts",
+            "time": -1000.0
+        },
+        "Take ref image": {
+            "comment": "comment",
+            "__abs_time__": 18391.199999999993,
+            "parent": "AbsFrame ends",
+            "time": 21.1
+        },
+        "Take abs image": {
+            "comment": "comment",
+            "__abs_time__": 18361.999999999996,
+            "parent": "Science stops",
+            "time": 20.0
+        },
+        "MOT back": {
+            "comment": "comment",
+            "__abs_time__": 18421.199999999993,
+            "hooks": {
+                "agilent_set_fm_ext": {
+                    "freq": 40000000.0,
+                    "peak_freq_dev": 40000000.0,
+                    "output_state": false,
+                    "amplitude": 0.7
+                }
+            },
+            "parent": "Close shutters",
+            "time": 20.0
+        },
+        "ODT evap1 starts": {
+            "comment": "comment",
+            "__abs_time__": 13013.1,
+            "time": 1000.0,
+            "parent": "ODT transfer 2",
+            "hooks": {}
+        },
+        "Clean frame": {
+            "comment": "comment",
+            "__abs_time__": 18352.899999999998,
+            "parent": "Take abs image",
+            "time": -9.1
+        },
+        "Open Raman shutter": {
+            "comment": "comment",
+            "__abs_time__": 18338.399999999998,
+            "parent": "RF On",
+            "time": -2.1
+        },
+        "Shut gate valve": {
+            "comment": "start the ramp",
+            "__abs_time__": 0.0,
+            "time": 0.0,
+            "parent": null,
+            "hooks": {
+                "dds_set_a_and_b": {
+                    "b_freq": 80000000,
+                    "a_amp": 50,
+                    "a_freq": 80000000,
+                    "b_amp": 50
+                }
+            }
+        },
+        "RF3 starts": {
+            "comment": "comment",
+            "__abs_time__": 1413.1,
+            "parent": "RF2 starts",
+            "time": 400.0
+        },
+        "RF2 starts": {
+            "comment": "comment",
+            "__abs_time__": 1013.1,
+            "parent": "QUAD capture/ RF1",
+            "time": 500.0
+        },
+        "RF4/ODT transfer starts": {
+            "comment": "comment",
+            "__abs_time__": 11013.1,
+            "parent": "RF3 starts",
+            "time": 9600.0
+        },
+        "Clean frame2 starts": {
+            "comment": "comment",
+            "__abs_time__": 18380.099999999995,
+            "parent": "Take ref image",
+            "time": -11.1
+        }
+    }
+}

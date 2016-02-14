@@ -1,2 +1,2 @@
-recursive-include ipbec *.py *.ui *.tif
+recursive-include rampage *.py *.ui *.tif
 global-exclude *.pyc

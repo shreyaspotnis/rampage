@@ -1,41 +1,63 @@
 # rampage
 
-A PyQt4 application to generate arbitrary waveforms.
+rampage is an arbitrary waveform builder and a control system for ultra-cold
+atom and ion trap experiments.  It is written in python and is primarily GUI
+based, with modules available to edit and run ramps over the command line.
+It follows a client-server architecture: the server is
+a command line program running on the control PC and the client communicates
+with the server via TCP/IP using zeromq. This allows the experiment to be
+controlled from anywhere within the local network.
 
-A ramp is stored as a .json file and consists of
-    - keyframes
-    - channels
-    - hooks
+rampage consists of four parts:
+- Implementation of a JSON based ramp description format
+- A PyQt4 based GUI to edit the ramp description
+- A server that converts a ramp description into analog and digital waveforms,
+uploads these on National Instruments DAQ cards, and controls the experiment.
+- A ramp queuer for batch running.
 
-## keyframes
-Keyframes are positions in time defined with respect to other frames. Every keyframe has the following properties:
+## Requirements
+rampage is written in PyQt4 and uses pyqtgraph for plotting. Hence, it is
+completely cross-platform. It has been tested on Windows, Mac and Linux using
+python 2.7. The following python packages are required:
 
-- **name**(_string_) - uniquely identifies a keyframe. Two keyframes cannot have the same name
-- **comment**(_string_) - brief description of the keyframe.
-- **parent**(_string_ or _null_) - name of the parent keyframe. The time position of the keyframe is with respect to the time of the parent. If parent is null then time is taken to be the absolute time.
-- **time**(_float_) - The position in time of the keyframe with respect to its parent. Time can be negative, which means that the keyframe is placed before its parent on the time axis.
+- [PyQt4](https://www.riverbankcomputing.com/software/pyqt/download)
+- [pyqtpgraph](http://www.pyqtgraph.org/)
+- [numpy](http://www.numpy.org/)
+- [zeromq](http://zeromq.org/)
 
+Except for PyQt4, all packages can be installed using pip:
 
-## channels
+```bash
+pip install pyqtgraph
+pip install numpy
+pip install pyzmq
+```
 
-parms tuple
-
-parms(0) ramp_data
-parms(1) t_initial
-parms(2) t_final
-parms(3) value_final
-prams(4) time_array
-
-ramp types
-- linear - Ramps from the current value to the next value linearly
-- quadratic - Ramps from the current value to the next value, but with an
-              added option of the initial slope
-
-v = vi + a*(t-t0) + b*(t-t0)^2
-v = vi + a*(t-t0) + b*(t-t0)^2
-vf = vi + sl*(tf-t0) + b*(tf-t0)^2
-b = ((vf-vi) - sl*(tf-t0))/(tf-t0)^2
+pip does not install PyQt4 correctly. Get the wheel package from [here](http://www.lfd.uci.edu/~gohlke/pythonlibs/) and install it.
 
 
-## Notes
-Keyframes cannot have --> in them
+## Installation
+
+```bash
+pip install rampage
+```
+
+If you wish to modify the code, download the package in a local directory
+and install it in develop mode.
+
+```bash
+cd path/to/installation
+git clone https://github.com/shreyaspotnis/rampage
+cd rampage
+python setup.py develop
+```
+
+## Running
+
+```bash
+python -m rampage
+
+```
+
+
+

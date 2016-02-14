@@ -1,0 +1,2 @@
+recursive-include ipbec *.py *.ui *.tif
+global-exclude *.pyc

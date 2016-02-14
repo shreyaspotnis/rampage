@@ -532,8 +532,15 @@ def main():
     app = QtGui.QApplication(sys.argv)
 
     main_dir = os.path.dirname(os.path.abspath(__file__))
-    path_to_settings = os.path.join(main_dir, 'settings.ini')
-    settings = QtCore.QSettings(path_to_settings, QtCore.QSettings.IniFormat)
+
+    if os.access(main_dir, os.W_OK):
+        # if yes, then put all settings in an ini file there
+        path_to_settings = os.path.join(main_dir, 'settings.ini')
+        settings = QtCore.QSettings(path_to_settings,
+                                    QtCore.QSettings.IniFormat)
+    else:
+        # else use Qt settings system
+        settings = QtCore.QSettings('rampage', 'Shreyas Potnis')
 
     if _platform == "win32":
         import ctypes

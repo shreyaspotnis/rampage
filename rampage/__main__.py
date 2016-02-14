@@ -13,8 +13,15 @@ path_to_icon = os.path.join(main_dir, 'icon.png')
 
 
 def main():
-    path_to_settings = os.path.join(main_dir, 'settings.ini')
-    settings = QtCore.QSettings(path_to_settings, QtCore.QSettings.IniFormat)
+    if os.access(main_dir, os.W_OK):
+        # if yes, then put all settings in an ini file there
+        path_to_settings = os.path.join(main_dir, 'settings.ini')
+        settings = QtCore.QSettings(path_to_settings,
+                                    QtCore.QSettings.IniFormat)
+    else:
+        # else use Qt settings system
+        settings = QtCore.QSettings('rampage', 'Shreyas Potnis')
+
     w = MainWindow(settings)
     w.show()
     return app.exec_()

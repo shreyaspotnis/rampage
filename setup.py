@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='rampage',
-      version='0.1',
+      version='0.1.1',
       description='An arbitrary waveform builder and a control system for ultra-cold atom and ion trap experiments',
       classifiers=['Development Status :: 3 - Alpha',
                    'Environment :: X11 Applications :: Qt',

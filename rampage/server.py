@@ -110,7 +110,7 @@ class Hooks(object):
         if ENABLE_MW:
             logging.info('HOOK:mw: set_freq: ' +
                   str(mesg_dict))
-            mw_client.mw_set_freq(mesg_dict)
+            mw_client.set_freq(mesg_dict)
 
     def ESDcontroller_readerrors(self, mesg_dict):
         logging.info('HOOK:Newport_ESP300: Read errors. ')

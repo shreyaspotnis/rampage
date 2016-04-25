@@ -85,7 +85,7 @@ class SynthHDSerial(RequestProcessor):
         self.serv = serial.Serial(com_port, 38400, timeout=0, parity = serial.PARITY_EVEN)
         RequestProcessor.__init__(self, bind_port)
 
-    def mw_set_freq(self, mesg):
+    def set_freq(self, mesg):
         freq, ch = mesg['freq'], mesg['ch']
         if (not (ch in ['0','1',0,1])):
             return {'success': 0}

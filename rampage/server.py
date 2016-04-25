@@ -54,7 +54,7 @@ if __name__ == '__main__':
     if ENABLE_MW:
         from rampage.daq import mw_server
         mw_client = ClientForServer(mw_server.SynthHDSerial,
-                                     'tcp://localhost:5556')
+                                     'tcp://192.168.0.110:5556')
 
 main_package_dir = os.path.dirname(__file__)
 

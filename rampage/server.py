@@ -41,8 +41,7 @@ if __name__ == '__main__':
     # not if some other module is importing functions from
     # this module
     from rampage.daq import daq
-    # from rampage.daq.gpib import agilent_33250a, tektronixTDS1002, newportesp300
-    from rampage.daq.gpib import agilent_33250a, newportesp300
+    from rampage.daq.gpib import agilent_33250a, tektronixTDS1002, newportesp300
 
     zmq_context = zmq.Context()
     pub_socket = zmq_context.socket(zmq.PUB)
@@ -301,9 +300,8 @@ class DaqThread(threading.Thread):
             if not log_data['properties']['log_ramp_file']:
                 return
         dt = self.task_end_time - self.task_start_time
-        if(dt.total_seconds() < 0.1):
+        if(dt.total_seconds() < 15.0):
             logging.error('Task ran for less than 15 seconds.')
-            # modified to be able to run molasses 
             # publish the error so that anyone waiting for an image can catch
             # it and take action
             pub_socket.send('server_error Task ran for less than 15 seconds')

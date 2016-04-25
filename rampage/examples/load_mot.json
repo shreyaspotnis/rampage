@@ -1,0 +1,641 @@
+{
+    "channels": {
+        "LMOT Shutter": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": true,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line21"
+        },
+        "Z-Bias-01": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao5"
+        },
+        "Z-Bias-02": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao4"
+        },
+        "RF trigger s/w": {
+            "comment": "Probably will not be used later on",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line19"
+        },
+        "AC Sync NOT": {
+            "comment": "Keep high to pipe clock through. When this goes low clock pauses until a rising edge of the AC line. Resumes afterwards",
+            "keys": {
+                "start": {
+                    "state": true,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line17"
+        },
+        "Dev3/ao5 (faulty?)": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao5"
+        },
+        "Useful RF": {
+            "comment": "Probably will not be used",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line29"
+        },
+        "P24 Scope Trigger": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line24"
+        },
+        "Raman switch": {
+            "comment": "Goes to RF switch of both raman beams",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line11"
+        },
+        "Barrier Shutter": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line23"
+        },
+        "RF Analog": {
+            "comment": "Units: MHz. Controls the frequency of the RF knife. Conversion is calibrated for this particular channel using start frequency of 40MHz and deviation of 40MHz",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 40.0
+                    }
+                }
+            },
+            "conversion": "5.1913-x*0.12931",
+            "type": "analog",
+            "id": "Dev3/ao0"
+        },
+        "Relay 2 Main coils": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line28"
+        },
+        "Trapping Seed Power": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 1.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao2"
+        },
+        "Repump Seed Power": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.5
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao4"
+        },
+        "Dev3/ao7 (faulty?)": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao7"
+        },
+        "Relay 1 Main coils": {
+            "comment": "If this is on and Main coils relay 2 is off, then coils are in anti-helmholtz",
+            "keys": {
+                "start": {
+                    "state": true,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line26"
+        },
+        "BOP Relay": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line20"
+        },
+        "X-Bias": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao0"
+        },
+        "Dev1/port0/line12": {
+            "comment": "Not connected",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line12"
+        },
+        "Dalsa Trigger": {
+            "comment": "Dalsa Trigger",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line08"
+        },
+        "Raman 1 attenuator": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev1/ao0"
+        },
+        "Camera Shutter": {
+            "comment": "Camera Shutter",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line10"
+        },
+        "Trapping Frequency": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.04
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao3"
+        },
+        "Raman 2 attenuator": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev1/ao1"
+        },
+        "10kHz Strobe": {
+            "comment": "Probably will be used for Dev3 triggering in the future",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line27"
+        },
+        "Labjack Trigger": {
+            "comment": "Connected to Labjack CIO0 to trigger Stream mode",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line09"
+        },
+        "RF attenuator": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line16"
+        },
+        "Abs/OP Switch": {
+            "comment": "ON - light goes to Optical pumping, OFF - goes to aborption probe",
+            "keys": {
+                "start": {
+                    "state": true,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line18"
+        },
+        "Abs Probe Shutter": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line22"
+        },
+        "DDS Sweep A": {
+            "comment": "Turns DDS freq sweeping on",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line14"
+        },
+        "Gate Valve (internal)": {
+            "comment": "Gate Valve (internal)",
+            "keys": {
+                "start": {
+                    "state": true,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line13"
+        },
+        "FET Main Coils": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                },
+                "FET On": {
+                    "state": true,
+                    "ramp_data": {},
+                    "ramp_type": "jump"
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line30"
+        },
+        "Dev1/ao3": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev1/ao3"
+        },
+        "Dev1/ao2": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev1/ao2"
+        },
+        "LMOT Agilent": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.6
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao1"
+        },
+        "UMOT ATE": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.1
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao1"
+        },
+        "Abs/OP Power": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao6"
+        },
+        "V-Bias": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.168
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao2"
+        },
+        "RF Trigger h/w": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line25"
+        },
+        "ODT-Z": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao3"
+        },
+        "Abs/OP Frequency": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.22
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev2/ao7"
+        },
+        "ODT-X": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "conversion": "x",
+            "type": "analog",
+            "id": "Dev3/ao6"
+        },
+        "Frame Grabber": {
+            "comment": "analog channel",
+            "keys": {
+                "start": {
+                    "state": false,
+                    "ramp_type": "jump",
+                    "ramp_data": {
+                        "value": 0.0
+                    }
+                }
+            },
+            "type": "digital",
+            "id": "Dev1/port0/line15"
+        }
+    },
+    "properties": {
+        "comment": "Loads default values for loading a MOT",
+        "ramp_resolution": 0.1,
+        "jump_resolution": 0.004,
+        "wait_after_running": 5000,
+        "log_ramp_file": false
+    },
+    "keyframes": {
+        "Load MOT": {
+            "comment": "comment",
+            "__abs_time__": 20.0,
+            "time": 10.0,
+            "parent": "FET On",
+            "hooks": {}
+        },
+        "start": {
+            "comment": "start the ramp",
+            "__abs_time__": 0.0,
+            "time": 0.0,
+            "parent": null,
+            "hooks": {}
+        },
+        "FET On": {
+            "comment": "comment",
+            "__abs_time__": 10.0,
+            "time": 10.0,
+            "parent": "start",
+            "hooks": {}
+        }
+    }
+}

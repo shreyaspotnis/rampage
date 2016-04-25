@@ -178,11 +178,17 @@ class Ramp1DScan(QRamp1DScan, Ui_Ramp1DScan):
         return np.array(vals)
 
     def setTableArray(self, arr):
-        num_cols = self.tableScanPoints.columnCount()
-        num_rows = self.tableScanPoints.rowCount()
+        num_cols = arr.shape[1]
+        self.tableScanPoints.setColumnCount(num_cols)
+        num_rows = arr.shape[0]
+        self.tableScanPoints.setRowCount(num_rows)
+        for i in range(num_cols-1):
+            self.addScanColumn()
+        print num_cols, num_rows
         for nr in range(num_rows):
             for nc in range(num_cols):
                 item = QtGui.QTableWidgetItem(str(arr[nr, nc]))
+                print item
                 self.tableScanPoints.setItem(nr, nc, item)
 
     def handleRandomizeClicked(self):
@@ -202,12 +208,132 @@ class Ramp1DScan(QRamp1DScan, Ui_Ramp1DScan):
         fname = str(QtGui.QFileDialog.getOpenFileName(self, "Open File"))
         if fname != '':
             vals = np.loadtxt(fname)
-            nrows, ncols = vals.shape
+            if len(vals.shape) == 1:
+                nrows, ncols = vals.shape[0], 1
+            else:
+                nrows, ncols = vals.shape
+            print nrows, ncols
             self.spinNumPoints.setValue(nrows)
-            self.setTableArray(vals)
+            self.setTableArray(vals.reshape([nrows, ncols]))
 
     def exec_(self):
         execReturn = super(Ramp1DScan, self).exec_()
+        if execReturn:
+            num_cols = self.num_scan_cols
+            num_rows = self.tableScanPoints.rowCount()
+            vals = self.getTableArray()
+            col_names = [str(self.scan_columns[i][0].currentText())
+                         for i in range(num_cols)]
+            reps = self.NumReps
+        else:
+            col_names = []
+            vals = np.array([])
+            reps = 1
+        return execReturn, col_names, vals, reps
+
+ui_filename = os.path.join(main_package_dir, "ui/Ramp2DScan.ui")
+Ui_Ramp2DScan, QRamp2DScan = uic.loadUiType(ui_filename)
+
+
+class Ramp2DScan(QRamp2DScan, Ui_Ramp2DScan):
+
+    def __init__(self, column_names_list, parent=None):
+        super(Ramp2DScan, self).__init__(parent)
+        self.setupUi(self)
+        self.num_scan_cols = 0
+        self.scan_columns = []
+        self.column_names_list = column_names_list
+        self.addScanColumn()
+        self.addScanColumn()
+        self.spinNumPoints1.setValue(1)
+        self.spinNumPoints2.setValue(1)
+        self.spinNumRep.setValue(1)
+
+    def handleNumRepsChanged(self, new_num_reps):
+        print(new_num_reps)
+        self.NumReps = new_num_reps
+
+    def addScanColumn(self):
+        start_index = 5
+        grid_row_number = start_index + self.num_scan_cols + 1
+        self.num_scan_cols += 1
+
+        combo = QtGui.QComboBox(self)
+        combo.addItems(self.column_names_list)
+
+        start_label = QtGui.QLabel('Start:')
+        start_val = QtGui.QDoubleSpinBox(self)
+        start_val.setMinimum(-1e100)
+        start_val.setMaximum(1e100)
+        start_val.setDecimals(7)
+
+        step_label = QtGui.QLabel('Step:')
+        step_val = QtGui.QDoubleSpinBox(self)
+        step_val.setMinimum(-1e100)
+        step_val.setMaximum(1e100)
+        step_val.setDecimals(7)
+
+        for i, widget in enumerate((combo, start_label, start_val,
+                                    step_label, step_val)):
+            self.gridLayout.addWidget(widget, grid_row_number, i)
+        self.scan_columns.append((combo, start_val, step_val))
+        self.tableScanPoints.setColumnCount(self.num_scan_cols)
+
+    def handleProgramValues(self):
+        self.tableScanPoints.setRowCount(self.spinNumPoints1.value()*self.spinNumPoints2.value())
+        scan_col = self.scan_columns[0]
+        col_name = str(scan_col[0].currentText())
+        start_val = float(scan_col[1].value())
+        step_val = float(scan_col[2].value())
+        vals1 = np.arange(self.spinNumPoints1.value())*step_val + start_val
+
+        scan_col = self.scan_columns[1]
+        col_name = str(scan_col[0].currentText())
+        start_val = float(scan_col[1].value())
+        step_val = float(scan_col[2].value())
+        vals2 = np.arange(self.spinNumPoints2.value())*step_val + start_val
+
+        tot_vals = np.array([[i, j] for i in vals1 for j in vals2])
+
+        for col in range(self.num_scan_cols):
+            for i, v in enumerate(tot_vals[:,col]):
+                item = QtGui.QTableWidgetItem(str(v))
+                self.tableScanPoints.setItem(i, col, item)
+
+    def getTableArray(self):
+        num_cols = self.tableScanPoints.columnCount()
+        num_rows = self.tableScanPoints.rowCount()
+        vals = [[float(self.tableScanPoints.item(nr, nc).text())
+                 for nc in range(num_cols)]
+                for nr in range(num_rows)]
+        return np.array(vals)
+
+    def setTableArray(self, arr):
+        num_cols = arr.shape[1]
+        self.tableScanPoints.setColumnCount(num_cols)
+        num_rows = arr.shape[0]
+        self.tableScanPoints.setRowCount(num_rows)
+        print num_cols, num_rows
+        for nr in range(num_rows):
+            for nc in range(num_cols):
+                item = QtGui.QTableWidgetItem(str(arr[nr, nc]))
+                print item
+                self.tableScanPoints.setItem(nr, nc, item)
+
+    def handleRandomizeClicked(self):
+        print('randomize')
+        vals = self.getTableArray()
+        np.random.shuffle(vals)
+        self.setTableArray(vals)
+
+    def handleSaveClicked(self):
+        vals = self.getTableArray()
+        fname = str(QtGui.QFileDialog.getSaveFileName(self, 'Save file', '.'))
+        if fname != '':
+            np.savetxt(fname, vals)
+
+    def exec_(self):
+        execReturn = super(Ramp2DScan, self).exec_()
         if execReturn:
             num_cols = self.num_scan_cols
             num_rows = self.tableScanPoints.rowCount()
@@ -327,6 +453,14 @@ class RampQueuer(QRampQueuer, Ui_RampQueuer):
         column_names_list = flatten_dict(self.getMainRampDict())
         ramp_1d_scan_generator = Ramp1DScan(column_names_list, self)
         exec_return, col_names, vals, reps = ramp_1d_scan_generator.exec_()
+        if exec_return:
+            self.add1dScanRamps(col_names, vals, reps)
+        print(exec_return)
+
+    def handle2DScanPressed(self):
+        column_names_list = flatten_dict(self.getMainRampDict())
+        ramp_2d_scan_generator = Ramp2DScan(column_names_list, self)
+        exec_return, col_names, vals, reps = ramp_2d_scan_generator.exec_()
         if exec_return:
             self.add1dScanRamps(col_names, vals, reps)
         print(exec_return)

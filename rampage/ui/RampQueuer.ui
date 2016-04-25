@@ -235,8 +235,8 @@
    <slot>handleChangePrependRamp()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>283</x>
-     <y>199</y>
+     <x>227</x>
+     <y>52</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -251,8 +251,8 @@
    <slot>handleAddCurrent()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>436</x>
-     <y>286</y>
+     <x>85</x>
+     <y>112</y>
     </hint>
     <hint type="destinationlabel">
      <x>571</x>
@@ -267,8 +267,8 @@
    <slot>handle1DScanPressed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>378</x>
-     <y>257</y>
+     <x>116</x>
+     <y>143</y>
     </hint>
     <hint type="destinationlabel">
      <x>572</x>
@@ -283,8 +283,8 @@
    <slot>handleQueueToServerPressed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>24</x>
-     <y>281</y>
+     <x>34</x>
+     <y>218</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -299,8 +299,8 @@
    <slot>handleUpdateServerQueuePressed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>210</x>
-     <y>285</y>
+     <x>220</x>
+     <y>276</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -315,8 +315,8 @@
    <slot>handleChangeMainRamp()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>219</x>
-     <y>224</y>
+     <x>228</x>
+     <y>82</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -331,8 +331,8 @@
    <slot>handlePauseAfterCurrent()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>166</x>
-     <y>313</y>
+     <x>339</x>
+     <y>247</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
@@ -347,8 +347,8 @@
    <slot>handleClearServerQueue()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>63</x>
-     <y>314</y>
+     <x>73</x>
+     <y>247</y>
     </hint>
     <hint type="destinationlabel">
      <x>264</x>
@@ -363,8 +363,8 @@
    <slot>handleAbortCurrentRun()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>354</x>
-     <y>311</y>
+     <x>339</x>
+     <y>276</y>
     </hint>
     <hint type="destinationlabel">
      <x>569</x>
@@ -379,8 +379,8 @@
    <slot>handlePushStart()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>63</x>
-     <y>334</y>
+     <x>298</x>
+     <y>218</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -404,6 +404,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>push2DScan</sender>
+   <signal>clicked()</signal>
+   <receiver>RampQueuer</receiver>
+   <slot>handle2DScanPressed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>175</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>188</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>handleChangePrependRamp()</slot>
@@ -417,5 +433,6 @@
   <slot>handleAbortCurrentRun()</slot>
   <slot>handlePushStart()</slot>
   <slot>handleClearLocalQueue()</slot>
+  <slot>handle2DScanPressed()</slot>
  </slots>
 </ui>

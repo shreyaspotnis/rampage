@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ramp2dScan</class>
+ <widget class="QDialog" name="ramp2dScan">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>711</width>
+    <height>479</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Ramp 2D Scan Generator</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="horizontalSpacing">
+      <number>7</number>
+     </property>
+     <item row="1" column="3">
+      <widget class="QPushButton" name="pushSave">
+       <property name="text">
+        <string>Save Values</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QPushButton" name="pushProgramValues">
+       <property name="text">
+        <string>Program Values</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Number of points 1:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinNumPoints1">
+         <property name="maximum">
+          <number>1000</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="0" colspan="4">
+      <widget class="QTableWidget" name="tableScanPoints"/>
+     </item>
+     <item row="2" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Number of points 2:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinNumPoints2"/>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="3">
+      <widget class="QPushButton" name="pushRandomize">
+       <property name="text">
+        <string>Randomize</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Number of reps</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinNumRep"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>ramp2dScan</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>236</x>
+     <y>469</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>ramp2dScan</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>304</x>
+     <y>469</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushRandomize</sender>
+   <signal>clicked()</signal>
+   <receiver>ramp2dScan</receiver>
+   <slot>handleRandomizeClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>690</x>
+     <y>410</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>392</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushProgramValues</sender>
+   <signal>clicked()</signal>
+   <receiver>ramp2dScan</receiver>
+   <slot>handleProgramValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>286</x>
+     <y>410</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>666</x>
+     <y>392</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushSave</sender>
+   <signal>clicked()</signal>
+   <receiver>ramp2dScan</receiver>
+   <slot>handleSaveClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>424</x>
+     <y>410</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>666</x>
+     <y>392</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinNumRep</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>ramp2dScan</receiver>
+   <slot>handleNumRepsChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>121</x>
+     <y>437</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>355</x>
+     <y>195</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>handleNumPointsChanged()</slot>
+  <slot>handleAddClicked()</slot>
+  <slot>handleProgramValues()</slot>
+  <slot>handleRandomizeClicked()</slot>
+  <slot>handleSaveClicked()</slot>
+  <slot>handleLoadClicked()</slot>
+  <slot>handleNumRepsChanged()</slot>
+ </slots>
+</ui>

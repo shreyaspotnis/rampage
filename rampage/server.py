@@ -33,6 +33,10 @@ if __name__ == '__main__':
     # make sure that the DDS server is running
     ENABLE_DDS = True
 
+    # Set this to True if you want to enable SynthHD (MW) functionality
+    # make sure that MW server is running
+    ENABLE_MW = True
+
     # import daq only if server is running
     # not if some other module is importing functions from
     # this module
@@ -47,6 +51,11 @@ if __name__ == '__main__':
         dds_client = ClientForServer(dds_server.DDSCombServer,
                                      'tcp://192.168.0.108:5555')
 
+    if ENABLE_MW:
+        from rampage.daq import mw_server
+        mw_client = ClientForServer(mw_server.SynthHDSerial,
+                                     'tcp://localhost:5556')
+
 main_package_dir = os.path.dirname(__file__)
 
 
@@ -56,6 +65,8 @@ class Hooks(object):
                                             'peak_freq_dev': 40e6,
                                             'amplitude': 0.7,
                                             'output_state': True},
+                    'mw_set_freq': {'freq': 6000.0,
+                                      'ch': '0'},
                      'agilent_set_burst': {'freq': 500e3,
                                            'amplitude': 3.0,
                                            'period': 1e-3,
@@ -94,6 +105,12 @@ class Hooks(object):
                                         'channel': 1},
                      'ESDcontroller_readerrors': {}
                      }
+
+    def mw_set_freq(self, mesg_dict):
+        if ENABLE_MW:
+            logging.info('HOOK:mw: set_freq: ' +
+                  str(mesg_dict))
+            mw_client.mw_set_freq(mesg_dict)
 
     def ESDcontroller_readerrors(self, mesg_dict):
         logging.info('HOOK:Newport_ESP300: Read errors. ')
@@ -193,6 +210,7 @@ members = inspect.getmembers(global_hooks_object,
 for func_name, func in members:
     global_hooks_object.function_dict[func_name] = func
 
+print global_hooks_object.function_dict['mw_set_freq']
 
 class DaqThread(threading.Thread):
     def __init__(self, data_q):

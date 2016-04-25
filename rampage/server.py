@@ -65,8 +65,6 @@ class Hooks(object):
                                             'peak_freq_dev': 40e6,
                                             'amplitude': 0.7,
                                             'output_state': True},
-                    'mw_set_freq': {'freq': 6000.0,
-                                      'ch': '0'},
                      'agilent_set_burst': {'freq': 500e3,
                                            'amplitude': 3.0,
                                            'period': 1e-3,
@@ -103,7 +101,11 @@ class Hooks(object):
                      'test_sleep': {'sleep_time_ms': 1.0},
                      'tek_scope_trace': {'file_path': 'E:\\traces.logs',
                                         'channel': 1},
-                     'ESDcontroller_readerrors': {}
+                     'ESDcontroller_readerrors': {},
+                     'mw_set_freq': {'freq': 6000.0,
+                                      'ch': '0'},
+                     'mw_set_amp': {'amp': 20000,
+                                      'ch': '0'},
                      }
 
     def mw_set_freq(self, mesg_dict):
@@ -111,6 +113,12 @@ class Hooks(object):
             logging.info('HOOK:mw: set_freq: ' +
                   str(mesg_dict))
             mw_client.set_freq(mesg_dict)
+
+    def mw_set_amp(self, mesg_dict):
+        if ENABLE_MW:
+            logging.info('HOOK:mw: set_amp: ' +
+                  str(mesg_dict))
+            mw_client.set_amp(mesg_dict)
 
     def ESDcontroller_readerrors(self, mesg_dict):
         logging.info('HOOK:Newport_ESP300: Read errors. ')
@@ -209,8 +217,6 @@ members = inspect.getmembers(global_hooks_object,
                              predicate=inspect.ismethod)
 for func_name, func in members:
     global_hooks_object.function_dict[func_name] = func
-
-print global_hooks_object.function_dict['mw_set_freq']
 
 class DaqThread(threading.Thread):
     def __init__(self, data_q):

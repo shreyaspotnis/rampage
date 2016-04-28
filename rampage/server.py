@@ -306,7 +306,9 @@ class DaqThread(threading.Thread):
             if not log_data['properties']['log_ramp_file']:
                 return
         dt = self.task_end_time - self.task_start_time
-        if(dt.total_seconds() < 15.0):
+        # modify it temporarily to be able to run short ramps
+        if(dt.total_seconds() < 0.1):
+        #if(dt.total_seconds() < 15.0):
             logging.error('Task ran for less than 15 seconds.')
             # publish the error so that anyone waiting for an image can catch
             # it and take action

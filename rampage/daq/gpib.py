@@ -217,8 +217,8 @@ class NewportESP300(object):
             print('Pos' + str(i+1) + ' ' + pos[:8])
 
     def move_absposition(self, abs_pos, axis):
-        self.instr.write(str(int(axis))+'PA'+str(abs_pos))
-        print('Set Axis ' + str(axis) + ' to ' + abs_pos)
+        self.instr.write(str(int(axis))+'PA'+str(np.around(abs_pos, decimals=3)))
+        print('Set Axis ' + str(axis) + ' to ' + str(np.around(abs_pos, decimals=3)))
 
     def read_all_errors(self):
         done = False

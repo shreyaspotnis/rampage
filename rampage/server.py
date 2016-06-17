@@ -102,6 +102,8 @@ class Hooks(object):
                      'tek_scope_trace': {'file_path': 'E:\\traces.logs',
                                         'channel': 1},
                      'ESDcontroller_readerrors': {},
+                     'ESDcontroller_move_position': {'abs_pos': 0.0,
+                                                    'axis': 2},
                      'mw_set_freq': {'freq': 6000.0,
                                       'ch': '0'},
                      'mw_set_amp': {'amp': 20000,
@@ -123,6 +125,11 @@ class Hooks(object):
     def ESDcontroller_readerrors(self, mesg_dict):
         logging.info('HOOK:Newport_ESP300: Read errors. ')
         newportesp300.read_all_errors()
+
+    def ESDcontroller_move_position(self, mesg_dict):
+        logging.info('HOOK:Newport_ESP300: Move axis ' +
+            str(mesg_dict['axis']) + ' to ' + str(mesg_dict['position']))
+        newportesp300.move_absposition(**mesg_dict)
 
     def tek_scope_trace(self, mesg_dict):
         logging.info('HOOK:Tektronix_TDS1002: acquire trace: ch: ' +

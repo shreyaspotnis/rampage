@@ -133,7 +133,6 @@ class Aglient33250A(object):
             if err[:2] == '+0':
                 done = True
 
-
 class TektronixTDS1002(object):
 
     def __init__(self):
@@ -193,6 +192,25 @@ class TektronixTDS1002(object):
         np.savetxt(file_path + '\\' + datetime.now().strftime('%Y_%m_%d_%H_%M_%S') + '.txt', (time_array, data_scaled), fmt='%1.4e')
         #return time_array, data_scaled
 
+class TektronixTDS2012C(TektronixTDS1002):
+
+    def __init__(self):
+        self.instr = self.open_instrument()
+        super(TektronixTDS2012C, self).__init__()
+
+    def open_instrument(self):
+        resource_list = resource_manager.list_resources()
+        gpib_address_list = filter(lambda x: x[:3] == 'USB', resource_list)
+
+        for addr in gpib_address_list:
+            instr = resource_manager.open_resource(addr)
+            idn = instr.query('*IDN?')
+            if 'TEKTRONIX,TDS 2012C' in idn:
+                return instr
+        else:
+            raise GPIBError('TektronixTDS2012C oscilloscope not in USB device list')
+            # device not round raise exception
+
 class NewportESP300(object):
 
     def __init__(self):
@@ -237,5 +255,6 @@ class GPIBError(Exception):
 
 #globals
 agilent_33250a = Aglient33250A()
-# tektronixTDS1002 = TektronixTDS1002()
+tektronixTDS1002 = TektronixTDS1002()
+tektronixTDS2012C = TektronixTDS2012C()
 newportesp300 = NewportESP300()

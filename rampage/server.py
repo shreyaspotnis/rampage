@@ -41,7 +41,7 @@ if __name__ == '__main__':
     # not if some other module is importing functions from
     # this module
     from rampage.daq import daq
-    from rampage.daq.gpib import agilent_33250a, newportesp300#, tektronixTDS1002,
+    from rampage.daq.gpib import agilent_33250a, newportesp300, tektronixTDS1002, tektronixTDS2012C
 
     zmq_context = zmq.Context()
     pub_socket = zmq_context.socket(zmq.PUB)
@@ -101,6 +101,8 @@ class Hooks(object):
                      'test_sleep': {'sleep_time_ms': 1.0},
                      'tek_scope_trace': {'file_path': 'E:\\traces.logs',
                                         'channel': 1},
+                    'tek_scope_usb_trace': {'file_path': 'E:\\traces.logs',
+                                        'channel': 1},
                      'ESDcontroller_readerrors': {},
                      'ESDcontroller_move_position': {'abs_pos': 0.0,
                                                     'axis': 3},
@@ -135,6 +137,11 @@ class Hooks(object):
         logging.info('HOOK:Tektronix_TDS1002: acquire trace: ch: ' +
               str(mesg_dict['channel']))
         tektronixTDS1002.get_save_data(**mesg_dict)
+
+    def tek_scope_usb_trace(self, mesg_dict):
+        logging.info('HOOK:Tektronix_TDS2012C: acquire trace: ch: ' +
+              str(mesg_dict['channel']))
+        tektronixTDS2012C.get_save_data(**mesg_dict)
 
     def test_sleep(self, mesg_dict):
         time_s = mesg_dict['sleep_time_ms']/1000.0

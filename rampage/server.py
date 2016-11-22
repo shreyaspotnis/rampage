@@ -588,6 +588,14 @@ def check_ramp_for_errors(ramp_data):
             error_str = error_fmt.format(n_found, ch_id)
             error_list.append(error_str)
 
+    # check for timing overlap in keyframelist
+    error_keyname = keyframe_list.do_keyframes_overlap()
+    if error_keyname is not None:
+        error_fmt = '{0} overlaps with the next keyframe'
+        error_str = error_fmt.format(error_keyname)
+        error_list.append(error_str)
+
+
     return error_list
 
 

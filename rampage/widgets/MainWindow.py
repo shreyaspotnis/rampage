@@ -155,6 +155,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.is_saved = True
 
     def handleRunCurrent(self):
+        error_list = self.ramp_editor.checkForErrors()
+        all_errors = '\n'.join(error_list)
+
+        if len(error_list) > 0:
+            reply = QtGui.QMessageBox.warning(self, 'Errors in ramp. Continue?',
+                                              all_errors,
+                                              (QtGui.QMessageBox.Yes |
+                                               QtGui.QMessageBox.No),
+                                              QtGui.QMessageBox.No)
+            if reply == QtGui.QMessageBox.No:
+                return
+
         if not self.is_saved:
             msg_str = ("Do you want to save changes? Unsaved changes won't be uploaded. File:"
                        + self.path_to_ramp_file+"?")
@@ -170,9 +182,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 return
             else:
                 self.handleSave()
+
         queuer.run_ramp_immediately(self.path_to_ramp_file, self.settings)
 
     def handleRunWithLoadMot(self):
+        error_list = self.ramp_editor.checkForErrors()
+        all_errors = '\n'.join(error_list)
+
+        if len(error_list) > 0:
+            reply = QtGui.QMessageBox.warning(self, 'Errors in ramp. Continue?',
+                                              all_errors,
+                                              (QtGui.QMessageBox.Yes |
+                                               QtGui.QMessageBox.No),
+                                              QtGui.QMessageBox.No)
+            if reply == QtGui.QMessageBox.No:
+                return
+
         if not self.is_saved:
             msg_str = ("Do you want to save changes? Unsaved changes won't be uploaded. File:"
                        + self.path_to_ramp_file+"?")

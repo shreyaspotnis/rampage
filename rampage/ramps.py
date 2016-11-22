@@ -196,7 +196,19 @@ class KeyFrameList(object):
                                   hooks_dict.iteritems()))
         return hooks_list
 
+    def do_keyframes_overlap(self):
+        """Checks for keyframs timing overlap.
 
+        Returns the name of the first keyframs that overlapped."""
+        skl = self.sorted_key_list()
+        for i in range(len(skl)-1):
+            this_time = self.dct[skl[i]]['__abs_time__']
+            next_time = self.dct[skl[i+1]]['__abs_time__']
+            if abs(next_time-this_time) < 1e-6:
+                # key frame times overlap
+                return skl[i]
+        # Return None if all passed
+        return None
 
 
 class Channel(object):

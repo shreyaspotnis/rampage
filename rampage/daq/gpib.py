@@ -125,7 +125,7 @@ class Aglient33250A(object):
         logging.info(print_string)
         self.instr.write(command_string)
 
-    def set_barriershapper(self, freq, low_volt, high_volt, output_state=True):
+    def set_arbitrary(self, freq, low_volt, high_volt, output_state=True):
         """Programs the function generator to output the arbitrary waveform."""
         commands = ['FUNC USER',
                     'BURS:STAT OFF',

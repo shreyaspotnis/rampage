@@ -78,6 +78,10 @@ class Hooks(object):
                                                 'amplitude': 0.2,
                                                 'offset': 0.0,
                                                 'output_state': True},
+                     'agilent_set_arbitrary': {'freq': 150e3,
+                                                'lowvolt': 0.0,
+                                                'highvolt': 0.5,
+                                                'output_state': True},
                      'agilent_set_output': {'state': True},
                      'dds_set_freq': {'freq': 80000000,
                                       'ch': 'A'},
@@ -168,6 +172,10 @@ class Hooks(object):
     def agilent_set_continuous(self, mesg_dict):
         logging.info('HOOK:agilent_33250a: setting continuous mode')
         agilent_33250a.set_continuous(**mesg_dict)
+
+    def agilent_set_arbitrary(self, mesg_dict):
+        logging.info('HOOK:agilent_33250a: setting continuous arbitrary waveform mode')
+        agilent_33250a.set_arbitrary(**mesg_dict)
 
     def dds_set_freq(self, mesg_dict):
         if ENABLE_DDS:

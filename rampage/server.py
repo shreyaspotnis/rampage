@@ -41,7 +41,7 @@ if __name__ == '__main__':
     # not if some other module is importing functions from
     # this module
     from rampage.daq import daq
-    from rampage.daq.gpib import agilent_33250a, newportesp300, tektronixTDS1002, tektronixTDS2012C
+    from rampage.daq.gpib import agilent_33250a, tektronixTDS1002, tektronixTDS2012C #,newportesp300
 
     zmq_context = zmq.Context()
     pub_socket = zmq_context.socket(zmq.PUB)

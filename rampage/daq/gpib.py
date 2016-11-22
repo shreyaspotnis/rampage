@@ -125,6 +125,26 @@ class Aglient33250A(object):
         logging.info(print_string)
         self.instr.write(command_string)
 
+    def set_barriershapper(self, freq, low_volt, high_volt, output_state=True):
+        """Programs the function generator to output the arbitrary waveform."""
+        commands = ['FUNC USER',
+                    'BURS:STAT OFF',
+                    'SWE:STAT OFF',
+                    'FM:STAT OFF',
+                    'FREQ {0}'.format(freq),
+                    'VOLT:HIGH {0}'.format(high_volt),
+                    'VOLT:LOW {0}'.format(low_volt),
+                    ]
+        if output_state is True:
+            commands.append('OUTP ON')
+        else:
+            commands.append('OUTP OFF')
+
+        command_string = '\n'.join(commands)
+        print_string = '\n\t' + command_string.replace('\n', '\n\t')
+        logging.info(print_string)
+        self.instr.write(command_string)
+
     def read_all_errors(self):
         done = False
         while not done:
@@ -257,4 +277,4 @@ class GPIBError(Exception):
 agilent_33250a = Aglient33250A()
 tektronixTDS1002 = TektronixTDS1002()
 tektronixTDS2012C = TektronixTDS2012C()
-newportesp300 = NewportESP300()
+# newportesp300 = NewportESP300()

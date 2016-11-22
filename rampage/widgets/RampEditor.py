@@ -141,6 +141,9 @@ class RampEditor(QtGui.QWidget):
         for err in error_list:
             print err
 
+        return error_list
+
+
     def handleViewChannel(self, ch_name):
         RampViewer(self.data, ch_name, self.settings, self).exec_()
 

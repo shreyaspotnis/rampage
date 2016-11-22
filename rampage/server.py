@@ -41,7 +41,7 @@ if __name__ == '__main__':
     # not if some other module is importing functions from
     # this module
     from rampage.daq import daq
-    from rampage.daq.gpib import agilent_33250a, newportesp300, tektronixTDS1002, tektronixTDS2012C
+    from rampage.daq.gpib import agilent_33250a, tektronixTDS1002, tektronixTDS2012C #, newportesp300
 
     zmq_context = zmq.Context()
     pub_socket = zmq_context.socket(zmq.PUB)
@@ -587,6 +587,14 @@ def check_ramp_for_errors(ramp_data):
             error_fmt = '{0} copies of {1} found. There should only be 1'
             error_str = error_fmt.format(n_found, ch_id)
             error_list.append(error_str)
+
+    # check for timing overlap in keyframelist
+    error_keyname = keyframe_list.do_keyframes_overlap()
+    if error_keyname is not None:
+        error_fmt = '{0} overlaps with the next keyframe'
+        error_str = error_fmt.format(error_keyname)
+        error_list.append(error_str)
+
 
     return error_list
 

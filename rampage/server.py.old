@@ -357,7 +357,6 @@ class DaqThread(threading.Thread):
             self.dev1_task.ClearTask()
             self.dev2_task.ClearTask()
             self.dev3_task.ClearTask()
-            self.dev4_task.ClearTask()
             self.digital_task.ClearTask()
             # print('Reseting clock to high')
             # daq.reset_analog_sample_clock(False)
@@ -365,16 +364,14 @@ class DaqThread(threading.Thread):
     def upload_and_start_tasks(self):
         daq.reset_analog_sample_clock()
         out = self.ramp_out
-        dev1_task, dev2_task, dev3_task, dev4_task, digital_task = daq.create_all_tasks(*out)
+        dev1_task, dev2_task, dev3_task, digital_task = daq.create_all_tasks(*out)
         dev1_task.StartTask()
         dev2_task.StartTask()
         dev3_task.StartTask()
-        dev4_task.StartTask()
         digital_task.StartTask()
         self.dev1_task = dev1_task
         self.dev2_task = dev2_task
         self.dev3_task = dev3_task
-        self.dev4_task = dev4_task
         self.digital_task = digital_task
         self.task_start_time = datetime.datetime.now()
 
@@ -459,8 +456,6 @@ def dev2_analog_ids():
 def dev3_analog_ids():
     return get_analog_ids("Dev3")
 
-def dev4_analog_ids():
-    return get_analog_ids("Dev4")
 
 def get_digital_channels(channel_list):
     """Goes through channel list and returns digital channels with ids
@@ -617,11 +612,10 @@ def make_ramps(data):
     dev1_trigger_line, dev1_voltages = make_analog_ramps(data, dev_name="Dev1")
     dev2_trigger_line, dev2_voltages = make_analog_ramps(data, dev_name="Dev2")
     dev3_trigger_line, dev3_voltages = make_analog_ramps(data, dev_name="Dev3")
-    dev4_trigger_line, dev4_voltages = make_analog_ramps(data, dev_name="Dev4")
     callback_list = make_callback_list(data)
     return (digital_data, dev1_trigger_line, dev1_voltages,
             dev2_trigger_line, dev2_voltages, dev3_trigger_line,
-            dev3_voltages, dev4_trigger_line, dev4_voltages, callback_list)
+            dev3_voltages, callback_list)
 
 
 def get_log_dir():

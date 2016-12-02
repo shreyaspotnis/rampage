@@ -434,7 +434,7 @@ class BECServer(RequestProcessor):
 def digital_channel_ids():
     """Returns list of digital channels used in the experiment."""
     line_fmt = 'Dev1/port0/line{0:02d}'
-    line_ids = [line_fmt.format(n) for n in range(8, 31)]
+    line_ids = [line_fmt.format(n) for n in range(7, 31)]
     return line_ids
 
 
@@ -549,9 +549,9 @@ def make_digital_ramps(ramp_data):
     # The channels used are Dev1/port0/line8:31
     dig_channels = get_digital_channels(channel_list)
 
-    for line_number, dig_ch in zip(range(8, 31), dig_channels):
+    for line_number, dig_ch in zip(range(7, 31), dig_channels):
         time, ramp_uint = dig_ch.generate_ramp(time_div=jump_resolution)
-        if line_number == 8:
+        if line_number == 7:
             steps = len(ramp_uint)
             digital_data = np.zeros(steps, dtype='uint32')
         digital_data += ramp_uint*(2**line_number)

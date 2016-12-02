@@ -15,8 +15,8 @@ class ExptSettings(object):
     dev2_clock_out_name = "Dev1/port0/line31"
     dev3_clock_out = 27
     dev3_clock_out_name = "Dev1/port0/line27"
-    dev4_clock_out = 07
-    dev4_clock_out_name = "Dev1/port0/line07"
+    dev4_clock_out = 7
+    dev4_clock_out_name = "Dev1/port0/line7"
     dev1_clock_out = 12
     dev1_clock_out_name = "Dev1/port0/line12"
     callback_resolution = 10e-3  # (ms)
@@ -398,8 +398,7 @@ def create_all_tasks(digital_data, dev1_trigger_line, dev1_voltages,
     digital_data += dev3_trigger_line*(2**expt_settings.dev3_clock_out)
     digital_data += dev4_trigger_line*(2**expt_settings.dev4_clock_out)
 
-    # digital_task = DigitalOutputTask("Dev1/port0/line8:31", digital_data)
-    digital_task = DigitalOutputTaskWithCallbacks("Dev1/port0/line8:31",
+    digital_task = DigitalOutputTaskWithCallbacks("Dev1/port0/line7:31",
                                                   digital_data, callback_list)
 
     return dev1_task, dev2_task, dev3_task, dev4_task, digital_task

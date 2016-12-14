@@ -137,7 +137,7 @@ class Hooks(object):
 
     def StanfordMW_enable_output(self, mesg_dict):
         logging.info('HOOK:Stanford_SG384: setting output' +
-              str(mesg_dict['output_state']))
+              str(mesg_dict['state']))
         stanfordSG384.set_output(**mesg_dict)
 
     def StanfordMW_disable_all(self, mesg_dict):

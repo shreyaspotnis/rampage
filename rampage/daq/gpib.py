@@ -361,7 +361,7 @@ class SRSSG384(object):
         freq is the carrier frequency in Hz."""
 
         sweep_deviation = round(abs(sweep_low_end - sweep_high_end)/2.0,6)
-        freq = sweep_start + sweep_deviation
+        freq = sweep_low_end + sweep_deviation
         commands = ['TYPE 3', #set to sweep
                     'SFNC 5',  #external modulation
                     'FREQ {0}'.format(freq),

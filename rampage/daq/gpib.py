@@ -405,7 +405,7 @@ class SRSSG384(object):
             else:
                 self.instr.write('ENBL 0')
 
-    def disable_all(self, state):
+    def disable_all(self, disable):
         """Disables all modulation and outputs of the Standford MW func. generator"""
         commands = ['ENBH 0', #disable high freq. rear output
                     'ENBL 0', #disable low freq. front bnc
@@ -414,7 +414,7 @@ class SRSSG384(object):
         command_string = '\n'.join(commands)
         print_string = '\n\t' + command_string.replace('\n', '\n\t')
         logging.info(print_string)
-        if state:
+        if disable:
             self.instr.write(command_string)
 
         # self.read_all_errors()

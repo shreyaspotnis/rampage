@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # not if some other module is importing functions from
     # this module
     from rampage.daq import daq
-    from rampage.daq.gpib import agilent_33250a, tektronixTDS1002, tektronixTDS2012C , stanfordSG384 #,newportesp300
+    from rampage.daq.gpib import agilent_33250a, tektronixTDS1002, tektronixTDS2012C, stanfordSG384 #,newportesp300
 
     zmq_context = zmq.Context()
     pub_socket = zmq_context.socket(zmq.PUB)
@@ -115,7 +115,7 @@ class Hooks(object):
                                       'ch': '0'},
                      'mw_set_amp': {'amp': 20000,
                                       'ch': '0'},
-                     'StanfordMW_enable_output': {'output_state': True},
+                     'StanfordMW_enable_output': {'state': True},
                      'StanfordMW_disable_all': {'disable': False},
                      'StanfordMW_continuous': {'freq(Hz)': 6.8e9,
                                                'amplitude(dBm)': 0.0,
@@ -126,8 +126,8 @@ class Hooks(object):
                                            'offset(V)': 0.0,
                                            'output_state': True},
                      'StanfordMW_freqsweep_ext': {'amplitude(dBm)': 0.0,
-                                                  'sweep_low_end': 5e9,
-                                                  'sweep_high_end': 5.5e9,
+                                                  'sweep_low_end(Hz)': 5e9,
+                                                  'sweep_high_end(Hz)': 5.5e9,
                                                   'offset(V)': 0.0,
                                                   'output_state': True},
                     }
@@ -147,15 +147,28 @@ class Hooks(object):
 
     def StanfordMW_continuous(self, mesg_dict):
         logging.info('HOOK:Stanford_SG384: setting to continuous mode')
-        stanfordSG384.set_continuous(**mesg_dict)
+        freq = mesg_dict['freq(Hz)']
+        amplitude = mesg_dict['amplitude(dBm)']
+        offset = mesg_dict['offset(V)']
+        output_state = mesg_dict['output_state']
+        stanfordSG384.set_continuous(freq, amplitude, offset, output_state)
 
     def StanfordMW_FM_ext(self, mesg_dict):
         logging.info('HOOK:Stanford_SG384: setting to external FM mode')
-        stanfordSG384.set_fm_ext(**mesg_dict)
+        freq = mesg_dict['freq(Hz)']
+        amplitude = mesg_dict['amplitude(dBm)']
+        offset = mesg_dict['offset(V)']
+        output_state = mesg_dict['output_state']
+        stanfordSG384.set_fm_ext(freq, amplitude, offset, output_state)
 
     def StanfordMW_freqsweep_ext(self, mesg_dict):
         logging.info('HOOK:Stanford_SG384: setting to external freq. sweep mode')
-        stanfordSG384.set_freqsweep_ext(**mesg_dict)
+        amplitude = mesg_dict['amplitude(dBm)']
+        sweep_low_end = mesg_dict['sweep_low_end(Hz)']
+        sweep_high_end = mesg_dict['sweep_high_end(Hz)']
+        offset = mesg_dict['offset(V)']
+        output_state = mesg_dict['output_state']
+        stanfordSG384.set_freqsweep_ext(amplitude, sweep_low_end, sweep_high_end, offset, output_state)
 
     def mw_set_freq(self, mesg_dict):
         if ENABLE_MW:

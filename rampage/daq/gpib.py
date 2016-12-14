@@ -266,6 +266,173 @@ class NewportESP300(object):
             if 'NO ERROR DETECTED' in err:
                 done = True
 
+class SRSSG384(object):
+
+    def __init__(self):
+        self.instr = self.open_instrument()
+
+    def open_instrument(self):
+        resource_list = resource_manager.list_resources()
+        gpib_address_list = filter(lambda x: x[:4] == 'GPIB', resource_list)
+
+        for addr in gpib_address_list:
+            instr = resource_manager.open_resource(addr)
+            idn = instr.query('*IDN?')
+            if 'Stanford Research Systems,SG384' in idn:
+                    return instr
+        else:
+            raise GPIBError('SRS SG384 function generator not in GPIB device list')
+            # device not found raise exception
+
+    def read_all_errors(self):
+        done = False
+        while not done:
+            err = self.instr.query('LERR?')
+            print(err)
+            if err[:1] == '0':
+                done = True
+
+    def set_continuous(self, freq, amplitude, offset, output_state=True):
+        """Programs the Stanford MW function generator to output a continuous sine wave.
+            External 'triggering' is accomplished using the MW switch."""
+        commands = ['MODL 0',       #disable any modulation
+                    'FREQ {0}'.format(freq)
+                    ]
+
+        if freq > 4.05e9:
+            commands.append('AMPH {0}'.format(amplitude)) #set rear RF doubler amplitude
+            if offset > 0.0:
+                print('HIGH FREQUENCY OUTPUT IS AC ONLY')
+            if output_state is True:
+                commands.append('ENBH 1') #enable output
+            else:
+                commands.append('ENBH 0')
+        elif freq < 62.5e6:
+            commands.extend(['AMPL {0}'.format(amplitude), 'OFSL {0}'.format(offset)]) #set front BNC amplitude
+            if output_state is True:
+                commands.append('ENBL 1') #enable output
+            else:
+                commands.append('ENBL 0')    
+
+        command_string = '\n'.join(commands)
+        print_string = '\n\t' + command_string.replace('\n', '\n\t')
+        logging.info(print_string)
+        self.instr.write(command_string)
+
+        # print(print_string)
+        # self.read_all_errors()
+
+    def set_fm_ext(self, freq, amplitude, offset=0.0, peak_fm_deviation=None, output_state=True):
+        """Sets the Stanford MW function generator to freq modulation with external modulation.
+        freq is the carrier frequency in Hz."""
+        if peak_fm_deviation is None:
+            peak_fm_deviation = freq
+        commands = ['TYPE 1', #set to FM
+                    'MFNC 5',  #external modulation
+                    'FREQ {0}'.format(freq),
+                    'FDEV {0}'.format(peak_fm_deviation),
+                    'MODL 1'   #enable modulation
+                    ]
+        if freq > 4.05e9:
+            commands.append('AMPH {0}'.format(amplitude)) #set rear RF doubler amplitude
+            if offset > 0.0:
+                print('HIGH FREQUENCY OUTPUT IS AC ONLY')
+            if output_state is True:
+                commands.append('ENBH 1') #enable output
+            else:
+                commands.append('ENBH 0')
+        elif freq < 62.5e6:
+            commands.extend(['AMPL {0}'.format(amplitude), 'OFSL {0}'.format(offset)]) #set front BNC amplitude
+            if output_state is True:
+                commands.append('ENBL 1') #enable output
+            else:
+                commands.append('ENBL 0') 
+
+        command_string = '\n'.join(commands)
+        print_string = '\n\t' + command_string.replace('\n', '\n\t')
+        logging.info(print_string)
+        self.instr.write(command_string)
+
+        print(print_string)
+        self.read_all_errors()
+
+    def set_freqsweep_ext(self, amplitude, sweep_low_end, sweep_high_end, offset=0.0, output_state=True):
+        """Sets the Stanford MW function generator to freq modulation with external modulation.
+        freq is the carrier frequency in Hz."""
+
+        sweep_deviation = round(abs(sweep_low_end - sweep_high_end)/2.0,6)
+        freq = sweep_start + sweep_deviation
+        commands = ['TYPE 3', #set to sweep
+                    'SFNC 5',  #external modulation
+                    'FREQ {0}'.format(freq),
+                    'SDEV {0}'.format(sweep_deviation),
+                    'MODL 1'   #enable modulation
+                    ]
+        if freq > 4.05e9:
+            commands.append('AMPH {0}'.format(amplitude)) #set rear RF doubler amplitude
+            if offset > 0.0:
+                print('HIGH FREQUENCY OUTPUT IS AC ONLY')
+            if output_state is True:
+                commands.append('ENBH 1') #enable output
+            else:
+                commands.append('ENBH 0')
+        elif freq < 62.5e6:
+            commands.extend(['AMPL {0}'.format(amplitude), 'OFSL {0}'.format(offset)]) #set front BNC amplitude
+            if output_state is True:
+                commands.append('ENBL 1') #enable output
+            else:
+                commands.append('ENBL 0') 
+
+        command_string = '\n'.join(commands)
+        print_string = '\n\t' + command_string.replace('\n', '\n\t')
+        logging.info(print_string)
+        self.instr.write(command_string)
+
+        print(print_string)
+        self.read_all_errors()
+
+    def set_output(self, state):
+        """Sets whether the function generator is outputting a voltage."""
+        freq = float(self.instr.query('FREQ?'))
+        if freq > 4.05e9:
+            if state:
+                self.instr.write('ENBH 1') #enable output
+            else:
+                self.instr.write('ENBH 0')
+        elif freq < 62.5e6:
+            if state:
+                self.instr.write('ENBL 1') #enable output
+            else:
+                self.instr.write('ENBL 0')
+
+    def disable_all(self, state):
+        """Disables all modulation and outputs of the Standford MW func. generator"""
+        commands = ['ENBH 0', #disable high freq. rear output
+                    'ENBL 0', #disable low freq. front bnc
+                    'MODL 0'   #disable modulation
+                    ]
+        command_string = '\n'.join(commands)
+        print_string = '\n\t' + command_string.replace('\n', '\n\t')
+        logging.info(print_string)
+        if state:
+            self.instr.write(command_string)
+
+        # self.read_all_errors()
+
+
+    # def set_MWinstr_freq_sweep(self, mod_type, freq, amplitude, mod_rate, mod_deviation, list_size=2, list_enable=True):
+    #     """Sets the Stanford MW device to an instrument to be triggered later."""
+    #     #create list of instrument states
+    #     self.instr.query('LSTC? {0}'.format(list_size))
+
+    #     for j in range(list_size):
+
+
+    #     #enable to list for triggering
+    #     cur_enable_state = self.instr.query('LSTE?')
+    #     if cur_enable_state == False:
+    #         self.instr.write('LSTE 1')
+
 class GPIBError(Exception):
     def __init__(self, value):
         self.value = value
@@ -277,4 +444,5 @@ class GPIBError(Exception):
 agilent_33250a = Aglient33250A()
 tektronixTDS1002 = TektronixTDS1002()
 tektronixTDS2012C = TektronixTDS2012C()
+stanfordSG384 = SRSSG384()
 # newportesp300 = NewportESP300()

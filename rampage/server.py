@@ -15,6 +15,7 @@ import zmq
 
 from rampage import ramps
 from rampage.zmq_server import RequestProcessor, ClientForServer
+#from rampage.widgets.DictEditor import DropDownSelection
 
 if __name__ == '__main__':
 
@@ -41,7 +42,7 @@ if __name__ == '__main__':
     # not if some other module is importing functions from
     # this module
     from rampage.daq import daq
-    from rampage.daq.gpib import agilent_33250a, tektronixTDS1002, tektronixTDS2012C #,newportesp300
+    from rampage.daq.gpib import agilent_33250a, tektronixTDS1002, tektronixTDS2012C , stanfordSG384 #,newportesp300
 
     zmq_context = zmq.Context()
     pub_socket = zmq_context.socket(zmq.PUB)
@@ -114,7 +115,47 @@ class Hooks(object):
                                       'ch': '0'},
                      'mw_set_amp': {'amp': 20000,
                                       'ch': '0'},
-                     }
+                     'StanfordMW_enable_output': {'output_state': True},
+                     'StanfordMW_disable_all': {'disable': False},
+                     'StanfordMW_continuous': {'freq(Hz)': 6.8e9,
+                                               'amplitude(dBm)': 0.0,
+                                               'offset(V)': 0.0,
+                                               'output_state': True},
+                     'StanfordMW_FM_ext': {'freq(Hz)': 6.8e9,
+                                           'amplitude(dBm)': 0.0,
+                                           'offset(V)': 0.0,
+                                           'output_state': True},
+                     'StanfordMW_freqsweep_ext': {'amplitude(dBm)': 0.0,
+                                                  'sweep_low_end': 5e9,
+                                                  'sweep_high_end': 5.5e9,
+                                                  'offset(V)': 0.0,
+                                                  'output_state': True},
+                    }
+
+    # def drop_down_test(self, mesg_dict):
+    #     print mesg_dict
+
+    def StanfordMW_enable_output(self, mesg_dict):
+        logging.info('HOOK:Stanford_SG384: setting output' +
+              str(mesg_dict['output_state']))
+        stanfordSG384.set_output(**mesg_dict)
+
+    def StanfordMW_disable_all(self, mesg_dict):
+        logging.info('HOOK:Stanford_SG384: disabling output is' +
+              str(mesg_dict['disable']))
+        stanfordSG384.disable_all(**mesg_dict)
+
+    def StanfordMW_continuous(self, mesg_dict):
+        logging.info('HOOK:Stanford_SG384: setting to continuous mode')
+        stanfordSG384.set_continuous(**mesg_dict)
+
+    def StanfordMW_FM_ext(self, mesg_dict):
+        logging.info('HOOK:Stanford_SG384: setting to external FM mode')
+        stanfordSG384.set_fm_ext(**mesg_dict)
+
+    def StanfordMW_freqsweep_ext(self, mesg_dict):
+        logging.info('HOOK:Stanford_SG384: setting to external freq. sweep mode')
+        stanfordSG384.set_freqsweep_ext(**mesg_dict)
 
     def mw_set_freq(self, mesg_dict):
         if ENABLE_MW:

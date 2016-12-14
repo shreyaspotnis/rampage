@@ -1,5 +1,6 @@
 from PyQt4 import QtGui, QtCore
 import sys
+from collections import namedtuple
 
 
 class BoolBox(QtGui.QPushButton):
@@ -83,6 +84,30 @@ class StringBox(QtGui.QPlainTextEdit):
 
     def handleTextChanged(self):
         self.myValueChanged.emit(str(self.toPlainText()))
+
+
+# class DropDownBox(QtGui.QComboBox):
+
+#     myValueChanged = QtCore.pyqtSignal(str)
+
+#     def __init__(self, dropdownselection, parent=None):
+#         super(DropDownBox, self).__init__(parent)
+#         self.dropdownselection = dropdownselection
+#         self.addItems(dropdownselection[1])
+#         self.setCurrentIndex(dropdownselection[0])
+
+#         self.currentIndexChanged.connect(self.handleIndexChanged)
+
+#     def handleIndexChanged(self, new_value):
+#         self.dropdownselection = DropDownSelection(new_value,
+#                                                    self.dropdownselection[1])
+
+#     def mySetValue(self, val):
+#         self.dropdownselection = val
+#         self.setCurrentIndex(self.dropdownselection[0])
+
+
+# DropDownSelection = namedtuple('DropDownSelection', ['value', 'list_of_options'], verbose=True)
 
 
 class ListBox(QtGui.QPlainTextEdit):

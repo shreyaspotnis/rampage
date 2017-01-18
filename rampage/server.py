@@ -121,6 +121,10 @@ class Hooks(object):
                                                'amplitude(dBm)': 0.0,
                                                'offset(V)': 0.0,
                                                'output_state': True},
+                     'StanfordMW_continuous_Vpp': {'freq(Hz)': 1.0e3,
+                                               'amplitude(Vpp)': 0.0,
+                                               'offset(V)': 0.0,
+                                               'output_state': True},
                      'StanfordMW_FM_ext': {'freq(Hz)': 6.8e9,
                                            'amplitude(dBm)': 0.0,
                                            'offset(V)': 0.0,
@@ -152,6 +156,14 @@ class Hooks(object):
         offset = mesg_dict['offset(V)']
         output_state = mesg_dict['output_state']
         stanfordSG384.set_continuous(freq, amplitude, offset, output_state)
+
+    def StanfordMW_continuous_Vpp(self, mesg_dict):
+        logging.info('HOOK:Stanford_SG384: setting to continuous mode with amp. in voltage')
+        freq = mesg_dict['freq(Hz)']
+        amplitude = mesg_dict['amplitude(Vpp)']
+        offset = mesg_dict['offset(V)']
+        output_state = mesg_dict['output_state']
+        stanfordSG384.set_continuous_Vpp(freq, amplitude, offset, output_state)
 
     def StanfordMW_FM_ext(self, mesg_dict):
         logging.info('HOOK:Stanford_SG384: setting to external FM mode')

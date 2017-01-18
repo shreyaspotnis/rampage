@@ -322,6 +322,33 @@ class SRSSG384(object):
         # print(print_string)
         # self.read_all_errors()
 
+    def set_continuous_Vpp(self, freq, amplitude, offset, output_state=True):
+        """Programs the Stanford MW function generator to output a continuous sine wave.
+            External 'triggering' is accomplished using the MW switch."""
+        commands = ['MODL 0',       #disable any modulation
+                    'FREQ {0}'.format(freq)
+                    ]
+
+        if freq > 4.05e9:
+            commands.append('AMPH {0} VPP'.format(amplitude)) #set rear RF doubler amplitude
+            if offset > 0.0:
+                print('HIGH FREQUENCY OUTPUT IS AC ONLY')
+            if output_state is True:
+                commands.append('ENBH 1') #enable output
+            else:
+                commands.append('ENBH 0')
+        elif freq < 62.5e6:
+            commands.extend(['AMPL {0} VPP'.format(amplitude), 'OFSL {0}'.format(offset)]) #set front BNC amplitude
+            if output_state is True:
+                commands.append('ENBL 1') #enable output
+            else:
+                commands.append('ENBL 0')    
+
+        command_string = '\n'.join(commands)
+        print_string = '\n\t' + command_string.replace('\n', '\n\t')
+        logging.info(print_string)
+        self.instr.write(command_string)
+
     def set_fm_ext(self, freq, amplitude, offset=0.0, peak_fm_deviation=None, output_state=True):
         """Sets the Stanford MW function generator to freq modulation with external modulation.
         freq is the carrier frequency in Hz."""
@@ -353,8 +380,8 @@ class SRSSG384(object):
         logging.info(print_string)
         self.instr.write(command_string)
 
-        print(print_string)
-        self.read_all_errors()
+        #print(print_string)
+        #self.read_all_errors()
 
     def set_freqsweep_ext(self, amplitude, sweep_low_end, sweep_high_end, offset=0.0, output_state=True):
         """Sets the Stanford MW function generator to freq modulation with external modulation.
@@ -388,8 +415,8 @@ class SRSSG384(object):
         logging.info(print_string)
         self.instr.write(command_string)
 
-        print(print_string)
-        self.read_all_errors()
+        #print(print_string)
+        #self.read_all_errors()
 
     def set_output(self, state):
         """Sets whether the function generator is outputting a voltage."""

@@ -1,5 +1,8 @@
 # rampage
 
+
+![Screenshot of the GUI used to edit ramps](doc/screenshot.png?raw=true "Rampage GUI")
+
 rampage is an arbitrary waveform builder and a control system for ultra-cold
 atom and ion trap experiments.  It is written in python and is primarily GUI
 based, with modules available to edit and run ramps over the command line.
@@ -7,6 +10,7 @@ It follows a client-server architecture: the server is
 a command line program running on the control PC and the client communicates
 with the server via TCP/IP using zeromq. This allows the experiment to be
 controlled from anywhere within the local network.
+
 
 rampage consists of four parts:
 - Implementation of a JSON based ramp description format

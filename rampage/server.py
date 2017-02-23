@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # not if some other module is importing functions from
     # this module
     from rampage.daq import daq
-    from rampage.daq.gpib import agilent_33250a, tektronixTDS1002, tektronixTDS2012C, stanfordSG384 #,newportesp300
+    from rampage.daq.gpib import agilent_33250a, tektronixTDS2012C, stanfordSG384 #,newportesp300, tektronixTDS1002,
 
     zmq_context = zmq.Context()
     pub_socket = zmq_context.socket(zmq.PUB)
@@ -134,10 +134,14 @@ class Hooks(object):
                                                   'sweep_high_end(Hz)': 5.5e9,
                                                   'offset(V)': 0.0,
                                                   'output_state': True},
+                     'StanfordMW_trigger_ListMode': {},
                     }
 
     # def drop_down_test(self, mesg_dict):
     #     print mesg_dict
+    def StanfordMW_trigger_ListMode(self, mesg_dict):
+        logging.info('HOOK:Stanford_SG384: Trigger ListMode iterator.')
+        stanfordSG384.trigger_ListMode()
 
     def StanfordMW_enable_output(self, mesg_dict):
         logging.info('HOOK:Stanford_SG384: setting output' +

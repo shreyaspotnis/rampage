@@ -432,6 +432,12 @@ class SRSSG384(object):
             else:
                 self.instr.write('ENBL 0')
 
+    def trigger_ListMode(self):
+        """Iterates the function generator to the next state in ListMode
+        NOTE: ListMode does not enable outputs, but only writes the function
+        generator state.  Output must be enabled separately"""
+        self.instr.write('*TRG')
+
     def disable_all(self, disable):
         """Disables all modulation and outputs of the Standford MW func. generator"""
         commands = ['ENBH 0', #disable high freq. rear output
@@ -469,7 +475,7 @@ class GPIBError(Exception):
 
 #globals
 agilent_33250a = Aglient33250A()
-tektronixTDS1002 = TektronixTDS1002()
+# tektronixTDS1002 = TektronixTDS1002()
 tektronixTDS2012C = TektronixTDS2012C()
 stanfordSG384 = SRSSG384()
 # newportesp300 = NewportESP300()

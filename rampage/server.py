@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # not if some other module is importing functions from
     # this module
     from rampage.daq import daq
-    from rampage.daq.gpib import agilent_33250a, tektronixTDS2012C, stanfordSG384 #,newportesp300, tektronixTDS1002,
+    from rampage.daq.gpib import agilent_33250a, stanfordSG384, tektronixTDS1002, agilentN900A #,newportesp300 , tektronixTDS2012C
 
     zmq_context = zmq.Context()
     pub_socket = zmq_context.socket(zmq.PUB)
@@ -107,6 +107,8 @@ class Hooks(object):
                      'tek_scope_trace': {'file_path': 'E:\\traces.logs',
                                         'channel': 1},
                     'tek_scope_usb_trace': {'file_path': 'E:\\traces.logs',
+                                        'channel': 1},
+                    'agilentN900A_marker': {'file_path': 'E:\\traces.logs',
                                         'channel': 1},
                      'ESDcontroller_readerrors': {},
                      'ESDcontroller_move_position': {'abs_pos': 0.0,
@@ -185,6 +187,10 @@ class Hooks(object):
         offset = mesg_dict['offset(V)']
         output_state = mesg_dict['output_state']
         stanfordSG384.set_freqsweep_ext(amplitude, sweep_low_end, sweep_high_end, offset, output_state)
+
+    def agilentN900A_marker(self, mesg_dict):
+        logging.info('HOOK:Agilent_N900A: marker')
+        agilentN900A.get_n_save_marker_pos(**mesg_dict)
 
     def mw_set_freq(self, mesg_dict):
         if ENABLE_MW:

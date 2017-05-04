@@ -389,7 +389,7 @@ def create_all_tasks(digital_data, dev1_trigger_line, dev1_voltages,
                                        clock_line=expt_settings.dev3_clock_line)
 
     _, n_dev4_samples = dev4_voltages.shape
-    dev4_task = FiniteAnalogOutputTask("Dev4/ao0:7", dev4_voltages.T.flatten(),
+    dev4_task = FiniteAnalogOutputTask("Dev4/ao0:5", dev4_voltages.T.flatten(),
                                        n_dev4_samples,
                                        clock_line=expt_settings.dev4_clock_line)
 

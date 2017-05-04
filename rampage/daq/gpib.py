@@ -266,6 +266,28 @@ class NewportESP300(object):
             if 'NO ERROR DETECTED' in err:
                 done = True
 
+class AgilentN900A(object):
+
+    def __init__(self):
+        self.instr = self.open_instrument()
+
+    def open_instrument(self):
+
+        IP = '192.168.0.109'
+        instr = resource_manager.get_instrument('TCPIP::' + IP + '::INSTR')
+        print(instr.ask('*IDN?'))
+        return instr
+
+    def get_n_save_marker_pos(self, file_path, channel=1):
+        self.instr.write(':CALC:MARK1:X?')
+        freq = np.float(self.instr.read())
+        self.instr.write(':CALC:MARK1:Y?')
+        amp = np.float(self.instr.read())
+        arr_write = np.array([freq, amp])
+        f_handle = open(file_path + '\\' + datetime.now().strftime('%Y_%m_%d') + '.txt', 'ab')
+        np.savetxt(f_handle, arr_write.reshape(1, arr_write.shape[0]))
+        f_handle.close()
+
 class SRSSG384(object):
 
     def __init__(self):
@@ -475,7 +497,8 @@ class GPIBError(Exception):
 
 #globals
 agilent_33250a = Aglient33250A()
-# tektronixTDS1002 = TektronixTDS1002()
-tektronixTDS2012C = TektronixTDS2012C()
+tektronixTDS1002 = TektronixTDS1002()
+#tektronixTDS2012C = TektronixTDS2012C()
 stanfordSG384 = SRSSG384()
 # newportesp300 = NewportESP300()
+agilentN900A = AgilentN900A()

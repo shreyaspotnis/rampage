@@ -333,7 +333,7 @@ class SRSSG384(object):
             if output_state is True:
                 commands.append('ENBL 1') #enable output
             else:
-                commands.append('ENBL 0')    
+                commands.append('ENBL 0')
 
         command_string = '\n'.join(commands)
         print_string = '\n\t' + command_string.replace('\n', '\n\t')
@@ -363,7 +363,7 @@ class SRSSG384(object):
             if output_state is True:
                 commands.append('ENBL 1') #enable output
             else:
-                commands.append('ENBL 0')    
+                commands.append('ENBL 0')
 
         command_string = '\n'.join(commands)
         print_string = '\n\t' + command_string.replace('\n', '\n\t')
@@ -394,7 +394,7 @@ class SRSSG384(object):
             if output_state is True:
                 commands.append('ENBL 1') #enable output
             else:
-                commands.append('ENBL 0') 
+                commands.append('ENBL 0')
 
         command_string = '\n'.join(commands)
         print_string = '\n\t' + command_string.replace('\n', '\n\t')
@@ -429,7 +429,7 @@ class SRSSG384(object):
             if output_state is True:
                 commands.append('ENBL 1') #enable output
             else:
-                commands.append('ENBL 0') 
+                commands.append('ENBL 0')
 
         command_string = '\n'.join(commands)
         print_string = '\n\t' + command_string.replace('\n', '\n\t')

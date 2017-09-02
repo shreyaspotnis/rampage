@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # not if some other module is importing functions from
     # this module
     from rampage.daq import daq
-    from rampage.daq.gpib import agilent_33250a, stanfordSG384, tektronixTDS1002, agilentN900A #,newportesp300 , tektronixTDS2012C
+    from rampage.daq.gpib import agilent_33250a, stanfordSG384, rigolDG1022Z#, #tektronixTDS1002#,newportesp300, agilentN900A, tektronixTDS2012C
 
     zmq_context = zmq.Context()
     pub_socket = zmq_context.socket(zmq.PUB)
@@ -137,10 +137,27 @@ class Hooks(object):
                                                   'offset(V)': 0.0,
                                                   'output_state': True},
                      'StanfordMW_trigger_ListMode': {},
+                     'rigol_set_continuous': {'freq': 700e3,
+                                                'amplitude': 0.1,
+                                                'offset': 0.0,
+                                                'phase':0.0,
+                                                'channel':2},
+                     'rigol_set_output': {'state': False,
+                                          'channel':2}
                     }
 
     # def drop_down_test(self, mesg_dict):
     #     print mesg_dict
+
+    def rigol_set_output(self, mesg_dict):
+        logging.info('HOOK:rigolDG1022Z: setting output: ' +
+              str(mesg_dict['state']))
+        rigolDG1022Z.set_output(**mesg_dict)
+
+    def rigol_set_continuous(self, mesg_dict):
+        logging.info('HOOK:rigolDG1022Z: setting continuous mode')
+        rigolDG1022Z.set_continuous(**mesg_dict)
+
     def StanfordMW_trigger_ListMode(self, mesg_dict):
         logging.info('HOOK:Stanford_SG384: Trigger ListMode iterator.')
         stanfordSG384.trigger_ListMode()
@@ -510,7 +527,7 @@ class BECServer(RequestProcessor):
 def digital_channel_ids():
     """Returns list of digital channels used in the experiment."""
     line_fmt = 'Dev1/port0/line{0:02d}'
-    line_ids = [line_fmt.format(n) for n in range(7, 31)]
+    line_ids = [line_fmt.format(n) for n in range(5, 31)]
     return line_ids
 
 
@@ -622,12 +639,12 @@ def make_digital_ramps(ramp_data):
     ramp_properties = ramp_data['properties']
     jump_resolution = ramp_properties['jump_resolution']
 
-    # The channels used are Dev1/port0/line8:31
+    # The channels used are Dev1/port0/line5:31
     dig_channels = get_digital_channels(channel_list)
 
-    for line_number, dig_ch in zip(range(7, 31), dig_channels):
+    for line_number, dig_ch in zip(range(5, 31), dig_channels):
         time, ramp_uint = dig_ch.generate_ramp(time_div=jump_resolution)
-        if line_number == 7:
+        if line_number == 5:
             steps = len(ramp_uint)
             digital_data = np.zeros(steps, dtype='uint32')
         digital_data += ramp_uint*(2**line_number)

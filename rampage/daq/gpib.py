@@ -275,7 +275,6 @@ class AgilentN900A(object):
 
         IP = '192.168.0.109'
         instr = resource_manager.get_instrument('TCPIP::' + IP + '::INSTR')
-        print(instr.ask('*IDN?'))
         return instr
 
     def get_n_save_marker_pos(self, file_path, channel=1):
@@ -488,6 +487,73 @@ class SRSSG384(object):
     #     if cur_enable_state == False:
     #         self.instr.write('LSTE 1')
 
+class RigolDG1022Z(object):
+
+    def __init__(self):
+        self.instr = self.open_instrument()
+
+    def open_instrument(self):
+        resource_list = resource_manager.list_resources()
+        gpib_address_list = filter(lambda x: x[:3] == 'USB', resource_list)
+
+        for addr in gpib_address_list:
+            instr = resource_manager.open_resource(addr)
+            idn = instr.query('*IDN?')
+            if 'Rigol Technologies,DG1022Z,DG1ZA184750979' in idn:
+                    return instr
+        else:
+            raise GPIBError('Rigol DG1022Z function generator not in USB device list')
+            # device not round raise exception
+
+    def set_output(self, state, channel=2):
+        """Sets whether the function generator is outputting a voltage."""
+        if state:
+            self.instr.write(':OUTP{0} ON'.format(channel))
+        else:
+            self.instr.write(':OUTP{0} OFF'.format(channel))
+
+    def set_continuous(self, freq, amplitude, offset, phase, channel=2):
+        """Programs the function generator to output a continuous sine wave."""
+        commands = [':SOUR{0}:APPL:SIN '.format(channel),
+                    '{0},'.format(freq),
+                    '{0},'.format(amplitude),
+                    '{0},'.format(offset),
+                    '{0}'.format(phase),
+                    ]
+
+        command_string = ''.join(commands)
+        logging.info(command_string)
+        self.instr.write(command_string)
+
+        # self.read_all_errors()
+
+    # def set_freq_sweep(self, start_freq, stop_freq, sweep_time, amplitude,
+    #                    output_state=True):
+    #     commands = ['FUNC SIN',
+    #                 'TRIG:SOUR EXT',
+    #                 'TRIG:SLOP POS',
+    #                 'SWE:STAT ON',
+    #                 'FREQ:STAR {0}'.format(start_freq),
+    #                 'FREQ:STOP {0}'.format(stop_freq),
+    #                 'SWE:TIME {0}'.format(sweep_time),
+    #                 'VOLT {0}'.format(amplitude),
+    #                 'VOLT:OFFS 0',
+    #                 'SWE:STAT ON']
+
+    #     command_string = '\n'.join(commands)
+
+    #     logging.info(command_string)
+    #     self.instr.write(command_string)
+
+    def read_all_errors(self):
+        done = False
+        while not done:
+            err = self.instr.query('SYST:ERR?')
+            print(err)
+            if err[:2] == '+0':
+                done = True
+
+
 class GPIBError(Exception):
     def __init__(self, value):
         self.value = value
@@ -497,8 +563,9 @@ class GPIBError(Exception):
 
 #globals
 agilent_33250a = Aglient33250A()
-tektronixTDS1002 = TektronixTDS1002()
+# tektronixTDS1002 = TektronixTDS1002()
+# agilentN900A = AgilentN900A()
 #tektronixTDS2012C = TektronixTDS2012C()
 stanfordSG384 = SRSSG384()
 # newportesp300 = NewportESP300()
-agilentN900A = AgilentN900A()
+rigolDG1022Z = RigolDG1022Z()

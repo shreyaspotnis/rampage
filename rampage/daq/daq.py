@@ -398,7 +398,7 @@ def create_all_tasks(digital_data, dev1_trigger_line, dev1_voltages,
     digital_data += dev3_trigger_line*(2**expt_settings.dev3_clock_out)
     digital_data += dev4_trigger_line*(2**expt_settings.dev4_clock_out)
 
-    digital_task = DigitalOutputTaskWithCallbacks("Dev1/port0/line7:31",
+    digital_task = DigitalOutputTaskWithCallbacks("Dev1/port0/line5:31",
                                                   digital_data, callback_list)
 
     return dev1_task, dev2_task, dev3_task, dev4_task, digital_task

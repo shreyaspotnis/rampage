@@ -299,11 +299,10 @@ class AgilentN900A(object):
                     ':AVER:STAT ON',
                     ':AVER:COUNT {0}'.format(num_avg)
                     ]
-       
-       command_string = '\n'.join(commands)
-       print_string = '\n\t' + command_string.replace('\n', '\n\t')
-       logging.info(print_string)
-       self.instr.write(command_string)
+        command_string = '\n'.join(commands)
+        print_string = '\n\t' + command_string.replace('\n', '\n\t')
+        logging.info(print_string)
+        self.instr.write(command_string)
 
 class SRSSG384(object):
 

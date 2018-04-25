@@ -182,8 +182,8 @@ class Ramp1DScan(QRamp1DScan, Ui_Ramp1DScan):
         self.tableScanPoints.setColumnCount(num_cols)
         num_rows = arr.shape[0]
         self.tableScanPoints.setRowCount(num_rows)
-        for i in range(num_cols-1):
-            self.addScanColumn()
+        # for i in range(num_cols-1):
+        #     self.addScanColumn()
         print num_cols, num_rows
         for nr in range(num_rows):
             for nc in range(num_cols):

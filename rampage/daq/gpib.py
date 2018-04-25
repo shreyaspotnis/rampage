@@ -282,10 +282,28 @@ class AgilentN900A(object):
         freq = np.float(self.instr.read())
         self.instr.write(':CALC:MARK1:Y?')
         amp = np.float(self.instr.read())
+        self.instr.write(':AVER:STAT OFF')
         arr_write = np.array([freq, amp])
         f_handle = open(file_path + '\\' + datetime.now().strftime('%Y_%m_%d') + '.txt', 'ab')
         np.savetxt(f_handle, arr_write.reshape(1, arr_write.shape[0]))
         f_handle.close()
+
+    def trigger_marker_avg(self,num_avg=100,freq=6.83468,span=25,ref_lev=15):
+        commands = [':FREQ:CENT {0}'.format(freq) + ' GHz',
+                    ':FREQ:SPAN {0}'.format(span) + ' MHz',
+                    ':DISP:WIND:TRAC:Y:RLEV {0}'.format(ref_lev) + ' dBm',
+                    ':CALC:MARK:MODE POS',
+                    ':CALC:MARK:CPS ON',
+                    ':TRIG:SOUR EXT1',
+                    ':TRIG:EXT1:LEV 1.0V',
+                    ':AVER:STAT ON',
+                    ':AVER:COUNT {0}'.format(num_avg)
+                    ]
+       
+       command_string = '\n'.join(commands)
+       print_string = '\n\t' + command_string.replace('\n', '\n\t')
+       logging.info(print_string)
+       self.instr.write(command_string)
 
 class SRSSG384(object):
 
@@ -524,26 +542,6 @@ class RigolDG1022Z(object):
         command_string = ''.join(commands)
         logging.info(command_string)
         self.instr.write(command_string)
-
-        # self.read_all_errors()
-
-    # def set_freq_sweep(self, start_freq, stop_freq, sweep_time, amplitude,
-    #                    output_state=True):
-    #     commands = ['FUNC SIN',
-    #                 'TRIG:SOUR EXT',
-    #                 'TRIG:SLOP POS',
-    #                 'SWE:STAT ON',
-    #                 'FREQ:STAR {0}'.format(start_freq),
-    #                 'FREQ:STOP {0}'.format(stop_freq),
-    #                 'SWE:TIME {0}'.format(sweep_time),
-    #                 'VOLT {0}'.format(amplitude),
-    #                 'VOLT:OFFS 0',
-    #                 'SWE:STAT ON']
-
-    #     command_string = '\n'.join(commands)
-
-    #     logging.info(command_string)
-    #     self.instr.write(command_string)
 
     def read_all_errors(self):
         done = False

@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # not if some other module is importing functions from
     # this module
     from rampage.daq import daq
-    from rampage.daq.gpib import agilent_33250a, stanfordSG384, rigolDG1022Z#, #tektronixTDS1002#,newportesp300, agilentN900A, tektronixTDS2012C
+    from rampage.daq.gpib import agilent_33250a, rigolDG1022Z , stanfordSG384#, newportesp300 #tektronixTDS1002#, agilentN900A, tektronixTDS2012C
 
     zmq_context = zmq.Context()
     pub_socket = zmq_context.socket(zmq.PUB)
@@ -143,11 +143,19 @@ class Hooks(object):
                                                 'phase':0.0,
                                                 'channel':2},
                      'rigol_set_output': {'state': False,
-                                          'channel':2}
+                                          'channel':2},
+                     'agilentN900A_trigger_marker': {'num_avg': 100,
+                                        			 'freq(GHz)': 6.83468,
+                                        			 'span(MHz)': 25,
+                                        			 'ref level(dBm)': 15}
                     }
 
     # def drop_down_test(self, mesg_dict):
     #     print mesg_dict
+
+    def agilentN900A_trigger_marker(self, mesg_dict):
+        logging.info('HOOK:Agilent_N900A: setup triggering of marker')
+        agilentN900A.trigger_marker_avg(**mesg_dict)
 
     def rigol_set_output(self, mesg_dict):
         logging.info('HOOK:rigolDG1022Z: setting output: ' +

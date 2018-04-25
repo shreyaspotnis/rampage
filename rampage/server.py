@@ -201,8 +201,9 @@ class Hooks(object):
         freq = mesg_dict['freq(Hz)']
         amplitude = mesg_dict['amplitude(dBm)']
         offset = mesg_dict['offset(V)']
+        peak_freq_dev = mesg_dict['peakdev(Hz)']
         output_state = mesg_dict['output_state']
-        stanfordSG384.set_fm_ext(freq, amplitude, offset, output_state)
+        stanfordSG384.set_fm_ext(freq, amplitude, offset, peak_freq_dev, output_state)
 
     def StanfordMW_freqsweep_ext(self, mesg_dict):
         logging.info('HOOK:Stanford_SG384: setting to external freq. sweep mode')

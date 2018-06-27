@@ -38,11 +38,15 @@ if __name__ == '__main__':
     # make sure that MW server is running
     ENABLE_MW = True
 
+    # Set this to True if you want to enable external GPIB functionality
+    # make sure that external GPIB server is running
+    ENABLE_extGPIB = True
+
     # import daq only if server is running
     # not if some other module is importing functions from
     # this module
     from rampage.daq import daq
-    from rampage.daq.gpib import agilent_33250a, rigolDG1022Z , stanfordSG384,  agilentN900A#, newportesp300 #tektronixTDS1002#, tektronixTDS2012C
+    from rampage.daq.gpib import agilent_33250a, rigolDG1022Z , stanfordSG384, tektronixTDS1002#,  agilentN900A#, newportesp300, tektronixTDS2012C
 
     zmq_context = zmq.Context()
     pub_socket = zmq_context.socket(zmq.PUB)
@@ -56,6 +60,11 @@ if __name__ == '__main__':
         from rampage.daq import mw_server
         mw_client = ClientForServer(mw_server.SynthHDSerial,
                                      'tcp://192.168.0.110:5556')
+
+    if ENABLE_extGPIB:
+        from rampage.daq import extGPIB_server
+        extGPIB_client = ClientForServer(extGPIB_server.NewportESP300,
+                                     'tcp://192.168.0.116:5558')
 
 main_package_dir = os.path.dirname(__file__)
 
@@ -117,6 +126,8 @@ class Hooks(object):
                                       'ch': '0'},
                      'mw_set_amp': {'amp': 20000,
                                       'ch': '0'},
+                     'extESP300_set_position': {'axis': 2,
+                                      'pos': -0.095},
                      'StanfordMW_enable_output': {'state': True},
                      'StanfordMW_disable_all': {'disable': False},
                      'StanfordMW_continuous': {'freq(Hz)': 6.8e9,
@@ -234,14 +245,32 @@ class Hooks(object):
                   str(mesg_dict))
             mw_client.set_amp(mesg_dict)
 
-    def ESDcontroller_readerrors(self, mesg_dict):
-        logging.info('HOOK:Newport_ESP300: Read errors. ')
-        newportesp300.read_all_errors()
+    def mw_set_freq(self, mesg_dict):
+        if ENABLE_MW:
+            logging.info('HOOK:mw: set_freq: ' +
+                  str(mesg_dict))
+            mw_client.set_freq(mesg_dict)
 
-    def ESDcontroller_move_position(self, mesg_dict):
-        logging.info('HOOK:Newport_ESP300: Move axis ' +
-            str(mesg_dict['axis']) + ' to ' + str(mesg_dict['abs_pos']))
-        newportesp300.move_absposition(**mesg_dict)
+    def mw_set_amp(self, mesg_dict):
+        if ENABLE_MW:
+            logging.info('HOOK:mw: set_amp: ' +
+                  str(mesg_dict))
+            mw_client.set_amp(mesg_dict)
+
+    def extESP300_set_position(self, mesg_dict):
+        if ENABLE_extGPIB:
+            logging.info('HOOK:ESP300: set_position: ' +
+                  str(mesg_dict))
+            extGPIB_client.set_position(mesg_dict)
+
+    # def ESDcontroller_readerrors(self, mesg_dict):
+    #     logging.info('HOOK:Newport_ESP300: Read errors. ')
+    #     newportesp300.read_all_errors()
+
+    # def ESDcontroller_move_position(self, mesg_dict):
+    #     logging.info('HOOK:Newport_ESP300: Move axis ' +
+    #         str(mesg_dict['axis']) + ' to ' + str(mesg_dict['abs_pos']))
+    #     newportesp300.move_absposition(**mesg_dict)
 
     def tek_scope_trace(self, mesg_dict):
         logging.info('HOOK:Tektronix_TDS1002: acquire trace: ch: ' +

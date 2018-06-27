@@ -284,7 +284,7 @@ class AgilentN900A(object):
         amp = np.float(self.instr.read())
         self.instr.write(':AVER:STAT OFF')
         arr_write = np.array([freq, amp])
-        f_handle = open(file_path + '\\' + datetime.now().strftime('%Y_%m_%d') + '.txt', 'ab')
+        f_handle = open(file_path + '\\' + datetime.now().strftime('%Y_%m_%d_%H_%M_%S') + '.txt', 'ab')
         np.savetxt(f_handle, arr_write.reshape(1, arr_write.shape[0]))
         f_handle.close()
 
@@ -560,7 +560,7 @@ class GPIBError(Exception):
 
 #globals
 agilent_33250a = Aglient33250A()
-# tektronixTDS1002 = TektronixTDS1002()
+tektronixTDS1002 = TektronixTDS1002()
 # agilentN900A = AgilentN900A()
 #tektronixTDS2012C = TektronixTDS2012C()
 stanfordSG384 = SRSSG384()

@@ -111,7 +111,7 @@ class NewportESP300(RequestProcessor):
         return {'success': 1}
 
 def main():
-    esp300 = NewportESP300(5557)
+    esp300 = NewportESP300(5561)
     #esp300._run()
 
 

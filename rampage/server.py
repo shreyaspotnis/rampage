@@ -57,8 +57,10 @@ if __name__ == '__main__':
 
     if ENABLE_MW:
         from rampage.daq import mw_server
+        # mw_client = ClientForServer(mw_server.SynthHDSerial,
+        #                              'tcp://192.168.0.110:5556')
         mw_client = ClientForServer(mw_server.SynthHDSerial,
-                                     'tcp://192.168.0.110:5556')
+                                     'tcp://localhost:5556')
 
     if ENABLE_extGPIB:
         from rampage.daq import extGPIB_server
@@ -127,6 +129,7 @@ class Hooks(object):
                                       'ch': '0'},
                      'mw_set_phase': {'phase': 10,
                                       'ch': '0'},
+                      'mw_query_settings': {'ch': 0},
                      'extESP300_set_position': {'axis': 2,
                                       'position': -0.095},
                      'StanfordMW_enable_output': {'state': True},
@@ -257,6 +260,12 @@ class Hooks(object):
             logging.info('HOOK:mw: set_phase: ' +
                   str(mesg_dict))
             mw_client.set_phase(mesg_dict)
+
+    def mw_query_settings(self, mesg_dict):
+        if ENABLE_MW:
+            logging.info('HOOK:mw: query_settings: ' +
+                  str(mesg_dict))
+            mw_client.query_settings(mesg_dict)
 
     def mw_set_amp(self, mesg_dict):
         if ENABLE_MW:

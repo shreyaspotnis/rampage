@@ -47,7 +47,6 @@ if __name__ == '__main__':
     # this module
     from rampage.daq import daq
     from rampage.daq.gpib import agilent_33250a, rigolDG1022Z , stanfordSG384, tektronixTDS1002#,  agilentN900A#, newportesp300, tektronixTDS2012C
-
     zmq_context = zmq.Context()
     pub_socket = zmq_context.socket(zmq.PUB)
     pub_socket.bind('tcp://*:8081')
@@ -64,7 +63,7 @@ if __name__ == '__main__':
     if ENABLE_extGPIB:
         from rampage.daq import extGPIB_server
         extGPIB_client = ClientForServer(extGPIB_server.NewportESP300,
-                                     'tcp://192.168.0.116:5558')
+                                     'tcp://192.168.0.116:5561')
 
 main_package_dir = os.path.dirname(__file__)
 
@@ -126,8 +125,10 @@ class Hooks(object):
                                       'ch': '0'},
                      'mw_set_amp': {'amp': 20000,
                                       'ch': '0'},
+                     'mw_set_phase': {'phase': 10,
+                                      'ch': '0'},
                      'extESP300_set_position': {'axis': 2,
-                                      'pos': -0.095},
+                                      'position': -0.095},
                      'StanfordMW_enable_output': {'state': True},
                      'StanfordMW_disable_all': {'disable': False},
                      'StanfordMW_continuous': {'freq(Hz)': 6.8e9,
@@ -250,6 +251,12 @@ class Hooks(object):
             logging.info('HOOK:mw: set_freq: ' +
                   str(mesg_dict))
             mw_client.set_freq(mesg_dict)
+
+    def mw_set_phase(self, mesg_dict):
+        if ENABLE_MW:
+            logging.info('HOOK:mw: set_phase: ' +
+                  str(mesg_dict))
+            mw_client.set_phase(mesg_dict)
 
     def mw_set_amp(self, mesg_dict):
         if ENABLE_MW:
